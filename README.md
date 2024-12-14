@@ -2,6 +2,9 @@
 
 **cruml** *(**Cr**ystal **UML**)* is a library that allows to generate a UML plan. This is useful for any projects type.
 
+> [!WARNING]  
+> This library is in the development phase, it is not completely finished.
+
 TODO: Write a description here
 
 ## Installation
