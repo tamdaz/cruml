@@ -1,4 +1,5 @@
-class Example::Person
+# Example 1 : A person
+class Example::E1::Person
   property name : String
   property age : Int8
 
@@ -9,7 +10,8 @@ class Example::Person
   end
 end
 
-class Example::Employee < Example::Person
+# Example 1 : An employee
+class Example::E1::Employee < Example::E1::Person
   property wages : Int16
 
   def initialize(@name : String, @age : Int8, @wages : Int16); end
