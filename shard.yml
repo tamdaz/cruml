@@ -1,0 +1,12 @@
+name: cruml
+version: 0.1.0
+
+description: |
+  A library that provides a UML plan for any projects.
+
+authors:
+  - tamdaz <tamda.zohir.pro@gmail.com>
+
+crystal: '>= 1.14.0'
+
+license: MIT
