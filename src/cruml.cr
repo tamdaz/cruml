@@ -1,4 +1,4 @@
-require "./annotations/**"
+require "./annotations"
 require "./generators/**"
 require "./../examples/**"
 
