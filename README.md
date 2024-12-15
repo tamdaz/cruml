@@ -1,9 +1,10 @@
 # cruml
 
-**cruml** *(**Cr**ystal **UML**)* is a library that allows to generate a UML plan. This is useful for any projects type.
-
-> [!WARNING]  
+> [!WARNING]
 > This library is in the development phase, it is not completely finished.
+
+**cruml** *(**Cr**ystal **UML**)* is a library that allows to generate a UML diagram.
+This is useful for any projects type.
 
 TODO: Write a description here
 
@@ -26,10 +27,6 @@ require "cruml"
 ```
 
 TODO: Write usage instructions here
-
-## Development
-
-TODO: Write development instructions here
 
 ## Contributing
 
