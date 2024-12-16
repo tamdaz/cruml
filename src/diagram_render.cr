@@ -39,6 +39,9 @@ class Cruml::DiagramRender
 
   def save : Nil
     output = <<-HTML
+    <head>
+      <title>UML Class Diagram : #{::CRUML_FILTER_PREFIX}</title>
+    </head>
     <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
     <script src='https://unpkg.com/panzoom@8.7.3/dist/panzoom.min.js'></script>
     <style>
@@ -82,7 +85,9 @@ class Cruml::DiagramRender
         });
         panzoom(document.querySelector(".mermaid"), {
           bounds: true,
-          boundsPadding: 0.8
+          boundsPadding: 0.6,
+          maxZoom: 2.5,
+          minZoom: 0.1
         });
       })
     </script>
