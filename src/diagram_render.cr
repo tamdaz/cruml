@@ -82,7 +82,7 @@ class Cruml::DiagramRender
         });
         panzoom(document.querySelector(".mermaid"), {
           bounds: true,
-          boundsPadding: 1
+          boundsPadding: 0.8
         });
       })
     </script>
