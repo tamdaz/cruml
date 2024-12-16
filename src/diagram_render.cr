@@ -1,5 +1,6 @@
 class Cruml::DiagramRender
   @code : String = "classDiagram\n"
+
   def initialize(@path_dir : Path); end
 
   def generate(
@@ -33,11 +34,13 @@ class Cruml::DiagramRender
       @code += "}\n\n"
       i += 1
     end
+    @code += "classDef default fill:#2e1065,color:white"
   end
 
   def save : Nil
     output = <<-HTML
     <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
+    <script src='https://unpkg.com/panzoom@8.7.3/dist/panzoom.min.js'></script>
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
       * {
@@ -48,6 +51,8 @@ class Cruml::DiagramRender
         width: 100vw;
         height: 100vh;
         margin: 0 auto;
+        background-color: #212121;
+        overflow: hidden;
       }
 
       .mermaid {
@@ -72,8 +77,10 @@ class Cruml::DiagramRender
       window.addEventListener("DOMContentLoaded", () => {
         mermaid.initialize({
           startOnLoad: true,
-          maxTextSize: Infinity
+          maxTextSize: Infinity,
+          theme: "dark"
         });
+        panzoom(document.querySelector(".mermaid"));
       })
     </script>
     HTML
