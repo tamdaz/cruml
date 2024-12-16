@@ -19,10 +19,6 @@ module Cruml
     reflected_instance_vars = Cruml::Reflector.reflect_instance_vars
     reflected_methods = Cruml::Reflector.reflect_methods
 
-    pp! reflected_classes.size
-    pp! reflected_instance_vars.size
-    pp! reflected_methods.size
-
     if reflected_classes.empty?
       puts "\e[31mCannot generate a UML diagram because there's no selected classes. Abort.\e[0m"
       exit 1
