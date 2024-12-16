@@ -24,9 +24,14 @@ dependencies:
 
 ```crystal
 require "cruml"
+
+# Your project module (e.g: Project)
+::CRUML_FILTER_PREFIX = "Project"
+
+Cruml.run
 ```
 
-TODO: Write usage instructions here
+Cruml uses macros to retrieve the names of classes and the names and types of instance variables and methods.
 
 ## Contributing
 
