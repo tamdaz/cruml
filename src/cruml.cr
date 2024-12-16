@@ -3,7 +3,7 @@ require "./diagram_render"
 require "./reflector"
 require "./../examples/**"
 
-::CRUML_FILTER_PREFIX = "Example"
+# ::CRUML_FILTER_PREFIX = "Example"
 
 # TODO: Write documentation for `Cruml`
 module Cruml
@@ -32,6 +32,4 @@ module Cruml
     diagram_render.generate(reflected_classes, reflected_instance_vars, reflected_methods)
     diagram_render.save
   end
-
-  run
 end
