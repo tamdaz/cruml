@@ -20,6 +20,23 @@ class Cruml::Reflector
     reflected_class
   end
 
+  # Get all links between the parent and the child class.
+  def self.reflect_link_subclasses : LinkSubClassArray
+    reflected_link_subclasses = [] of Tuple(String, String)
+    {% unless Object.all_subclasses.size == 0 %}
+      {% for subclass in Object.all_subclasses %}
+        {% if subclass.name.starts_with?(::CRUML_FILTER_PREFIX) && !(subclass.name.ends_with?(".class")) %}
+          {% unless subclass.name.ends_with?(":Module") || subclass.subclasses.empty? %}
+            {% for child_class in subclass.subclasses %}
+              reflected_link_subclasses << {{ {subclass.name.stringify, child_class.stringify} }}
+            {% end %}
+          {% end %}
+        {% end %}
+      {% end %}
+    {% end %}
+    reflected_link_subclasses
+  end
+
   # Get all instance variables for each class.
   def self.reflect_instance_vars : Array(InstanceVarsArray)
     reflected_instance_vars = [] of InstanceVarsArray

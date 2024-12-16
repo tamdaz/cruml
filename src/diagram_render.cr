@@ -4,9 +4,13 @@ class Cruml::DiagramRender
 
   def generate(
     reflected_classes : ClassArray,
+    reflected_link_subclasses : LinkSubClassArray,
     reflected_instance_vars : Array(InstanceVarsArray),
     reflected_methods : Array(MethodsArray)
   ) : Nil
+    reflected_link_subclasses.each do |cn, scn|
+      @code += "#{cn.split("::")[-1]} --|> #{scn.split("::")[-1]}\n"
+    end
     i = 0
     until i == reflected_classes.size
       class_name = reflected_classes[i].split("::")[-1]
@@ -35,8 +39,9 @@ class Cruml::DiagramRender
     output = <<-HTML
     <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
     <style>
+      @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
       * {
-        font-family: "Noto Sans Mono", monospace;
+        font-family: "Roboto Mono", monospace;
       }
 
       body {
