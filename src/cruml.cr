@@ -1,7 +1,6 @@
 require "./annotations"
 require "./diagram_render"
 require "./reflector"
-require "./../examples/**"
 
 # ::CRUML_FILTER_PREFIX = "Example"
 
