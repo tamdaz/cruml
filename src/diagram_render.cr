@@ -9,26 +9,26 @@ class Cruml::DiagramRender
     reflected_instance_vars : Array(InstanceVarsArray),
     reflected_methods : Array(MethodsArray)
   ) : Nil
-    reflected_link_subclasses.each do |cn, scn|
-      @code += "#{cn.split("::")[-1]} --|> #{scn.split("::")[-1]}\n"
+    reflected_link_subclasses.each do |class_name, subclass_name|
+      @code += "#{class_name.split("::")[-1]} --|> #{subclass_name.split("::")[-1]}\n"
     end
     i = 0
     until i == reflected_classes.size
       class_name = reflected_classes[i].split("::")[-1]
       @code += "class #{class_name} {\n"
-      reflected_instance_vars[i].each do |t|
-        name = t[-2]
-        type = t[-1]
+      reflected_instance_vars[i].each do |instance_var|
+        name = instance_var[-2]
+        type = instance_var[-1]
         @code += "  -#{name} : #{type}\n"
       end
-      reflected_methods[i].each do |t|
-        scope = case t[-3]
-          when :public then "+"
-          when :protected then "#"
-          when :private then "-"
-        end
-        name = t[-2]
-        return_type = t[-1]
+      reflected_methods[i].each do |method|
+        scope = case method[-3]
+                when :public    then "+"
+                when :protected then "#"
+                when :private   then "-"
+                end
+        name = method[-2]
+        return_type = method[-1]
         @code += "  #{scope}#{name}() #{return_type}\n"
       end
       @code += "}\n\n"
