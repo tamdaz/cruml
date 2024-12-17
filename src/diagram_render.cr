@@ -92,9 +92,9 @@ class Cruml::DiagramRender
       })
     </script>
     HTML
-    File.write(@path_dir / "diagram.html", output)
-  rescue File::NotFoundError
-    puts "Can't create the diagram because the \"#{@path_dir}\" directory doesn't exist. Abort."
-    exit 1
+    unless Dir.exists?(@path_dir)
+      Dir.mkdir(@path_dir)
+      File.write(@path_dir / "diagram.html", output)
+    end
   end
 end

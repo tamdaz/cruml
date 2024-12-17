@@ -3,6 +3,7 @@ require "./diagram_render"
 require "./reflector"
 
 # ::CRUML_FILTER_PREFIX = "Example"
+# ::CRUML_OUT_DIR = "./out/"
 
 # TODO: Write documentation for `Cruml`
 module Cruml
@@ -25,7 +26,7 @@ module Cruml
       exit 1
     end
 
-    diagram_render = Cruml::DiagramRender.new(Path["out"])
+    diagram_render = Cruml::DiagramRender.new(Path[::CRUML_OUT_DIR])
     diagram_render.generate(
       reflected_classes, reflected_link_subclasses, reflected_instance_vars, reflected_methods
     )
