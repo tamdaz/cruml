@@ -44,7 +44,7 @@ class Cruml::Reflector
       {% if subclass.name.starts_with?(::CRUML_FILTER_PREFIX) && !(subclass.name.ends_with?(".class")) %}
         {% unless subclass.resolve.instance_vars.empty? %}
           {% for instance_var in subclass.resolve.instance_vars %}
-            {% stored_instance_var = { instance_var.name.stringify, instance_var.type.stringify } %}
+            {% stored_instance_var = {instance_var.name.stringify, instance_var.type.stringify} %}
             reflected_instance_vars << [ {{ stored_instance_var }} ]
           {% end %}
         {% end %}

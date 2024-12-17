@@ -5,7 +5,7 @@ class Example::E1::Person
 
   def initialize(@name : String, @age : Int8); end
 
-  def is_major? : Bool
+  def major? : Bool
     @age >= 18
   end
 end
