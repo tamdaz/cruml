@@ -4,9 +4,7 @@
 > This library is in the development phase, it is not completely finished.
 
 **cruml** *(**Cr**ystal **UML**)* is a library that allows to generate a UML diagram.
-This is useful for any projects type.
-
-TODO: Write a description here
+This is useful for any Crystal projects.
 
 ## Installation
 
@@ -25,8 +23,15 @@ dependencies:
 ```crystal
 require "cruml"
 
+module Project
+  # ...
+end
+
 # Your project module (e.g: Project)
 ::CRUML_FILTER_PREFIX = "Project"
+
+# Directory where the diagram will be saved.
+::CRUML_OUT_DIR = "./out/"
 
 Cruml.run
 ```
