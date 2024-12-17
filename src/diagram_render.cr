@@ -92,9 +92,7 @@ class Cruml::DiagramRender
       })
     </script>
     HTML
-    unless Dir.exists?(@path_dir)
-      Dir.mkdir(@path_dir)
-      File.write(@path_dir / "diagram.html", output)
-    end
+    Dir.mkdir(@path_dir) unless Dir.exists?(@path_dir)
+    File.write(@path_dir / "diagram.html", output)
   end
 end
