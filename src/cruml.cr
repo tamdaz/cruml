@@ -2,10 +2,25 @@ require "./annotations"
 require "./diagram_render"
 require "./reflector"
 
-# ::CRUML_FILTER_PREFIX = "Example"
+# **cruml** *(**Cr**ystal **UML**)* is a library that allows to generate a UML diagram.
+# This is useful for any Crystal projects.
+#
+# ```
+# require "cruml"
+#
+# module Project
+#   # ...
+# end
+#
+# # Your project module (e.g: Project)
+# ::CRUML_FILTER_PREFIX = "Project"
+#
+# # Directory where the diagram will be saved.
 # ::CRUML_OUT_DIR = "./out/"
-
-# TODO: Write documentation for `Cruml`
+#
+# Cruml.run
+# ```
+# Cruml uses macros to retrieve the names of classes and the names and types of instance variables and methods.
 module Cruml
   VERSION = "0.1.0"
 
