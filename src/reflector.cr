@@ -7,12 +7,17 @@
 class Cruml::Reflector
   # Get all specified classes.
   def self.reflect_classes : ClassArray
-    reflected_class = [] of String
+    reflected_class = [] of Tuple(String, Symbol)
     {% unless Object.all_subclasses.size == 0 %}
       {% for subclass in Object.all_subclasses %}
         {% if subclass.name.starts_with?(::CRUML_FILTER_PREFIX) && !(subclass.name.ends_with?(".class")) %}
           {% unless subclass.name.ends_with?(":Module") %}
-            reflected_class << {{ subclass.name.stringify }}
+            {%
+              class_type = :class if subclass.class?
+              class_type = :abstract if subclass.abstract?
+              class_type = :interface if subclass.annotation(Cruml::Annotation::AsInterface)
+            %}
+            reflected_class << {{ {subclass.name.stringify, class_type} }}
           {% end %}
         {% end %}
       {% end %}
@@ -22,13 +27,18 @@ class Cruml::Reflector
 
   # Get all links between the parent and the child class.
   def self.reflect_link_subclasses : LinkSubClassArray
-    reflected_link_subclasses = [] of Tuple(String, String)
+    reflected_link_subclasses = [] of Tuple(String, String, Symbol)
     {% unless Object.all_subclasses.size == 0 %}
       {% for subclass in Object.all_subclasses %}
         {% if subclass.name.starts_with?(::CRUML_FILTER_PREFIX) && !(subclass.name.ends_with?(".class")) %}
           {% unless subclass.name.ends_with?(":Module") || subclass.subclasses.empty? %}
             {% for child_class in subclass.subclasses %}
-              reflected_link_subclasses << {{ {subclass.name.stringify, child_class.stringify} }}
+              {%
+                class_type = :class if subclass.class?
+                class_type = :abstract if subclass.abstract?
+                class_type = :interface if subclass.annotation(Cruml::Annotation::AsInterface)
+              %}
+              reflected_link_subclasses << {{ {subclass.name.stringify, child_class.stringify, class_type} }}
             {% end %}
           {% end %}
         {% end %}
