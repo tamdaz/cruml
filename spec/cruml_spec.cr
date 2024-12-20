@@ -17,8 +17,8 @@ describe Cruml do
 
   it "get inherit classes" do
     reflected_link_subclasses.should eq([
-      {"Example::E2::Organization", "Example::E2::Enterprise"},
-      {"Example::E2::Organization", "Example::E2::Bank"},
+      {"Example::E2::Organization", "Example::E2::Enterprise", :class},
+      {"Example::E2::Organization", "Example::E2::Bank", :class},
     ])
   end
 
