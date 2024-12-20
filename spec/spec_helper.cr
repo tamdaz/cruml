@@ -1,8 +1,6 @@
 require "spec"
-require "../src/cruml"
-require "../examples/e1_person_example"
-require "../examples/e2_organization_example"
-require "../examples/e3_universe_example"
+require "./../src/cruml"
+require "./../examples/*"
 
-::CRUML_FILTER_PREFIX = "Example"
+::CRUML_FILTER_PREFIX = "Example::E2"
 ::CRUML_OUT_DIR       = "/tmp"
