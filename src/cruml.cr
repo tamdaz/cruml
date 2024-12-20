@@ -24,8 +24,8 @@ require "./reflector"
 module Cruml
   VERSION = "0.1.0"
 
-  alias ClassArray = Array(String)
-  alias LinkSubClassArray = Array(Tuple(String, String))
+  alias ClassArray = Array(Tuple(String, Symbol))
+  alias LinkSubClassArray = Array(Tuple(String, String, Symbol))
   alias InstanceVarsArray = Array(Tuple(String, String))
   alias MethodsArray = Array(Tuple(Symbol, String, String))
 
