@@ -1,13 +1,4 @@
 module Cruml::Annotation
-  # Allows to define informations about class.
-  # ```
-  # @[Cruml::Annotation::Class(name: "A person")]
-  # class Person
-  #   property name : String
-  # end
-  # ```
-  annotation Class; end
-
   # Allows to hide a class during the UML diagram generation.
   # ```
   # @[Cruml::Annotation::Invisible]
@@ -16,16 +7,6 @@ module Cruml::Annotation
   # end
   # ```
   annotation Invisible; end
-
-  # Allows to set a color for a specific class.
-  # ```
-  # @[Cruml::Annotation::Color("#ff0000")]
-  # class Organization
-  #   property name : String
-  #   property persons : Array(Person)
-  # end
-  # ```
-  annotation Color; end
 
   # Allows to set a class as an interface. Useful for an abstract class
   # who implements the methods signature.
