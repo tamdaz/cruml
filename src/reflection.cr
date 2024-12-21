@@ -21,7 +21,7 @@ module Cruml::Reflection
           {{ class_type }}
         )
 
-        {% for inherit_class in subclass.all_subclasses %}
+        {% for inherit_class in subclass.subclasses %}
           class_info.add_inherit_class({{ subclass.name.stringify }}, {{ inherit_class.name.stringify }})
         {% end %}
 
