@@ -9,7 +9,7 @@ classDiagram
 
 direction LR
 
-Person --|> Employee
+Person <|-- Employee
 
 class Person {
     -name : String
