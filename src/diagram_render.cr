@@ -55,11 +55,11 @@ class Cruml::DiagramRender
     reflected_link_subclasses.each do |class_name, subclass_name, class_type|
       case class_type
       when :interface
-        @code += "#{class_name.split("::")[-1]} ..|> #{subclass_name.split("::")[-1]}\n"
+        @code += "#{class_name.split("::")[-1]} <|.. #{subclass_name.split("::")[-1]}\n"
       when :abstract
-        @code += "#{class_name.split("::")[-1]} --|> #{subclass_name.split("::")[-1]}\n"
+        @code += "#{class_name.split("::")[-1]} <|-- #{subclass_name.split("::")[-1]}\n"
       when :class
-        @code += "#{class_name.split("::")[-1]} --|> #{subclass_name.split("::")[-1]}\n"
+        @code += "#{class_name.split("::")[-1]} <|-- #{subclass_name.split("::")[-1]}\n"
       end
     end
   end
