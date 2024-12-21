@@ -2,7 +2,7 @@ name: cruml
 version: 0.1.0
 
 description: |
-  A library that provides a UML diagram for any projects.
+  A library that provides a UML class diagram for any projects.
 
 authors:
   - tamdaz <tamda.zohir.pro@gmail.com>
