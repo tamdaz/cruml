@@ -3,56 +3,18 @@ class Cruml::DiagramRender
 
   def initialize(@path_dir : Path); end
 
-  def generate(
-    reflected_classes : ClassArray,
-    reflected_link_subclasses : LinkSubClassArray,
-    reflected_instance_vars : Array(InstanceVarsArray),
-    reflected_methods : Array(MethodsArray)
-  ) : Nil
-    add_links(reflected_link_subclasses)
-
-    i = 0
-    until i == reflected_classes.size
-      add_classes(reflected_classes, i)
-      add_instance_vars(reflected_instance_vars, i)
-
-      unless reflected_methods.size == 0
-        reflected_methods[i].each do |method|
-          scope = case method[-3]
-                  when :public    then "+"
-                  when :protected then "#"
-                  when :private   then "-"
-                  end
-          name = method[-2]
-          return_type = method[-1]
-          @code += "  #{scope}#{name}() #{return_type}\n"
-        end
-      end
-
-      @code += "}\n\n"
-      i += 1
+  def generate(class_list : Cruml::ClassList) : Nil
+    class_list.classes.each do |class_info|
+      add_inherit_class(class_info.inherit_classes)
+      add_class(class_info)
     end
-
     set_diagram_colors
+
+    save
   end
 
-  private def add_classes(reflected_classes : ClassArray, i : Int32) : Nil
-    class_name = reflected_classes[i][0].split("::")[-1]
-
-    case reflected_classes[i][1]
-    when :interface
-      @code += "&lt;&lt;interface&gt;&gt; #{class_name}\n"
-      @code += "class #{class_name}:::interface {\n"
-    when :abstract
-      @code += "&lt;&lt;abstract&gt;&gt; #{class_name}\n"
-      @code += "class #{class_name} {\n"
-    when :class
-      @code += "class #{class_name} {\n"
-    end
-  end
-
-  private def add_links(reflected_link_subclasses : LinkSubClassArray) : Nil
-    reflected_link_subclasses.each do |class_name, subclass_name, class_type|
+  private def add_inherit_class(inherit_classes : Array(Tuple(String, String, Symbol))) : Nil
+    inherit_classes.each do |class_name, subclass_name, class_type|
       case class_type
       when :interface
         @code += "#{class_name.split("::")[-1]} <|.. #{subclass_name.split("::")[-1]}\n"
@@ -64,14 +26,34 @@ class Cruml::DiagramRender
     end
   end
 
-  private def add_instance_vars(reflected_instance_vars : Array(InstanceVarsArray), i : Int32) : Nil
-    unless reflected_instance_vars.size == 0
-      reflected_instance_vars[i].each do |instance_var|
+  private def add_class(class_info : Cruml::Entities::ClassInfo) : Nil
+    short_class_name = class_info.name.split("::")[-1]
+    case class_info.type
+    when :interface
+      @code += "&lt;&lt;interface&gt;&gt; #{short_class_name}\n"
+      @code += "class #{short_class_name}:::interface {\n"
+    when :abstract
+      @code += "&lt;&lt;abstract&gt;&gt; #{short_class_name}\n"
+      @code += "class #{short_class_name} {\n"
+    when :class
+      @code += "class #{short_class_name} {\n"
+    end
+
+    unless class_info.instance_vars.size == 0
+      class_info.instance_vars.each do |instance_var|
         name = instance_var[-2]
         type = instance_var[-1]
         @code += "  -#{name} : #{type}\n"
       end
     end
+
+    unless class_info.methods.size == 0
+      class_info.methods.each do |method|
+        @code += "  +#{method.name}() #{method.return_type}\n"
+      end
+    end
+
+    @code += "}\n"
   end
 
   private def set_diagram_colors : Nil
