@@ -3,6 +3,8 @@ theme:
   name: material
   palette:
     primary: deep-purple
+  icon:
+    repo: material/github
 
 markdown_extensions:
   - admonition
@@ -12,3 +14,6 @@ markdown_extensions:
         - name: mermaid
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
+
+repo_url: https://github.com/tamdaz/cruml
+repo_name: tamdaz/cruml
