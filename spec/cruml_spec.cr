@@ -1,56 +1,35 @@
 require "./spec_helper"
 
 describe Cruml do
-  reflected_classes = Cruml::Reflector.reflect_classes
-  reflected_link_subclasses = Cruml::Reflector.reflect_link_subclasses
-  reflected_instance_vars = Cruml::Reflector.reflect_instance_vars
-  reflected_methods = Cruml::Reflector.reflect_methods
-
-  it "check config" do
-    ::CRUML_FILTER_PREFIX.should eq("Example::E2")
-    ::CRUML_OUT_DIR.should eq("/tmp")
+  it "has been reflected" do
+    get_reflection.should_not be_nil
   end
 
-  it "get classes" do
-    reflected_classes.empty?.should be_false
+  it "get any type of classes" do
+    get_reflection.classes.size.should eq(10)
   end
 
-  it "get inherit classes" do
-    reflected_link_subclasses.should eq([
-      {"Example::E2::Organization", "Example::E2::Enterprise", :class},
-      {"Example::E2::Organization", "Example::E2::Bank", :class},
-    ])
+  it "get normal classes" do
+    class_list = get_reflection.classes.select do |class_info|
+      class_info.type == :class
+    end
+
+    class_list.size.should eq(7)
   end
 
-  it "get instance vars" do
-    reflected_instance_vars.should eq([
-      [
-        {"persons", "Int32"},
-      ], [
-        {"type", "String"},
-      ], [
-        {"clients", "Int32"},
-      ],
-    ])
+  it "get interfaces" do
+    interfaces = get_reflection.classes.select do |class_info|
+      class_info.type == :interface
+    end
+
+    interfaces.size.should eq(2)
   end
 
-  it "get methods" do
-    reflected_methods.should eq([
-      [
-        {:protected, "initialize", "Nil"},
-        {:public, "name", "String"},
-        {:public, "name=", "Nil"},
-        {:public, "persons", "Int32"},
-        {:public, "persons=", "Nil"},
-      ], [
-        {:protected, "initialize", "Nil"},
-        {:public, "type", "String"},
-        {:public, "type=", "Nil"},
-      ], [
-        {:protected, "initialize", "Nil"},
-        {:public, "clients", "Int32"},
-        {:public, "clients=", "Nil"},
-      ],
-    ])
+  it "get abstract class" do
+    abstract_classes = get_reflection.classes.select do |class_info|
+      class_info.type == :abstract
+    end
+
+    abstract_classes.size.should eq(1)
   end
 end

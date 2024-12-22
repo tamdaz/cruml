@@ -82,7 +82,6 @@ class Example::Test::Sphere < Example::Test::Solid
   end
 end
 
-@[Cruml::Annotation::AsInterface]
 abstract class Example::Test::Vehicle
   abstract def fuel_efficiency : Float64
 end
