@@ -16,6 +16,7 @@ nav:
   - Get started:
     - Installation: get_started/1_installation.md
     - Generate a class diagram: get_started/2_generate_a_class_diagram.md
+    - Set a class as an interface: get_started/3_set_a_class_as_an_interface.md
 
 markdown_extensions:
   - admonition
@@ -25,6 +26,12 @@ markdown_extensions:
         - name: mermaid
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
 
 repo_url: https://github.com/tamdaz/cruml
 repo_name: tamdaz/cruml
