@@ -28,14 +28,14 @@ module Cruml::Reflection
         {% for instance_var in subclass.resolve.instance_vars %}
           class_info.add_instance_var(
             {{ instance_var.name.stringify }},
-            {{ instance_var.type.stringify }}
+            {{ instance_var.type.stringify.gsub(/[()]/, "~") }}
           )
         {% end %}
 
         {% for method in subclass.resolve.methods %}
           method_info = Cruml::Entities::MethodInfo.new(
             {{ method.name.stringify }},
-            {{ method.return_type.stringify.empty? ? "Nil" : method.return_type.stringify }}
+            {{ method.return_type.stringify.empty? ? "Nil" : method.return_type.stringify.gsub(/[()]/, "~") }}
           )
 
           class_info.add_method(method_info)
