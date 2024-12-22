@@ -7,6 +7,15 @@ description: |
 authors:
   - tamdaz <tamda.zohir.pro@gmail.com>
 
+targets:
+  cruml:
+    main: src/cruml.cr
+  examples:
+    main: src/run_examples.cr
+
+crystalline:
+  main: .crystalline_main.cr
+
 development_dependencies:
   ameba:
     github: crystal-ameba/ameba
