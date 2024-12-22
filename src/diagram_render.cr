@@ -9,8 +9,6 @@ class Cruml::DiagramRender
       add_class(class_info)
     end
     set_diagram_colors
-
-    save
   end
 
   private def add_inherit_class(inherit_classes : Array(Tuple(String, String, Symbol))) : Nil
