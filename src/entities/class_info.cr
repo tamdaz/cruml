@@ -22,6 +22,10 @@ class Cruml::Entities::ClassInfo
   end
 
   def add_method(method : Cruml::Entities::MethodInfo) : Nil
-    @methods << method
+    if method.name == "initialize"
+      @methods.unshift(method)
+    else
+      @methods << method
+    end
   end
 end
