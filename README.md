@@ -5,7 +5,7 @@
 [![ci-docs](https://github.com/tamdaz/cruml/actions/workflows/ci-docs.yml/badge.svg)](https://github.com/tamdaz/cruml/actions/workflows/ci-docs.yml)
 
 > [!WARNING]
-> This library is in the development phase, it is not completely finished.
+> This library is under development, it is not completely finished.
 
 **cruml** *(**Cr**ystal **UML**)* is a library that allows to generate a UML diagram.
 This is useful for any Crystal projects.
