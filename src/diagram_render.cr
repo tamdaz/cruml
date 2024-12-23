@@ -1,5 +1,5 @@
 class Cruml::DiagramRender
-  @code : String = "classDiagram\n"
+  @code : String = "classDiagram\ndirection BT\n"
 
   def initialize(@path_dir : Path); end
 
@@ -25,38 +25,43 @@ class Cruml::DiagramRender
   end
 
   private def add_class(class_info : Cruml::Entities::ClassInfo) : Nil
+    namespace = class_info.name.split("::")[0..-2].join("")
     short_class_name = class_info.name.split("::")[-1]
+
     case class_info.type
-    when :interface
-      @code += "&lt;&lt;interface&gt;&gt; #{short_class_name}\n"
-      @code += "class #{short_class_name}:::interface {\n"
-    when :abstract
-      @code += "&lt;&lt;abstract&gt;&gt; #{short_class_name}\n"
-      @code += "class #{short_class_name} {\n"
-    when :class
-      @code += "class #{short_class_name} {\n"
+    when :interface then @code += "&lt;&lt;interface&gt;&gt; #{short_class_name}\n"
+    when :abstract  then @code += "&lt;&lt;abstract&gt;&gt; #{short_class_name}\n"
+    end
+
+    @code += "namespace #{namespace} {\n"
+    case class_info.type
+    when :interface then @code += "  class #{short_class_name}:::interface {\n"
+    when :abstract  then @code += "  class #{short_class_name} {\n"
+    when :class     then @code += "  class #{short_class_name} {\n"
     end
 
     unless class_info.instance_vars.size == 0
       class_info.instance_vars.each do |instance_var|
         name = instance_var[-2]
         type = instance_var[-1]
-        @code += "  -#{name} : #{type}\n"
+        @code += "    -#{name} : #{type}\n"
       end
     end
 
     unless class_info.methods.size == 0
       class_info.methods.each do |method|
-        @code += "  +#{method.name}() #{method.return_type}\n"
+        @code += "    +#{method.name}() #{method.return_type}\n"
       end
     end
 
-    @code += "}\n"
+    @code += "  }\n" # end class
+    @code += "}\n"   # end namespace
   end
 
   private def set_diagram_colors : Nil
     @code += "classDef default fill:#2e1065,color:white\n"
     @code += "classDef interface fill:#365314,color:white"
+    @code += "namespaceDef default fill:#ffffff"
   end
 
   def save : Nil
