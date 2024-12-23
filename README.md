@@ -1,5 +1,9 @@
 # cruml
 
+![GitHub Release](https://img.shields.io/github/v/release/tamdaz/cruml)
+[![ci](https://github.com/tamdaz/cruml/actions/workflows/crystal.yml/badge.svg?branch=main)](https://github.com/tamdaz/cruml/actions/workflows/crystal.yml)
+[![ci-docs](https://github.com/tamdaz/cruml/actions/workflows/ci-docs.yml/badge.svg)](https://github.com/tamdaz/cruml/actions/workflows/ci-docs.yml)
+
 > [!WARNING]
 > This library is in the development phase, it is not completely finished.
 
