@@ -1,5 +1,5 @@
 class Cruml::DiagramRender
-  @code : String = "classDiagram\ndirection BT\n"
+  @code : String = "classDiagram\n"
 
   def initialize(@path_dir : Path); end
 
@@ -25,7 +25,7 @@ class Cruml::DiagramRender
   end
 
   private def add_class(class_info : Cruml::Entities::ClassInfo) : Nil
-    namespace = class_info.name.split("::")[0..-2].join("")
+    # namespace = class_info.name.split("::")[0..-2].join("")
     short_class_name = class_info.name.split("::")[-1]
 
     case class_info.type
@@ -33,7 +33,7 @@ class Cruml::DiagramRender
     when :abstract  then @code += "&lt;&lt;abstract&gt;&gt; #{short_class_name}\n"
     end
 
-    @code += "namespace #{namespace} {\n"
+    # @code += "namespace #{namespace} {\n"
     case class_info.type
     when :interface then @code += "  class #{short_class_name}:::interface {\n"
     when :abstract  then @code += "  class #{short_class_name} {\n"
@@ -50,12 +50,18 @@ class Cruml::DiagramRender
 
     unless class_info.methods.size == 0
       class_info.methods.each do |method|
-        @code += "    +#{method.name}() #{method.return_type}\n"
+        litteral_scope = case method.scope
+                         when :public    then '+'
+                         when :protected then '#'
+                         when :private   then '-'
+                         else                 '+'
+                         end
+        @code += "    #{litteral_scope}#{method.name}() #{method.return_type}\n"
       end
     end
 
     @code += "  }\n" # end class
-    @code += "}\n"   # end namespace
+    # @code += "}\n"   # end namespace
   end
 
   private def set_diagram_colors : Nil
