@@ -110,12 +110,7 @@ class Cruml::DiagramRender
           maxTextSize: Infinity,
           theme: "dark"
         });
-        panzoom(document.querySelector(".mermaid"), {
-          bounds: true,
-          boundsPadding: 0.6,
-          maxZoom: 2.5,
-          minZoom: 0.1
-        });
+        panzoom(document.querySelector(".mermaid"));
       })
     </script>
     HTML
