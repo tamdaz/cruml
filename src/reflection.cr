@@ -1,10 +1,10 @@
-# ```text
-# - Array of classes
-#  - Classes (name only)
-#   - Instance vars (name and type)
-#   - Methods (scope, name and return type)
-# ```
+# A reflection consists of retrieving infos on classes,
+# which contain infos on instance variables, methods and arguments.
+# This reflection principle is inspired by the `Reflection` class in the PHP language.
+# - Reflection : https://www.php.net/manual/en/class.reflection.php
+# - ReflectionClass : https://www.php.net/manual/en/class.reflectionclass.php
 module Cruml::Reflection
+  # Allows to process reflected classes.
   def self.start : Cruml::ClassList
     class_list = Cruml::ClassList.new
     {% for subclass in Object.all_subclasses %}

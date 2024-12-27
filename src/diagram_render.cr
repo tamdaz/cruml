@@ -1,7 +1,9 @@
 class Cruml::DiagramRender
   @code : String = "classDiagram\n"
 
-  def initialize(@path_dir : Path); end
+  def initialize(path_dir : Path)
+    @path_dir = path_dir
+  end
 
   def generate(class_list : Cruml::ClassList) : Nil
     class_list.classes.each do |class_info|
@@ -50,13 +52,13 @@ class Cruml::DiagramRender
 
     unless class_info.methods.size == 0
       class_info.methods.each do |method|
-        litteral_scope = case method.scope
+        literal_scope = case method.scope
                          when :public    then '+'
                          when :protected then '#'
                          when :private   then '-'
                          else                 '+'
                          end
-        @code += "    #{litteral_scope}#{method.name}() #{method.return_type}\n"
+        @code += "    #{literal_scope}#{method.name}() #{method.return_type}\n"
       end
     end
 

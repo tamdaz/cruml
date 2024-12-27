@@ -1,6 +1,9 @@
+# Contains a set of annotations for adding metadata to a class.
 module Cruml::Annotation
-  # Allows to set a class as an interface. Useful for an abstract class
-  # who implements the methods signature.
+  # Ensures that a class is considered as an interface.
+  # This is useful when an interface implements the methods signature.
+  #
+  # Example:
   # ```
   # @[Cruml::Annotation::AsInterface]
   # abstract class Animal

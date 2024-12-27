@@ -11,7 +11,7 @@ require "./class_list"
 # require "cruml"
 #
 # module Project
-#   # ...
+#   # your module containing classes of all types.
 # end
 #
 # # Your project module (e.g: Project)
@@ -22,7 +22,7 @@ require "./class_list"
 #
 # Cruml.run
 # ```
-# Cruml uses macros to retrieve the names of classes and the names and types of instance variables and methods.
+# > Cruml uses macros to retrieve reflected classes.
 module Cruml
   VERSION = "0.2.0"
 
@@ -30,7 +30,7 @@ module Cruml
   def self.run : Nil
     class_list = Cruml::Reflection.start
     if class_list.classes.empty?
-      puts "\e[31mCannot generate UML diagram because there's no selected classes. Abort.\e[0m"
+      puts "\e[31mUnable to generate class diagram because no class is selected. Abort.\e[0m"
       exit 1
     end
 
