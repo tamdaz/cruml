@@ -53,11 +53,11 @@ class Cruml::DiagramRender
     unless class_info.methods.size == 0
       class_info.methods.each do |method|
         literal_scope = case method.scope
-                         when :public    then '+'
-                         when :protected then '#'
-                         when :private   then '-'
-                         else                 '+'
-                         end
+                        when :public    then '+'
+                        when :protected then '#'
+                        when :private   then '-'
+                        else                 '+'
+                        end
         @code += "    #{literal_scope}#{method.name}() #{method.return_type}\n"
       end
     end
