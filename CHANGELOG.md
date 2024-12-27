@@ -9,7 +9,7 @@
 - Optimize the macro code in the [`src/reflection.cr`](https://github.com/tamdaz/cruml/commit/e24b77ecac065356b471c02c2c3a33a3738d3027) file. (#1)(0a1660d) @tamdaz 
 - Refactor the `Cruml.run` static method. ([8ed873a](https://github.com/tamdaz/cruml/commit/8ed873a0b8cf173e77dd91013e22db4fa3207846)) @tamdaz 
 - Refactor the `Cruml::DiagramRender` class. ([7aa8a4a](https://github.com/tamdaz/cruml/commit/7aa8a4a683568d1fbb38056acbe178d79bebe96f)) @tamdaz 
-- Replace paranthesis by rafters for the return type. ([9507dae](https://github.com/tamdaz/cruml/commit/9507dae6311d0e1c2aa08acaa76d59adf0e0328d)) @tamdaz 
+- Replace parenthesis by rafters for the return type. ([9507dae](https://github.com/tamdaz/cruml/commit/9507dae6311d0e1c2aa08acaa76d59adf0e0328d)) @tamdaz 
 
 ### Fixed
 - Fix inherit class. ([d9fe043](https://github.com/tamdaz/cruml/commit/d9fe0436a86c02ecc02de2217fdb41f0ba5309d8)) @tamdaz 
