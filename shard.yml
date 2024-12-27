@@ -19,6 +19,8 @@ crystalline:
 development_dependencies:
   ameba:
     github: crystal-ameba/ameba
+  crystal-kcov:
+    github: vici37/crystal-kcov
 
 crystal: '>= 1.10.0'
 

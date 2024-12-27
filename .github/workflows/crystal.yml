@@ -17,5 +17,7 @@ jobs:
       run: shards install
     - name: Check format
       run: ./bin/ameba
+    - name: Check format
+      run: ./bin/crkcov --output
     - name: Run tests
       run: crystal spec
