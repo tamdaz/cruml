@@ -10,4 +10,4 @@
 
 # Ignored directories
 /out/
-/coverage/
+/coverage/*
