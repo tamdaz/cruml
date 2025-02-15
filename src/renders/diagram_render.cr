@@ -1,6 +1,6 @@
 # Consists of generating a class diagram.
 # See https://mermaid.js.org/syntax/classDiagram.html
-class Cruml::DiagramRender
+class Cruml::Renders::DiagramRender
   @code : String = "classDiagram\n"
 
   # The directory path must be passed as argument when instantiating this class.
@@ -93,9 +93,8 @@ class Cruml::DiagramRender
     <script src='https://unpkg.com/panzoom@8.7.3/dist/panzoom.min.js'></script>
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
-      * {
-        font-family: "Roboto Mono", monospace;
-      }
+
+      * { font-family: "Roboto Mono", monospace; }
 
       body {
         width: 100vw;
@@ -114,8 +113,7 @@ class Cruml::DiagramRender
       }
     </style>
     <!--
-      UML code will be set here. After that,
-      a class diagram will be displayed on the web browser.
+      UML code will be set here. After that, a class diagram will be displayed on the web browser.
     -->
     <div class="mermaid">
       #{@code}
