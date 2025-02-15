@@ -1,8 +1,8 @@
 require "./annotations"
-require "./diagram_render"
 require "./reflection"
-require "./entities/**"
 require "./class_list"
+require "./entities/**"
+require "./renders/**"
 
 # **cruml** *(**Cr**ystal **UML**)* is a library that allows to generate a UML diagram.
 # This is useful for any Crystal projects.
