@@ -34,7 +34,7 @@ module Cruml
       exit 1
     end
 
-    diagram_render = Cruml::DiagramRender.new(Path[::CRUML_OUT_DIR])
+    diagram_render = Cruml::Renders::DiagramRender.new(Path[::CRUML_OUT_DIR])
     diagram_render.generate(class_list)
     diagram_render.save
   end
