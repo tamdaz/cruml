@@ -36,4 +36,15 @@ class Cruml::Entities::MethodInfo
   def add_arg(arg : Cruml::Entities::ArgInfo)
     @args << arg
   end
+
+  # Generate the args.
+  # Returns: String.
+  def generate_args : String
+    String.build do |str|
+      @args.each_with_index do |arg, i|
+        str << "#{arg.name} : #{arg.type}"
+        str << ", " if i != @args.size - 1
+      end
+    end
+  end
 end

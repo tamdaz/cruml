@@ -42,6 +42,15 @@ module Cruml::Reflection
             {{ method.return_type.stringify.empty? ? "Nil" : method.return_type.stringify.gsub(/[()]/, "~") }}
           )
 
+          {% for arg in method.args %}
+            method_info.add_arg(
+              Cruml::Entities::ArgInfo.new(
+                {{ arg.name.stringify.gsub(/[()]/, "~") }},
+                {{ arg.restriction.stringify.gsub(/[()]/, "~") }}
+              )
+            )
+          {% end %}
+
           class_info.add_method(method_info)
         {% end %}
         class_list.add(class_info)
