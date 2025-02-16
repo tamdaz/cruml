@@ -5,7 +5,7 @@ describe Cruml do
     get_reflection.should_not be_nil
   end
 
-  it "gets any type of classes" do
+  it "gets any classes type" do
     get_reflection.classes.size.should eq(10)
   end
 
