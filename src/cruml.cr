@@ -24,7 +24,7 @@ require "./renders/**"
 # ```
 # > Cruml uses macros to retrieve reflected classes.
 module Cruml
-  VERSION = "0.3.0"
+  VERSION = "0.4.0"
 
   # Proceed to the UML diagram generation.
   def self.run : Nil
