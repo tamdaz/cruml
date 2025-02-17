@@ -68,7 +68,13 @@ class Cruml::Renders::DiagramRender
                         when :private   then '-'
                         else                 '+'
                         end
-        @code += "    #{literal_scope}#{method.name}(#{method.generate_args}) #{method.return_type}\n"
+        @code += "    #{literal_scope}#{method.name}(#{method.generate_args}) "
+
+        if method.return_type =~ /\(.*\)/
+          @code += " : "
+        end
+
+        @code += "#{method.return_type}\n"
       end
     end
 

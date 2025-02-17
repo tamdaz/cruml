@@ -39,7 +39,7 @@ module Cruml::Reflection
           method_info = Cruml::Entities::MethodInfo.new(
             {{ method.visibility }},
             {{ method.name.stringify }},
-            {{ method.return_type.stringify.empty? ? "Nil" : method.return_type.stringify.gsub(/[()]/, "~") }}
+            {{ method.return_type.stringify.empty? ? "Nil" : method.return_type.stringify }}
           )
 
           {% for arg in method.args %}
