@@ -1,3 +1,5 @@
+require "ecr"
+
 # Consists of generating a class diagram.
 # See https://mermaid.js.org/syntax/classDiagram.html
 class Cruml::Renders::DiagramRender
@@ -91,54 +93,7 @@ class Cruml::Renders::DiagramRender
 
   # Save the class diagram as a HTML file.
   def save : Nil
-    output = <<-HTML
-    <head>
-      <title>UML Class Diagram : #{::CRUML_FILTER_PREFIX}</title>
-    </head>
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
-    <script src='https://unpkg.com/panzoom@8.7.3/dist/panzoom.min.js'></script>
-    <style>
-      @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
-
-      * { font-family: "Roboto Mono", monospace; }
-
-      body {
-        width: 100vw;
-        height: 100vh;
-        margin: 0 auto;
-        background-color: #212121;
-        overflow: hidden;
-      }
-
-      .mermaid {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-    </style>
-    <!--
-      UML code will be set here. After that, a class diagram will be displayed on the web browser.
-    -->
-    <div class="mermaid">
-      #{@code}
-    </div>
-    <script>
-      /**
-       * Load the UML class diagram once the page is loaded.
-       */
-      window.addEventListener("DOMContentLoaded", () => {
-        mermaid.initialize({
-          startOnLoad: true,
-          maxTextSize: Infinity,
-          theme: "dark"
-        });
-        panzoom(document.querySelector(".mermaid"));
-      })
-    </script>
-    HTML
-    Dir.mkdir(@path_dir) unless Dir.exists?(@path_dir)
-    File.write(@path_dir / "diagram.html", output)
+    output = ECR.render("src/renders/diagram.ecr")
+    File.write(@path_dir, output)
   end
 end
