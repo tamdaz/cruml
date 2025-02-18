@@ -1,15 +1,16 @@
+require "./entities/*"
+
 # Consists of processing a list of classes.
 class Cruml::ClassList
-  # An array that contains the classes to easily retrieve.
-  getter classes : Array(Cruml::Entities::ClassInfo)
+  class_getter classes = [] of Cruml::Entities::ClassInfo
 
-  # When instantiating the `Cruml::ClassList` class. A list of reflected classes are empty by default.
-  def initialize : Nil
-    @classes = [] of Cruml::Entities::ClassInfo
+  # Adds the class info to the class array.
+  def self.add(class_info : Cruml::Entities::ClassInfo) : Nil
+    @@classes << class_info
   end
 
-  # Adds a reflected class into class list.
-  def add(class_info : Cruml::Entities::ClassInfo) : Nil
-    @classes << class_info
+  # Find a class info by name.
+  def self.find_by_name(class_name : String) : Cruml::Entities::ClassInfo
+    @@classes.find! { |class_info| class_name == class_info.name }
   end
 end
