@@ -1,6 +1,4 @@
 class Example::E3::Universe
-  @size : Int32
-
   def initialize(@size : Int32); end
 end
 
