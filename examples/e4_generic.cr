@@ -1,10 +1,10 @@
-class Example::E4::Container
+class E4::Container
   def to_s : String
     "Container"
   end
 end
 
-class Example::E4::Box(T) < Example::E4::Container
+class E4::Box(T) < E4::Container
   property value : T
 
   def initialize(value : T)
@@ -16,7 +16,7 @@ class Example::E4::Box(T) < Example::E4::Container
   end
 end
 
-class Example::E4::Pair(A, B) < Example::E4::Container
+class E4::Pair(A, B) < E4::Container
   property first : A
   property second : B
 

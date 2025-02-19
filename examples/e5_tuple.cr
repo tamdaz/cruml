@@ -1,4 +1,4 @@
-class Example::E5::Person
+class E5::Person
   def initialize(@name : String, @age : Int32, @address : String, @phone : String)
   end
 
@@ -7,7 +7,7 @@ class Example::E5::Person
   end
 end
 
-class Example::E5::Book
+class E5::Book
   def initialize(@title : String, @publisher : String, @isbn : String, @year : Int32)
   end
 
@@ -16,7 +16,7 @@ class Example::E5::Book
   end
 end
 
-class Example::E5::Coordinates
+class E5::Coordinates
   def initialize(@latitude : Float64, @longitude : Float64, @altitude : Float64, @accuracy : Float64)
   end
 
