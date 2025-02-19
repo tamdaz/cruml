@@ -1,4 +1,4 @@
-private class E6::Visibility
+class E6::Visibility
   def public_method : String
     "This is a public method"
   end
