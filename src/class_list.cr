@@ -13,4 +13,9 @@ class Cruml::ClassList
   def self.find_by_name(class_name : String) : Cruml::Entities::ClassInfo
     @@classes.find! { |class_info| class_name == class_info.name }
   end
+
+  # Groups the classes by their namespaces.
+  def self.group_by_namespaces
+    @@classes.group_by(&.name.split(".").first)
+  end
 end
