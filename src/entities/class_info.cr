@@ -6,17 +6,17 @@ class Cruml::Entities::ClassInfo
   # Type of a class. This latter can be set as :class, :abstract or :interface.
   getter type : Symbol
 
-  # A list of inherited classes.
+  # An array of inherited classes.
   getter inherit_classes : Array(Tuple(String, String, Symbol))
 
-  # A list of instance variables.
+  # An array of instance variables.
   getter instance_vars : Array(Tuple(String, String))
 
-  # A list of methods.
+  # An array of methods.
   getter methods : Array(Cruml::Entities::MethodInfo)
 
   # The name and type of a class will be passed as arguments.
-  # A list of instance variables, inherited classes and methods are empty
+  # An array of instance variables, inherited classes and methods are empty
   # when the `Cruml::Entities::ClassInfo` class is instantiated.
   # ```
   # Cruml::Entities::ClassInfo.new("Person", :class)
@@ -33,19 +33,19 @@ class Cruml::Entities::ClassInfo
   # class_info.add_instance_var("first_name", "String")
   # ```
   def add_instance_var(name : String, type : String) : Nil
-    @instance_vars << {name, type}
+    @instance_vars |= [{name, type}]
   end
 
-  # Adds a inherited class into a list of inherited classes.
+  # Adds a inherited class into an array of inherited classes.
   # ```
   # class_info = Cruml::Entities::ClassInfo.new("Person", :class)
   # class_info.add_inherit_class("Person", "Employee")
   # ```
-  def add_inherit_class(parent_class_name : String, inherit_class_name : String) : Nil
-    @inherit_classes << {parent_class_name, inherit_class_name, @type}
+  def add_inherit_class(parent_class_name : String) : Nil
+    @inherit_classes << {parent_class_name, @name, @type}
   end
 
-  # Adds a method into a list of methods.
+  # Adds a method into an array of methods.
   # INFO: The special `initialize` method will be placed at the first element of the list.
   # ```
   # class_info = Cruml::Entities::ClassInfo.new("Person", :class)
