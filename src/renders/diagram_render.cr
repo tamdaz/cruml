@@ -10,9 +10,9 @@ class Cruml::Renders::DiagramRender
 
   def initialize(@path_dir : String)
     Cruml::ClassList.group_by_namespaces.each do |klass_group|
-      klass_group[1].each do |class_info|
-        add_inherit_class(class_info.inherit_classes)
-      end
+      # Add a relationship before creating a namespace.
+      klass_group[1].each { |klass| add_inherit_class(klass.inherit_classes) }
+
       @code << "namespace #{klass_group[0]} {\n" # begin namespace
       klass_group[1].each do |class_info|
         add_class(class_info)
