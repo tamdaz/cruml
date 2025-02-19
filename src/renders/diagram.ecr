@@ -32,10 +32,10 @@
 
 <body>
     <!--
-        UML code will be set here. After that, a class diagram will be displayed on the web browser.
+        Mermaid code will be set here. After that, a class diagram will be displayed on the web browser.
     -->
     <div class="mermaid">
-        <%= @code %>
+        <%= @code.to_s %>
     </div>
     <script>
         /**
@@ -47,7 +47,9 @@
                 maxTextSize: Infinity,
                 theme: "dark"
             });
-            panzoom(document.querySelector(".mermaid"));
+            panzoom(document.querySelector(".mermaid"), {
+                zoomSpeed: 0.2
+            });
         })
     </script>
     <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
