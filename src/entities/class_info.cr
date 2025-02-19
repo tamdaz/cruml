@@ -33,7 +33,8 @@ class Cruml::Entities::ClassInfo
   # class_info.add_instance_var("first_name", "String")
   # ```
   def add_instance_var(name : String, type : String) : Nil
-    @instance_vars |= [{name, type}]
+    @instance_vars.reject! { |ivar| ivar[0] == name }
+    @instance_vars << {name, type}
   end
 
   # Adds a inherited class into an array of inherited classes.
