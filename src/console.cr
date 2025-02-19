@@ -44,7 +44,6 @@ if files.size == 0
 end
 
 files.each do |file|
-  puts file
   ast = Crystal::Parser.parse(File.read(file))
   tx = Cruml::Transformer.new
   ast.transform(tx)
