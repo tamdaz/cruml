@@ -42,7 +42,7 @@ class Cruml::Transformer < Crystal::Transformer
     node.body.to_s.each_line do |line|
       if match = line.match(/^include (\w+(?:::\w+)*)$/)
         included_module = match[1].gsub("::", ".")
-        Cruml::ClassList.find_by_name!(@current_class_name).add_inherit_class(included_module)
+        Cruml::ClassList.find_by_name!(@current_class_name).add_included_module(included_module)
       end
     end
 
