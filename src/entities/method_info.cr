@@ -1,7 +1,7 @@
 # This consists of obtaining information about the reflected methods in a class.
 class Cruml::Entities::MethodInfo
-  # Scope of a method. This latter can be :public, :protected or :private.
-  getter scope : Symbol
+  # Method visibility. This latter can be :public, :protected or :private.
+  getter visibility : Symbol
 
   # Name of a method.
   getter name : String
@@ -17,8 +17,8 @@ class Cruml::Entities::MethodInfo
   # ```
   # Cruml::Entities::MethodInfo.new(:public, "major?", "Bool")
   # ```
-  def initialize(scope : Symbol, name : String, return_type : String)
-    @scope = scope
+  def initialize(visibility : Symbol, name : String, return_type : String)
+    @visibility = visibility
     @name = name
     @return_type = return_type
     @args = [] of Cruml::Entities::ArgInfo
