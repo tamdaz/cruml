@@ -49,4 +49,6 @@ files.each do |file|
   ast.transform(tx)
 end
 
+Cruml::ClassList.verify_instance_var_duplication
+
 Cruml::Renders::DiagramRender.new("out/diagram.html").save
