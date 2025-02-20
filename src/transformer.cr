@@ -33,7 +33,7 @@ class Cruml::Transformer < Crystal::Transformer
 
     # Replace the "::" by "." for namespaces.
     if node.superclass
-      class_info.add_inherit_class(node.superclass.to_s.gsub("::", "."))
+      class_info.add_parent_class(node.superclass.to_s.gsub("::", "."))
     end
 
     Cruml::ClassList.add(class_info)
