@@ -3,21 +3,42 @@ require "ecr"
 # Consists of generating a class diagram.
 # See https://mermaid.js.org/syntax/classDiagram.html
 class Cruml::Renders::DiagramRender
-  @code = String::Builder.new(<<-STR)
-  classDiagram\n
-  direction LR\n
-  STR
+  @code = String::Builder.new("classDiagram\n")
 
   def initialize(@path_dir : String)
+    Cruml::ModuleList.modules.each do |mod|
+      @code << "class #{mod.name}:::module {\n"
+      @code << "&lt;&lt;module&gt;&gt;\n"
+
+      mod.instance_vars.each do |instance_var|
+        name, type = instance_var[-2], instance_var[-1]
+        @code << "    -#{name} : #{type}\n"
+      end
+
+      mod.methods.each do |method|
+        literal_scope = case method.scope
+                        when :public    then '+'
+                        when :protected then '#'
+                        when :private   then '-'
+                        else                 '+'
+                        end
+
+        @code << "    #{literal_scope}#{method.name}(#{method.generate_args}) "
+        @code << " : " if method.return_type =~ /\(.*\)/
+        @code << "#{method.return_type}\n"
+      end
+      @code << "}\n" # end module
+    end
+
     Cruml::ClassList.group_by_namespaces.each do |klass_group|
       # Add a relationship before creating a namespace.
       klass_group[1].each { |klass| add_inherit_class(klass.inherit_classes) }
 
-      @code << "namespace #{klass_group[0]} {\n" # begin namespace
+      # @code << "namespace #{klass_group[0]} {\n" # begin namespace
       klass_group[1].each do |class_info|
         add_class(class_info)
       end
-      @code << "}\n" # end namespace
+      # @code << "}\n" # end namespace
     end
     set_diagram_colors
   end
@@ -79,7 +100,8 @@ class Cruml::Renders::DiagramRender
   # See https://mermaid.js.org/syntax/classDiagram.html#css-classes for more info.
   private def set_diagram_colors : Nil
     @code << "classDef default fill:#2e1065,color:white\n"
-    @code << "classDef abstract fill:#365314,color:white"
+    @code << "classDef abstract fill:#365314,color:white\n"
+    @code << "classDef module fill:#0041cc,color:white"
   end
 
   # Save the class diagram as a HTML file.
