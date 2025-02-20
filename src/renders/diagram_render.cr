@@ -1,61 +1,43 @@
 require "ecr"
+require "./uml"
 
 # Consists of generating a class diagram.
 # See https://mermaid.js.org/syntax/classDiagram.html
 class Cruml::Renders::DiagramRender
+  include Cruml::Renders::UML
+
   @code = String::Builder.new("classDiagram\n")
 
   def initialize(@path_dir : String)
     Cruml::ModuleList.modules.each do |mod|
-      @code << "class #{mod.name}:::module {\n"
+      @code << "namespace #{mod.name.gsub("::", '.').split('.').first} {\n"
+      @code << "class #{mod.name.gsub("::", '.')}:::module {\n"
       @code << "&lt;&lt;module&gt;&gt;\n"
-
-      mod.instance_vars.each do |instance_var|
-        name, type = instance_var[-2], instance_var[-1]
-        @code << "    -#{name} : #{type}\n"
-      end
-
-      mod.methods.each do |method|
-        literal_scope = case method.scope
-                        when :public    then '+'
-                        when :protected then '#'
-                        when :private   then '-'
-                        else                 '+'
-                        end
-
-        @code << "    #{literal_scope}#{method.name}(#{method.generate_args}) "
-        @code << " : " if method.return_type =~ /\(.*\)/
-        @code << "#{method.return_type}\n"
-      end
-      @code << "}\n" # end module
+      add_instance_vars(mod.instance_vars)
+      add_methods(mod.methods)
+      @code << "}\n"
+      @code << "}\n"
     end
 
     Cruml::ClassList.group_by_namespaces.each do |klass_group|
-      # Add a relationship before creating a namespace.
-      klass_group[1].each { |klass| add_inherit_class(klass.inherit_classes) }
+      namespace, classes = klass_group[0], klass_group[1]
 
-      # @code << "namespace #{klass_group[0]} {\n" # begin namespace
-      klass_group[1].each do |class_info|
+      # Add a relationship before creating a namespace.
+      classes.each do |klass|
+        add_parent_class(klass.parent_classes)
+        klass.included_modules.each do |included_module|
+          @code << namespace + '.' if namespace
+          @code << "#{included_module} <|-- #{klass.name}\n"
+        end
+      end
+
+      @code << "namespace " << namespace << " {\n"        # begin namespace
+      classes.each do |class_info|
         add_class(class_info)
       end
-      # @code << "}\n" # end namespace
+      @code << "}\n"                                      # end namespace
     end
     set_diagram_colors
-  end
-
-  # Creates a link between the parent and child classes.
-  # If the parent class type is abstract, the arrow would look like : <|..
-  # If the parent class type is normal, the arrow would look like : <|--
-  # See https://mermaid.js.org/syntax/classDiagram.html#defining-relationship for more info.
-  private def add_inherit_class(inherit_classes : Array(Tuple(String, String, Symbol))) : Nil
-    inherit_classes.each do |class_name, subclass_name, class_type|
-      case class_type
-      when :abstract
-        @code << "#{class_name.split("::")[-1]} <|.. #{subclass_name.split("::")[-1]}\n"
-      when :class
-        @code << "#{class_name.split("::")[-1]} <|-- #{subclass_name.split("::")[-1]}\n"
-      end
-    end
   end
 
   # Creates a class with a whole set of instance variables and methods.
@@ -71,33 +53,14 @@ class Cruml::Renders::DiagramRender
       @code << "  class #{short_class_name} {\n"
     end
 
-    unless class_info.instance_vars.size == 0
-      class_info.instance_vars.each do |instance_var|
-        name, type = instance_var[-2], instance_var[-1]
-        @code << "    -#{name} : #{type}\n"
-      end
-    end
-
-    unless class_info.methods.size == 0
-      class_info.methods.each do |method|
-        literal_scope = case method.scope
-                        when :public    then '+'
-                        when :protected then '#'
-                        when :private   then '-'
-                        else                 '+'
-                        end
-
-        @code << "    #{literal_scope}#{method.name}(#{method.generate_args}) "
-        @code << " : " if method.return_type =~ /\(.*\)/
-        @code << "#{method.return_type}\n"
-      end
-    end
+    add_instance_vars(class_info.instance_vars)
+    add_methods(class_info.methods)
 
     @code << "  }\n" # end class
   end
 
   # Define the style properties for the class diagram.
-  # See https://mermaid.js.org/syntax/classDiagram.html#css-classes for more info.
+  # See https://mermaid.js.org/syntax/classDiagram.html#default-class for more info.
   private def set_diagram_colors : Nil
     @code << "classDef default fill:#2e1065,color:white\n"
     @code << "classDef abstract fill:#365314,color:white\n"
