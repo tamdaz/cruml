@@ -20,17 +20,34 @@
             overflow: hidden;
         }
 
+        .loading-view {
+            width: 100%;
+            height: 100vh;
+            z-index: 1;
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
         .mermaid {
             width: 100%;
             height: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
+            visibility: hidden;
+            cursor: grab;
+        }
+
+        .mermaid:active {
+            cursor: grabbing;
         }
     </style>
 </head>
 
 <body>
+    <div class="loading-view">Loading...</div>
     <!--
         Mermaid code will be set here. After that, a class diagram will be displayed on the web browser.
     -->
@@ -42,6 +59,9 @@
          * Load the UML class diagram once the page is loaded.
          */
         window.addEventListener("DOMContentLoaded", () => {
+            document.querySelector(".mermaid").style.visibility = "visible";
+            document.querySelector(".loading-view").style.visibility = "hidden";
+
             mermaid.initialize({
                 startOnLoad: true,
                 maxTextSize: Infinity,
