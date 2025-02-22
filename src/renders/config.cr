@@ -35,6 +35,7 @@ class Cruml::Renders::Config
   def self.class_def_colors : String
     String.build do |io|
       [{:default, self.class_color}, {:abstract, self.abstract_color}, {:module, self.module_color}].each do |type, color|
+        io << Cruml::Renders::UML::INDENT * 2
         io << "classDef " << type << " fill:"
         io << (@@no_color == true ? self.theme_color : color)
         io << ",color:" << self.text_color
