@@ -11,9 +11,6 @@ targets:
   cruml:
     main: src/cruml.cr
 
-crystalline:
-  main: .crystalline_main.cr
-
 development_dependencies:
   ameba:
     github: crystal-ameba/ameba
