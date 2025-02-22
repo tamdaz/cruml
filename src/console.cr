@@ -1,10 +1,10 @@
 require "option_parser"
 require "./transformer"
 require "./renders/diagram_render"
+require "./renders/config"
 
 files = [] of String
 verbose = false
-dark_mode = false
 
 OptionParser.parse do |parser|
   parser.banner = "Usage : cruml [subcommand] [arguments] -- [options]"
@@ -13,7 +13,14 @@ OptionParser.parse do |parser|
     parser.banner = "Usage : cruml generate [arguments] -- [options]"
 
     parser.on "--verbose", "Enable verbose" { verbose = true }
-    parser.on "--dark-mode", "Set to dark mode" { dark_mode = true }
+
+    parser.on "--dark-mode", "Set to dark mode" do
+      Cruml::Renders::Config.theme = :dark
+    end
+
+    parser.on "--no-color", "Disable color output" do
+      Cruml::Renders::Config.no_color = true
+    end
 
     parser.on "--path=PATH", "Path to specify" do |path|
       files << path if File.file?(path) && path.ends_with?(".cr")
@@ -32,14 +39,14 @@ OptionParser.parse do |parser|
   end
 
   parser.invalid_option do |flag|
-    STDERR.puts "\e[31mERROR: #{flag} is not a valid option.\e[0m"
+    STDERR.puts "ERROR: #{flag} is not a valid option.".colorize(:red)
     STDERR.puts parser
     exit 1
   end
 end
 
 if files.size == 0
-  puts "No crystal files are present in the path, please retry."
+  puts "No crystal files are present in the path, please retry.".colorize(:red)
   exit 1
 end
 
@@ -51,4 +58,6 @@ end
 
 Cruml::ClassList.verify_instance_var_duplication
 
-Cruml::Renders::DiagramRender.new("out/diagram.html").save
+diagram = Cruml::Renders::DiagramRender.new("out/diagram.html")
+diagram.generate
+diagram.save
