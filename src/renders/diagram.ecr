@@ -16,7 +16,7 @@
             width: 100vw;
             height: 100vh;
             margin: 0 auto;
-            background-color: #212121;
+            background-color: <%= Cruml::Renders::Config.theme_color %>;
             overflow: hidden;
         }
 
@@ -65,7 +65,7 @@
             mermaid.initialize({
                 startOnLoad: true,
                 maxTextSize: Infinity,
-                theme: "dark"
+                theme: <%= Cruml::Renders::Config.theme.to_s.dump %>
             });
             panzoom(document.querySelector(".mermaid"), {
                 zoomSpeed: 0.2
