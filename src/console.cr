@@ -5,6 +5,7 @@ require "./renders/config"
 
 files = [] of String
 verbose = false
+output_dir = "out/"
 
 OptionParser.parse do |parser|
   parser.banner = "Usage : cruml [subcommand] [arguments] -- [options]"
@@ -26,6 +27,8 @@ OptionParser.parse do |parser|
       files << path if File.file?(path) && path.ends_with?(".cr")
       files |= Dir.glob("#{path}/**/*.cr") if File.directory?(path)
     end
+
+    parser.on "--output-dir=DIR", "Path to specify" { |dir| output_dir = dir }
   end
 
   parser.on "-v", "--version", "Show the version" do
@@ -58,6 +61,6 @@ end
 
 Cruml::ClassList.verify_instance_var_duplication
 
-diagram = Cruml::Renders::DiagramRender.new("out/diagram.html")
+diagram = Cruml::Renders::DiagramRender.new("#{output_dir}/diagram.html")
 diagram.generate
 diagram.save
