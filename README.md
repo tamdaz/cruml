@@ -10,7 +10,8 @@
 **cruml** *(**Cr**ystal **UML**)* is a tool that allows to generate an UML diagram. This is useful for any Crystal projects.
 
 ![uml_class_diagram](img/diagram.png)
-> A class diagram that represents the parent class, linked with inherited classes.
+
+> A class diagram representing the child classes linked to the parent class.
 
 ## Installation
 
