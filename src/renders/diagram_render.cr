@@ -1,4 +1,5 @@
 require "ecr"
+require "file_utils"
 require "./uml"
 
 # Consists of generating a class diagram.
@@ -20,6 +21,11 @@ class Cruml::Renders::DiagramRender
   # Saves the class diagram as an HTML file.
   def save : Nil
     output = ECR.render("src/renders/diagram.ecr")
+    dir = File.dirname(@path_dir)
+    FileUtils.mkdir_p(dir) unless Dir.exists?(dir)
     File.write(@path_dir, output)
+  rescue error : File::AccessDeniedError
+    puts "An error is occured when saving the diagram into #{@path_dir}. Please retry.".colorize(:red)
+    puts ("Reason of this error : " + error.to_s).colorize(:red)
   end
 end
