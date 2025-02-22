@@ -1,4 +1,6 @@
 module Cruml::Renders::UML
+  INDENT = " " * 4
+
   # Gets the UML method visibility.
   private def method_visibility(visibility : Symbol) : Char
     case visibility
@@ -12,13 +14,13 @@ module Cruml::Renders::UML
   # Generates module diagrams.
   private def generate_module_diagrams
     Cruml::ModuleList.modules.each do |mod|
-      @code << "namespace #{mod.name.gsub("::", '.').split('.').first} {\n"
-      @code << "class #{mod.name.gsub("::", '.')}:::module {\n"
-      @code << "&lt;&lt;module&gt;&gt;\n"
+      @code << INDENT * 2 << "namespace #{mod.name.gsub("::", '.').split('.').first} {\n"
+      @code << INDENT * 3 << "class #{mod.name.gsub("::", '.')}:::module {\n"
+      @code << INDENT * 4 << "&lt;&lt;module&gt;&gt;\n"
       add_instance_vars(mod.instance_vars)
       add_methods(mod.methods)
-      @code << "}\n"
-      @code << "}\n"
+      @code << INDENT * 3 << "}\n"
+      @code << INDENT * 2 << "}\n"
     end
   end
 
@@ -31,16 +33,17 @@ module Cruml::Renders::UML
       classes.each do |klass|
         add_parent_class(klass.parent_classes)
         klass.included_modules.each do |included_module|
+          @code << INDENT * 2
           @code << namespace.gsub("::", '.') + '.' if namespace
           @code << "#{included_module.gsub("::", '.')} <|-- #{klass.name.gsub("::", '.')}\n"
         end
       end
 
-      @code << "namespace " << namespace.gsub("::", '.') << " {\n"
+      @code << INDENT * 2 << "namespace " << namespace.gsub("::", '.') << " {\n"
       classes.each do |class_info|
         add_class(class_info)
       end
-      @code << "}\n"
+      @code << INDENT * 2 << "}\n"
     end
   end
 
@@ -48,7 +51,7 @@ module Cruml::Renders::UML
   private def add_instance_vars(instance_vars : Array(Tuple(String, String))) : Nil
     instance_vars.each do |ivar|
       name, type = ivar[-2], ivar[-1]
-      @code << "    -#{name} : #{type}\n"
+      @code << INDENT * 4 << "-#{name} : #{type}\n"
     end
   end
 
@@ -58,16 +61,16 @@ module Cruml::Renders::UML
 
     case class_info.type # begin class
     when :abstract
-      @code << "  class #{short_class_name}:::abstract {\n"
-      @code << "    &lt;&lt;abstract&gt;&gt;\n"
+      @code << INDENT * 3 << "class #{short_class_name}:::abstract {\n"
+      @code << INDENT * 4 << "&lt;&lt;abstract&gt;&gt;\n"
     when :class
-      @code << "  class #{short_class_name} {\n"
+      @code << INDENT * 3 << "class #{short_class_name} {\n"
     end
 
     add_instance_vars(class_info.instance_vars)
     add_methods(class_info.methods)
 
-    @code << "  }\n" # end class
+    @code << INDENT * 3 << "}\n" # end class
   end
 
   # Adds methods to the class.
@@ -75,7 +78,8 @@ module Cruml::Renders::UML
     methods.each do |method|
       visibility = method_visibility(method.visibility)
 
-      @code << "    #{visibility}#{method.name}(#{method.generate_args}) "
+      @code << INDENT * 4
+      @code << "#{visibility}#{method.name}(#{method.generate_args}) "
       @code << " : " if method.return_type =~ /\(.*\)/
       @code << "#{method.return_type}\n"
     end
@@ -87,6 +91,7 @@ module Cruml::Renders::UML
   # See https://mermaid.js.org/syntax/classDiagram.html#defining-relationship for more info.
   private def add_parent_class(inherit_classes : Array(Tuple(String, String, Symbol))) : Nil
     inherit_classes.each do |class_name, subclass_name, class_type|
+      @code << INDENT * 2
       case class_type
       when :abstract
         @code << "#{class_name.gsub("::", '.')} <|.. #{subclass_name.gsub("::", '.')}\n"
