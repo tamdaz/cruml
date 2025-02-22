@@ -1,4 +1,4 @@
-class E11::G1::Link;
+class E11::G1::Link
   def my_public_method : Void; end
 end
 
