@@ -31,11 +31,12 @@ class Cruml::Renders::DiagramRender
         end
       end
 
-      @code << "namespace " << namespace << " {\n"        # begin namespace
+      # Namespace block
+      @code << "namespace " << namespace << " {\n"
       classes.each do |class_info|
         add_class(class_info)
       end
-      @code << "}\n"                                      # end namespace
+      @code << "}\n"
     end
     set_diagram_colors
   end
