@@ -14,8 +14,8 @@ module Cruml::Renders::UML
   # Generates module diagrams.
   private def generate_module_diagrams
     Cruml::ModuleList.modules.each do |mod|
-      @code << INDENT * 2 << "namespace #{mod.name.gsub("::", '.').split('.').first} {\n"
-      @code << INDENT * 3 << "class #{mod.name.gsub("::", '.')}:::module {\n"
+      @code << INDENT * 2 << "namespace " << mod.name.gsub("::", '.').split('.').first << " {\n"
+      @code << INDENT * 3 << "class `" << mod.name << "`:::module {\n"
       @code << INDENT * 4 << "&lt;&lt;module&gt;&gt;\n"
       add_instance_vars(mod.instance_vars)
       add_methods(mod.methods)
@@ -34,8 +34,9 @@ module Cruml::Renders::UML
         add_parent_class(klass.parent_classes)
         klass.included_modules.each do |included_module|
           @code << INDENT * 2
-          @code << namespace.gsub("::", '.') + '.' if namespace
-          @code << "#{included_module.gsub("::", '.')} <|-- #{klass.name.gsub("::", '.')}\n"
+          @code << '`'
+          @code << namespace << "::" if namespace
+          @code << included_module << "` <|-- `" << klass.name << '`' << "\n"
         end
       end
 
@@ -57,20 +58,20 @@ module Cruml::Renders::UML
 
   # Creates a class with a complete set of instance variables and methods.
   private def add_class(class_info : Cruml::Entities::ClassInfo) : Nil
-    short_class_name = class_info.name.gsub("::", '.')
+    short_class_name = class_info.name
 
     case class_info.type # begin class
     when :abstract
-      @code << INDENT * 3 << "class #{short_class_name}:::abstract {\n"
+      @code << INDENT * 3 << "class " << '`' << short_class_name << '`' << ":::abstract {\n"
       @code << INDENT * 4 << "&lt;&lt;abstract&gt;&gt;\n"
     when :class
-      @code << INDENT * 3 << "class #{short_class_name} {\n"
+      @code << INDENT * 3 << "class " << '`' << short_class_name << '`' << "{\n"
     end
 
     add_instance_vars(class_info.instance_vars)
     add_methods(class_info.methods)
 
-    @code << INDENT * 3 << "}\n" # end class
+    @code << INDENT * 3 << "}\n"
   end
 
   # Adds methods to the class.
@@ -94,9 +95,9 @@ module Cruml::Renders::UML
       @code << INDENT * 2
       case class_type
       when :abstract
-        @code << "#{class_name.gsub("::", '.')} <|.. #{subclass_name.gsub("::", '.')}\n"
+        @code << '`' << class_name << "` <|.. `" << subclass_name << '`' << "\n"
       when :class
-        @code << "#{class_name.gsub("::", '.')} <|-- #{subclass_name.gsub("::", '.')}\n"
+        @code << '`' << class_name << "` <|-- `" << subclass_name << '`' << "\n"
       end
     end
   end
