@@ -19,7 +19,7 @@ class Cruml::Transformer < Crystal::Transformer
   end
 
   def transform(node : Crystal::ClassDef) : Crystal::ASTNode
-    @current_class_name = node.name.to_s.gsub("::", ".")
+    @current_class_name = node.name.to_s
     @current_module_name = ""
 
     # If a class def contains the generic
@@ -33,7 +33,7 @@ class Cruml::Transformer < Crystal::Transformer
 
     # Replace the "::" by "." for namespaces.
     if node.superclass
-      class_info.add_parent_class(node.superclass.to_s.gsub("::", "."))
+      class_info.add_parent_class(node.superclass.to_s)
     end
 
     Cruml::ClassList.add(class_info)
@@ -41,7 +41,7 @@ class Cruml::Transformer < Crystal::Transformer
     # Check if there's an "include" keyword followed by a module
     node.body.to_s.each_line do |line|
       if match = line.match(/^include (\w+(?:::\w+)*)$/)
-        included_module = match[1].gsub("::", ".")
+        included_module = match[1]
         Cruml::ClassList.find_by_name!(@current_class_name).add_included_module(included_module)
       end
     end

@@ -21,7 +21,10 @@ class Cruml::ClassList
 
   # Groups the classes by their namespaces.
   def self.group_by_namespaces
-    @@classes.group_by(&.name.split(".").first)
+    @@classes.group_by do |klass|
+      namespace = klass.name.split("::")
+      namespace.size > 2 ? namespace[0..-2].join("::") : namespace[0]
+    end
   end
 
   def self.verify_instance_var_duplication : Nil
