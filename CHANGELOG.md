@@ -1,5 +1,30 @@
 # Changelog
 
+## [0.5.0](https://github.com/tamdaz/cruml/releases/tag/0.5.0) - 2025-02-22
+
+**BREAKING CHANGE**: cruml is no longer a library, this is now a exectuable tool.
+
+## Added
+
+- Add the `--output-dir` flag by (@tamdaz)(#10)
+- Add a config to format the HTML files (dev only). by (@tamdaz)(#7)
+- Add the specs by (@tamdaz)(#6)
+- Add a CLI by @tamdaz in [#5](https://github.com/tamdaz/cruml/pull/5/files#diff-1141c7f214dfe9fce761897ef05ab40a28bd6f97fc0651111c48057ffdf36021)
+
+## Changed
+
+- **Breaking**: Use the Crystal Compiler API instead of macros by (@tamdaz)(#5)
+- Refactor the code located in the `src/render` directory. by (@tamdaz)(#8)
+
+## Fixed
+
+- Indent the Mermaid code. by (@tamdaz)(#11)
+- Fixed a bug with special characters in class names. by (@tamdaz)(#12)
+
+## Removed
+
+- Remove the crystalline config by (@tamdaz)(#9)
+
 ## [0.4.0](https://github.com/tamdaz/cruml/releases/tag/0.4.0) - 2025-02-17
 
 ## Added

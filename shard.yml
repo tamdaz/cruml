@@ -1,8 +1,8 @@
 name: cruml
-version: 0.4.0
+version: 0.5.0
 
 description: |
-  A tool that provides a UML class diagram for any Crystal projects.
+  A library that provides an UML class diagram for any Crystal projects.
 
 authors:
   - tamdaz <tamda.zohir.pro@gmail.com>
