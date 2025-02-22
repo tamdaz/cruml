@@ -28,7 +28,7 @@ OptionParser.parse do |parser|
       files |= Dir.glob("#{path}/**/*.cr") if File.directory?(path)
     end
 
-    parser.on "--output-dir=DIR", "Path to specify" { |dir| output_dir = dir }
+    parser.on "--output-dir=DIR", "Directory path to save diagrams" { |dir| output_dir = dir }
   end
 
   parser.on "-v", "--version", "Show the version" do
