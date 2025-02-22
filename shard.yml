@@ -15,6 +15,12 @@ development_dependencies:
   ameba:
     github: crystal-ameba/ameba
 
+scripts:
+  postinstall: shards build cruml
+
+executables:
+  - cruml
+
 crystal: '>= 1.10.0'
 
 license: MIT
