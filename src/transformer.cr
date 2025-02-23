@@ -42,7 +42,8 @@ class Cruml::Transformer < Crystal::Transformer
     node.body.to_s.each_line do |line|
       if match = line.match(/^include (\w+(?:::\w+)*)$/)
         included_module = match[1]
-        Cruml::ClassList.find_by_name!(@current_class_name).add_included_module(included_module)
+        found_class = Cruml::ClassList.find_by_name(@current_class_name)
+        found_class.add_included_module(included_module) if found_class
       end
     end
 
@@ -50,22 +51,34 @@ class Cruml::Transformer < Crystal::Transformer
   end
 
   def transform(node : Crystal::VisibilityModifier) : Crystal::ASTNode
-    method = node.exp.as(Crystal::Def)
-    method_name = method.receiver ? "self.#{method.name}" : method.name
+    method = node.exp.as?(Crystal::Def)
 
-    @protected_and_private_methods << method
+    if method
+      method_name = method.receiver ? "self.#{method.name}" : method.name
 
-    if @current_module_name.empty?
-      # Add a method into class.
-      Cruml::ClassList.find_by_name!(@current_class_name).add_method(
-        Cruml::Entities::MethodInfo.new(visibility(node.modifier), method_name.to_s, method.return_type.to_s)
-      )
-    else
-      # Add a method into module.
-      Cruml::ModuleList.find_by_name!(@current_module_name).add_method(
-        Cruml::Entities::MethodInfo.new(visibility(node.modifier), method_name.to_s, method.return_type.to_s)
-      )
+      @protected_and_private_methods << method
+
+      if @current_module_name.empty?
+        # Add a method into class.
+        found_class = Cruml::ClassList.find_by_name(@current_class_name)
+
+        if found_class
+          found_class.add_method(
+            Cruml::Entities::MethodInfo.new(visibility(node.modifier), method_name.to_s, method.return_type.to_s)
+          )
+        end
+      else
+        # Add a method into module.
+        found_module = Cruml::ModuleList.find_by_name(@current_module_name)
+
+        if found_module
+          found_module.add_method(
+            Cruml::Entities::MethodInfo.new(visibility(node.modifier), method_name.to_s, method.return_type.to_s)
+          )
+        end
+      end
     end
+
     super(node)
   end
 
@@ -82,15 +95,19 @@ class Cruml::Transformer < Crystal::Transformer
       if match = exp.to_s.match(/^(property|getter|setter|property\?|getter\?)\((\w+) : ([\w:| ]+)\)/)
         visibility, name, type = match[1], match[2], match[3].gsub("::Nil", "Nil")
 
-        Cruml::ClassList.find_by_name!(@current_class_name).tap do |class_info|
-          class_info.add_instance_var("@#{name}", type)
+        found_class = Cruml::ClassList.find_by_name(@current_class_name)
 
-          if ["property", "getter", "property?", "getter?"].includes?(visibility)
-            class_info.add_method(Cruml::Entities::MethodInfo.new(:public, name, type))
-          end
+        if found_class
+          found_class.tap do |class_info|
+            class_info.add_instance_var("@#{name}", type)
 
-          if ["property", "setter", "property?", "getter?"].includes?(visibility)
-            class_info.add_method(Cruml::Entities::MethodInfo.new(:public, "#{name}=", type))
+            if ["property", "getter", "property?", "getter?"].includes?(visibility)
+              class_info.add_method(Cruml::Entities::MethodInfo.new(:public, name, type))
+            end
+
+            if ["property", "setter", "property?", "getter?"].includes?(visibility)
+              class_info.add_method(Cruml::Entities::MethodInfo.new(:public, "#{name}=", type))
+            end
           end
         end
       end
@@ -107,9 +124,11 @@ class Cruml::Transformer < Crystal::Transformer
 
       if var_name.includes?(ivar_name)
         if @current_module_name.empty?
-          Cruml::ClassList.find_by_name!(@current_class_name).add_instance_var(var_name, var_type)
+          found_class = Cruml::ClassList.find_by_name(@current_class_name)
+          found_class.add_instance_var(var_name, var_type) if found_class
         else
-          Cruml::ModuleList.find_by_name!(@current_module_name).add_instance_var(var_name, var_type)
+          found_module = Cruml::ModuleList.find_by_name(@current_module_name)
+          found_module.add_instance_var(var_name, var_type) if found_module
         end
       end
     end
@@ -120,9 +139,12 @@ class Cruml::Transformer < Crystal::Transformer
   def transform(node : Crystal::Assign) : Crystal::ASTNode
     @variables.each do |var|
       if node.target.to_s.includes?(var.var.to_s)
-        Cruml::ClassList.find_by_name!(@current_class_name).add_instance_var(
-          node.target.to_s, var.declared_type.to_s.gsub(" ::", ' ')
-        )
+        found_class = Cruml::ClassList.find_by_name(@current_class_name)
+        if found_class
+          found_class.add_instance_var(
+            node.target.to_s, var.declared_type.to_s.gsub(" ::", ' ')
+          )
+        end
       end
     end
 
@@ -144,14 +166,18 @@ class Cruml::Transformer < Crystal::Transformer
       node.body.to_s.each_line do |line|
         if match = line.match(/^@(\w+) = #{arg_name}$/)
           ivar_name = match[1]
-          Cruml::ClassList.find_by_name!(@current_class_name).add_instance_var("@#{ivar_name}", arg.restriction.to_s.gsub("::Nil", "Nil"))
+          found_class = Cruml::ClassList.find_by_name(@current_class_name)
+          if found_class
+            found_class.add_instance_var("@#{ivar_name}", arg.restriction.to_s.gsub("::Nil", "Nil"))
+          end
         end
       end
     end
 
     if match = node.body.to_s.match(/^@(\w+) : ([\w:| ]+)$/)
       ivar_name, ivar_type = match[1], match[2].gsub("::Nil", "Nil")
-      Cruml::ClassList.find_by_name!(@current_class_name).add_instance_var("@#{ivar_name}", ivar_type)
+      found_class = Cruml::ClassList.find_by_name(@current_class_name)
+      found_class.add_instance_var("@#{ivar_name}", ivar_type) if found_class
     end
 
     if is_not_duplicated_method
@@ -170,10 +196,12 @@ class Cruml::Transformer < Crystal::Transformer
 
       if @current_module_name.empty?
         # Add a method into class.
-        Cruml::ClassList.find_by_name!(@current_class_name).add_method(method_info)
+        found_class = Cruml::ClassList.find_by_name(@current_class_name)
+        found_class.add_method(method_info) if found_class
       else
         # Add a method into module.
-        Cruml::ModuleList.find_by_name!(@current_module_name).add_method(method_info)
+        found_module = Cruml::ModuleList.find_by_name(@current_module_name)
+        found_module.add_method(method_info) if found_module
       end
     end
 

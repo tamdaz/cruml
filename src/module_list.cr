@@ -15,7 +15,7 @@ class Cruml::ModuleList
   end
 
   # Find a module info by name.
-  def self.find_by_name!(module_name : String) : Cruml::Entities::ModuleInfo
+  def self.find_by_name(module_name : String) : Cruml::Entities::ModuleInfo?
     @@modules.find! { |module_info| module_name == module_info.name }
   end
 end
