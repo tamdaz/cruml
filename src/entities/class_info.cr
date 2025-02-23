@@ -30,7 +30,10 @@ class Cruml::Entities::ClassInfo
   # class_info.add_parent_class("Person")
   # ```
   def add_parent_class(parent_class_name : String) : Nil
-    @parent_classes << {parent_class_name, @name, @type}
+    found_class = Cruml::ClassList.find_by_name(parent_class_name)
+    if found_class
+      @parent_classes << {parent_class_name, @name, found_class.type}
+    end
   end
 
   def add_included_module(module_name : String) : Nil

@@ -69,8 +69,11 @@ module Cruml::Renders::UML
     when :abstract
       @code << INDENT * 3 << "class " << '`' << short_class_name << '`' << ":::abstract {\n"
       @code << INDENT * 4 << "&lt;&lt;abstract&gt;&gt;\n"
+    when :interface
+      @code << INDENT * 3 << "class " << '`' << short_class_name << '`' << ":::interface {\n"
+      @code << INDENT * 4 << "&lt;&lt;interface&gt;&gt;\n"
     when :class
-      @code << INDENT * 3 << "class " << '`' << short_class_name << '`' << "{\n"
+      @code << INDENT * 3 << "class " << '`' << short_class_name << '`' << " {\n"
     end
 
     add_instance_vars(class_info.instance_vars)
@@ -99,9 +102,11 @@ module Cruml::Renders::UML
     inherit_classes.each do |class_name, subclass_name, class_type|
       @code << INDENT * 2
       case class_type
-      when :abstract
+      when :interface
         @code << '`' << class_name << "` <|.. `" << subclass_name << '`' << "\n"
       when :class
+        @code << '`' << class_name << "` <|-- `" << subclass_name << '`' << "\n"
+      when :abstract
         @code << '`' << class_name << "` <|-- `" << subclass_name << '`' << "\n"
       end
     end
