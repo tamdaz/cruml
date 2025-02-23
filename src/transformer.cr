@@ -29,10 +29,10 @@ class Cruml::Transformer < Crystal::Transformer
     end
 
     class_type = if @current_class_name.downcase.ends_with?("interface")
-      :interface
-    else
-      node.abstract? ? :abstract : :class
-    end
+                   :interface
+                 else
+                   node.abstract? ? :abstract : :class
+                 end
 
     class_info = Cruml::Entities::ClassInfo.new(@current_class_name, class_type)
 

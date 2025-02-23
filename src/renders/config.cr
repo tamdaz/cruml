@@ -43,7 +43,7 @@ class Cruml::Renders::Config
         {:default, self.class_color},
         {:abstract, self.abstract_color},
         {:interface, self.interface_color},
-        {:module, self.module_color}
+        {:module, self.module_color},
       ].each do |type, color|
         io << Cruml::Renders::UML::INDENT * 2
         io << "classDef " << type << " fill:"
