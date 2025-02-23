@@ -19,13 +19,15 @@ module Cruml::Renders::UML
       namespace.pop if namespace.size > 1
 
       @code << INDENT * 2 << "namespace " << namespace.join('-') << " {\n"
-      if mod
+      case mod.type
+      when :normal
         @code << INDENT * 3 << "class `" << mod.name << "`:::module {\n"
-      else
+        @code << INDENT * 4 << "&lt;&lt;module&gt;&gt;\n"
+      when :interface
         @code << INDENT * 3 << "class `" << mod.name << "`:::interface {\n"
+        @code << INDENT * 4 << "&lt;&lt;interface&gt;&gt;\n"
       end
 
-      @code << INDENT * 4 << "&lt;&lt;module&gt;&gt;\n"
       add_instance_vars(mod.instance_vars)
       add_methods(mod.methods)
       @code << INDENT * 3 << "}\n"

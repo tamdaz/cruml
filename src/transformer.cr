@@ -13,7 +13,11 @@ class Cruml::Transformer < Crystal::Transformer
   def transform(node : Crystal::ModuleDef) : Crystal::ASTNode
     @current_module_name = node.name.to_s
 
-    Cruml::ModuleList.add(Cruml::Entities::ModuleInfo.new(@current_module_name))
+    if @current_module_name.downcase.ends_with?("interface")
+      Cruml::ModuleList.add(Cruml::Entities::ModuleInfo.new(@current_module_name, :interface))
+    else
+      Cruml::ModuleList.add(Cruml::Entities::ModuleInfo.new(@current_module_name))
+    end
 
     super(node)
   end
