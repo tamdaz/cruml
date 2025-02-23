@@ -1,8 +1,24 @@
 # Changelog
 
+## [0.6.0](https://github.com/tamdaz/cruml/releases/tag/0.6.0) - 2025-02-24
+
+## Added
+
+* Add an interface (@tamdaz)(#16)
+
+## Changed
+
+* Rename the `#find_by_name!` static method to `#find_by_name` (@tamdaz)(#15)
+
+## Fixed
+
+* Add missing code to set a module as an interface (@tamdaz)(#18)
+* Namespace did not accept special characters (@tamdaz)(#14)
+* Fix namespaces (@tamdaz)(#17)
+
 ## [0.5.0](https://github.com/tamdaz/cruml/releases/tag/0.5.0) - 2025-02-22
 
-**BREAKING CHANGE**: cruml is no longer a library, this is now a exectuable tool.
+**BREAKING CHANGE**: cruml is no longer a library, this is now an exectuable tool.
 
 ## Added
 
