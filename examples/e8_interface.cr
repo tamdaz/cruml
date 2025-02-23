@@ -1,10 +1,13 @@
-abstract class E8::Shape
-  abstract def area : Float64
-  abstract def perimeter : Float64
+abstract class E8::ObjectInterface
   abstract def draw : Void
 end
 
-class E8::Circle < E8::Shape
+abstract class E8::ShapeInterface < E8::ObjectInterface
+  abstract def area : Float64
+  abstract def perimeter : Float64
+end
+
+class E8::Circle < E8::ShapeInterface
   property radius : Float64
 
   def initialize(@radius : Float64); end
@@ -22,7 +25,7 @@ class E8::Circle < E8::Shape
   end
 end
 
-class E8::Rectangle < E8::Shape
+class E8::Rectangle < E8::ShapeInterface
   property width : Float64
   property height : Float64
 
@@ -41,7 +44,7 @@ class E8::Rectangle < E8::Shape
   end
 end
 
-class E8::Triangle < E8::Shape
+class E8::Triangle < E8::ShapeInterface
   property base : Float64
   property height : Float64
 
