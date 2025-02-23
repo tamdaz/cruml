@@ -2,8 +2,6 @@ require "../src/module_list"
 require "spec"
 
 describe Cruml::ModuleList do
-  before_each { Cruml::ModuleList.clear }
-
   describe "#add" do
     it "adds a module to the list" do
       module_info = Cruml::Entities::ModuleInfo.new("TestModule")
@@ -26,4 +24,6 @@ describe Cruml::ModuleList do
       end
     end
   end
+
+  after_each { Cruml::ModuleList.clear }
 end
