@@ -24,7 +24,7 @@ module Cruml::Renders::UML
       else
         @code << INDENT * 3 << "class `" << mod.name << "`:::interface {\n"
       end
-  
+
       @code << INDENT * 4 << "&lt;&lt;module&gt;&gt;\n"
       add_instance_vars(mod.instance_vars)
       add_methods(mod.methods)
