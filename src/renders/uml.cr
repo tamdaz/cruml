@@ -19,7 +19,11 @@ module Cruml::Renders::UML
       namespace.pop if namespace.size == 2
 
       @code << INDENT * 2 << "namespace " << namespace.join('-') << " {\n"
-      @code << INDENT * 3 << "class `" << mod.name << "`:::module {\n"
+      if mod
+        @code << INDENT * 3 << "class `" << mod.name << "`:::module {\n"
+      else
+        @code << INDENT * 3 << "class `" << mod.name << "`:::interface {\n"
+      end
       @code << INDENT * 4 << "&lt;&lt;module&gt;&gt;\n"
       add_instance_vars(mod.instance_vars)
       add_methods(mod.methods)
@@ -39,7 +43,6 @@ module Cruml::Renders::UML
         klass.included_modules.each do |included_module|
           @code << INDENT * 2
           @code << '`'
-          @code << namespace << "::" if namespace
           @code << included_module << "` <|-- `" << klass.name << '`' << "\n"
         end
       end
