@@ -29,8 +29,12 @@ describe Cruml::Entities::ClassInfo do
 
   describe "#add_parent_class" do
     it "adds a parent class" do
+      Cruml::ClassList.add(Cruml::Entities::ClassInfo.new("Person", :class))
+
       class_info = Cruml::Entities::ClassInfo.new("Employee", :class)
       class_info.add_parent_class("Person")
+
+      Cruml::ClassList.add(class_info)
       class_info.parent_classes.should eq([{"Person", "Employee", :class}])
     end
   end
@@ -53,4 +57,6 @@ describe Cruml::Entities::ClassInfo do
       class_info.methods.should eq([initialize_method, is_major_method])
     end
   end
+
+  after_each { Cruml::ClassList.clear }
 end

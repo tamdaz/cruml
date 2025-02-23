@@ -3,8 +3,6 @@ require "./../src/class_list"
 require "./../src/entities/class_info"
 
 describe Cruml::ClassList do
-  before_each { Cruml::ClassList.clear }
-
   describe "#find_by_name" do
     it "adds and finds a class by name" do
       class_info = Cruml::Entities::ClassInfo.new("TestClass", :class)

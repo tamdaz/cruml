@@ -16,6 +16,11 @@ class Cruml::Renders::Config
     @@theme == :light ? "#a7e5a7" : "#365314"
   end
 
+  # Gets the color for interfaces.
+  def self.interface_color : String
+    @@theme == :light ? "#e2c7a3" : "#af6300"
+  end
+
   # Gets the color for modules.
   def self.module_color : String
     @@theme == :light ? "#5ab3f4" : "#0041cc"
@@ -34,7 +39,12 @@ class Cruml::Renders::Config
   # Generates the class definitions for the diagram.
   def self.class_def_colors : String
     String.build do |io|
-      [{:default, self.class_color}, {:abstract, self.abstract_color}, {:module, self.module_color}].each do |type, color|
+      [
+        {:default, self.class_color},
+        {:abstract, self.abstract_color},
+        {:interface, self.interface_color},
+        {:module, self.module_color},
+      ].each do |type, color|
         io << Cruml::Renders::UML::INDENT * 2
         io << "classDef " << type << " fill:"
         io << (@@no_color == true ? self.theme_color : color)

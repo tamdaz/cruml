@@ -19,7 +19,11 @@ module Cruml::Renders::UML
       namespace.pop if namespace.size == 2
 
       @code << INDENT * 2 << "namespace " << namespace.join('-') << " {\n"
-      @code << INDENT * 3 << "class `" << mod.name << "`:::module {\n"
+      if mod
+        @code << INDENT * 3 << "class `" << mod.name << "`:::module {\n"
+      else
+        @code << INDENT * 3 << "class `" << mod.name << "`:::interface {\n"
+      end
       @code << INDENT * 4 << "&lt;&lt;module&gt;&gt;\n"
       add_instance_vars(mod.instance_vars)
       add_methods(mod.methods)
@@ -39,7 +43,6 @@ module Cruml::Renders::UML
         klass.included_modules.each do |included_module|
           @code << INDENT * 2
           @code << '`'
-          @code << namespace << "::" if namespace
           @code << included_module << "` <|-- `" << klass.name << '`' << "\n"
         end
       end
@@ -69,8 +72,11 @@ module Cruml::Renders::UML
     when :abstract
       @code << INDENT * 3 << "class " << '`' << short_class_name << '`' << ":::abstract {\n"
       @code << INDENT * 4 << "&lt;&lt;abstract&gt;&gt;\n"
+    when :interface
+      @code << INDENT * 3 << "class " << '`' << short_class_name << '`' << ":::interface {\n"
+      @code << INDENT * 4 << "&lt;&lt;interface&gt;&gt;\n"
     when :class
-      @code << INDENT * 3 << "class " << '`' << short_class_name << '`' << "{\n"
+      @code << INDENT * 3 << "class " << '`' << short_class_name << '`' << " {\n"
     end
 
     add_instance_vars(class_info.instance_vars)
@@ -99,9 +105,11 @@ module Cruml::Renders::UML
     inherit_classes.each do |class_name, subclass_name, class_type|
       @code << INDENT * 2
       case class_type
-      when :abstract
+      when :interface
         @code << '`' << class_name << "` <|.. `" << subclass_name << '`' << "\n"
       when :class
+        @code << '`' << class_name << "` <|-- `" << subclass_name << '`' << "\n"
+      when :abstract
         @code << '`' << class_name << "` <|-- `" << subclass_name << '`' << "\n"
       end
     end
