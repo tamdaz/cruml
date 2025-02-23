@@ -11,8 +11,8 @@ module E10::ModuleTwo
 end
 
 class E10::MyClass
-  include ModuleOne
-  include ModuleTwo
+  include E10::ModuleOne
+  include E10::ModuleTwo
 
   def initialize(@my_ivar : String); end
 end
