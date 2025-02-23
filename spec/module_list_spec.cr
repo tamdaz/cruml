@@ -16,13 +16,13 @@ describe Cruml::ModuleList do
     it "finds a module by name" do
       module_info = Cruml::Entities::ModuleInfo.new("TestModule")
       Cruml::ModuleList.add(module_info)
-      found_module = Cruml::ModuleList.find_by_name!("TestModule")
+      found_module = Cruml::ModuleList.find_by_name("TestModule")
       found_module.should eq(module_info)
     end
 
     it "raises an error when module is not found" do
       expect_raises(Enumerable::NotFoundError) do
-        Cruml::ModuleList.find_by_name!("NonExistentModule")
+        Cruml::ModuleList.find_by_name("NonExistentModule")
       end
     end
   end

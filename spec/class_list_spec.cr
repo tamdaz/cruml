@@ -5,18 +5,18 @@ require "./../src/entities/class_info"
 describe Cruml::ClassList do
   before_each { Cruml::ClassList.clear }
 
-  describe "#find_by_name!" do
+  describe "#find_by_name" do
     it "adds and finds a class by name" do
       class_info = Cruml::Entities::ClassInfo.new("TestClass", :class)
       Cruml::ClassList.add(class_info)
 
-      found_class = Cruml::ClassList.find_by_name!("TestClass")
+      found_class = Cruml::ClassList.find_by_name("TestClass")
       found_class.should eq(class_info)
     end
 
     it "raises an error when class is not found" do
       expect_raises(Enumerable::NotFoundError) do
-        Cruml::ModuleList.find_by_name!("NonExistentClass")
+        Cruml::ModuleList.find_by_name("NonExistentClass")
       end
     end
   end
