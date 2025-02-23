@@ -14,6 +14,7 @@ module Cruml::Renders::UML
   # Generates module diagrams.
   private def generate_module_diagrams
     Cruml::ModuleList.modules.each do |mod|
+      # Replace `::` by `-`
       namespace = mod.name.gsub("::", '-').split('-')
       namespace.pop if namespace.size == 2
 
@@ -43,6 +44,7 @@ module Cruml::Renders::UML
         end
       end
 
+      # Replace `::` by `.`
       @code << INDENT * 2 << "namespace " << namespace.gsub("::", '.') << " {\n"
       classes.each do |class_info|
         add_class(class_info)
