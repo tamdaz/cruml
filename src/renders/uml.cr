@@ -16,7 +16,7 @@ module Cruml::Renders::UML
     Cruml::ModuleList.modules.each do |mod|
       # Replace `::` by `-`
       namespace = mod.name.gsub("::", '-').split('-')
-      namespace.pop if namespace.size == 2
+      namespace.pop if namespace.size > 1
 
       @code << INDENT * 2 << "namespace " << namespace.join('-') << " {\n"
       if mod
@@ -24,6 +24,7 @@ module Cruml::Renders::UML
       else
         @code << INDENT * 3 << "class `" << mod.name << "`:::interface {\n"
       end
+
       @code << INDENT * 4 << "&lt;&lt;module&gt;&gt;\n"
       add_instance_vars(mod.instance_vars)
       add_methods(mod.methods)
@@ -41,14 +42,12 @@ module Cruml::Renders::UML
       classes.each do |klass|
         add_parent_class(klass.parent_classes)
         klass.included_modules.each do |included_module|
-          @code << INDENT * 2
-          @code << '`'
-          @code << included_module << "` <|-- `" << klass.name << '`' << "\n"
+          @code << INDENT * 2 << '`' << included_module << "` <|-- `" << klass.name << '`' << "\n"
         end
       end
 
       # Replace `::` by `.`
-      @code << INDENT * 2 << "namespace " << namespace.gsub("::", '.') << " {\n"
+      @code << INDENT * 2 << "namespace -" << namespace.gsub("::", '.') << " {\n"
       classes.each do |class_info|
         add_class(class_info)
       end
