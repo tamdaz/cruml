@@ -4,5 +4,5 @@ require "./console"
 # This is useful for any Crystal projects.
 # > Cruml uses the compiler API to retrieve the Crystal code.
 module Cruml
-  VERSION = "0.6.0"
+  VERSION = "0.6.1"
 end

@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.6.1](https://github.com/tamdaz/cruml/releases/tag/0.6.1) - 2025-02-24
+
+## Setup
+
+- Setup configuration to debug. (@tamdaz)(#21)
+
+## Changed
+
+- Refactor the code and docs. (@tamdaz)(#19)(#20)
+
+## Fixed
+
+- Fix namespace prefix. (@tamdaz)(#22)
+
 ## [0.6.0](https://github.com/tamdaz/cruml/releases/tag/0.6.0) - 2025-02-24
 
 ## Added
