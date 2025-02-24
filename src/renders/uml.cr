@@ -20,7 +20,7 @@ module Cruml::Renders::UML
       namespace = mod.name.gsub("::", '-').split('-')
       namespace.pop if namespace.size > 1
 
-      @code << INDENT * 2 << "namespace " << namespace.join('-') << " {\n"
+      @code << INDENT * 2 << "namespace -" << namespace.join('-') << " {\n"
       case mod.type
       when :normal
         @code << INDENT * 3 << "class `" << mod.name << "`:::module {\n"
