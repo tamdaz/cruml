@@ -1,0 +1,14 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "program": "bin/cruml",
+            "args": ["generate", "--path=examples"],
+            "name": "Debug cruml (with path 'examples/'",
+            "type": "lldb",
+            "request": "launch",
+            "cwd": "${workspaceRoot}",
+            "preLaunchTask": "Compile"
+        }
+    ]
+}
