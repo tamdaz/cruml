@@ -8,32 +8,32 @@ class Cruml::Renders::Config
 
   # Gets the color for classes.
   def self.class_color : String
-    @@theme == :light ? "#baa7e5" : "#2e1065"
+    (@@theme == :light) ? "#baa7e5" : "#2e1065"
   end
 
   # Gets the color for abstract classes.
   def self.abstract_color : String
-    @@theme == :light ? "#a7e5a7" : "#365314"
+    (@@theme == :light) ? "#a7e5a7" : "#365314"
   end
 
   # Gets the color for interfaces.
   def self.interface_color : String
-    @@theme == :light ? "#e2c7a3" : "#af6300"
+    (@@theme == :light) ? "#e2c7a3" : "#af6300"
   end
 
   # Gets the color for modules.
   def self.module_color : String
-    @@theme == :light ? "#5ab3f4" : "#0041cc"
+    (@@theme == :light) ? "#5ab3f4" : "#0041cc"
   end
 
   # Gets the theme color.
   def self.theme_color : String
-    @@theme == :light ? "#dedede" : "#212121"
+    (@@theme == :light) ? "#dedede" : "#212121"
   end
 
   # Gets the text color.
   def self.text_color : String
-    @@theme == :light ? "#000000" : "#ffffff"
+    (@@theme == :light) ? "#000000" : "#ffffff"
   end
 
   # Generates the class definitions for the diagram.
