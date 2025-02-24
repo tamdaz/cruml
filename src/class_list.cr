@@ -27,6 +27,7 @@ class Cruml::ClassList
     end
   end
 
+  # Verifies and removes duplicated instance variables from classes based on their parent classes.
   def self.verify_instance_var_duplication : Nil
     self.classes.reject(&.parent_classes.empty?).sort_by!(&.parent_classes.size).reverse_each do |klass|
       klass.parent_classes.each do |parent_klass, _, _|
