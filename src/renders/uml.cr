@@ -1,4 +1,6 @@
+# A module that provides methods to generate a Mermaid code.
 module Cruml::Renders::UML
+  # To format the mermaid code, an indentation of 4 spaces is set.
   INDENT = " " * 4
 
   # Gets the UML method visibility.
@@ -99,8 +101,8 @@ module Cruml::Renders::UML
   end
 
   # Creates a link between parent and child classes.
-  # If the parent class type is abstract, the arrow would look like : <|..
-  # If the parent class type is normal, the arrow would look like : <|--
+  # If it is an interface, the arrow would look like : <|..
+  # If the parent class type is normal or abstract, the arrow would look like : <|--
   # See https://mermaid.js.org/syntax/classDiagram.html#defining-relationship for more info.
   private def add_parent_class(inherit_classes : Array(Tuple(String, String, Symbol))) : Nil
     inherit_classes.each do |class_name, subclass_name, class_type|

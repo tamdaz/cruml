@@ -2,6 +2,7 @@ require "compiler/crystal/syntax"
 require "./class_list"
 require "./module_list"
 
+# Class that consists to inspect the reflected objects.
 class Cruml::Transformer < Crystal::Transformer
   def initialize
     @current_class_name = ""
@@ -10,6 +11,7 @@ class Cruml::Transformer < Crystal::Transformer
     @protected_and_private_methods = [] of Crystal::Def
   end
 
+  # Transforms a module definition node.
   def transform(node : Crystal::ModuleDef) : Crystal::ASTNode
     @current_module_name = node.name.to_s
 
@@ -22,6 +24,7 @@ class Cruml::Transformer < Crystal::Transformer
     super(node)
   end
 
+  # Transforms a class definition node.
   def transform(node : Crystal::ClassDef) : Crystal::ASTNode
     @current_class_name = node.name.to_s
     @current_module_name = ""
@@ -59,6 +62,7 @@ class Cruml::Transformer < Crystal::Transformer
     super(node)
   end
 
+  # Transforms a visibility modifier node.
   def transform(node : Crystal::VisibilityModifier) : Crystal::ASTNode
     method = node.exp.as?(Crystal::Def)
 
@@ -91,14 +95,7 @@ class Cruml::Transformer < Crystal::Transformer
     super(node)
   end
 
-  private def visibility(modifier : Crystal::Visibility) : Symbol
-    case modifier
-    when Crystal::Visibility::Protected then :protected
-    when Crystal::Visibility::Private   then :private
-    else                                     :public
-    end
-  end
-
+  # Transforms an expressions node.
   def transform(node : Crystal::Expressions) : Crystal::ASTNode
     node.expressions.each do |exp|
       if match = exp.to_s.match(/^(property|getter|setter|property\?|getter\?)\((\w+) : ([\w:| ]+)\)/)
@@ -124,6 +121,7 @@ class Cruml::Transformer < Crystal::Transformer
     super(node)
   end
 
+  # Transforms an instance variable node.
   def transform(node : Crystal::InstanceVar) : Crystal::ASTNode
     ivar_name = node.name.to_s
 
@@ -145,6 +143,7 @@ class Cruml::Transformer < Crystal::Transformer
     super(node)
   end
 
+  # Transforms an assignment node.
   def transform(node : Crystal::Assign) : Crystal::ASTNode
     @variables.each do |var|
       if node.target.to_s.includes?(var.var.to_s)
@@ -160,11 +159,13 @@ class Cruml::Transformer < Crystal::Transformer
     super(node)
   end
 
+  # Transforms a type declaration node.
   def transform(node : Crystal::TypeDeclaration) : Crystal::ASTNode
     @variables |= [node]
     super(node)
   end
 
+  # Transforms a method definition node.
   def transform(node : Crystal::Def) : Crystal::ASTNode
     is_not_duplicated_method = @protected_and_private_methods.none? do |method|
       method.name == node.name
@@ -215,5 +216,14 @@ class Cruml::Transformer < Crystal::Transformer
     end
 
     super(node)
+  end
+
+  # Determines the visibility of a node.
+  private def visibility(modifier : Crystal::Visibility) : Symbol
+    case modifier
+    when Crystal::Visibility::Protected then :protected
+    when Crystal::Visibility::Private   then :private
+    else                                     :public
+    end
   end
 end
