@@ -2,17 +2,12 @@
 class Cruml::Entities::ClassInfo
   getter name : String
   getter type : Symbol
-  getter parent_classes : Array(Tuple(String, String, Symbol))
-  getter included_modules : Array(String)
-  getter instance_vars : Array(Tuple(String, String))
-  getter methods : Array(Cruml::Entities::MethodInfo)
+  getter parent_classes = [] of Tuple(String, String, Symbol)
+  getter included_modules = [] of String
+  getter instance_vars = [] of Tuple(String, String)
+  getter methods = [] of Cruml::Entities::MethodInfo
 
-  def initialize(@name : String, @type : Symbol) : Nil
-    @instance_vars = [] of Tuple(String, String)
-    @parent_classes = [] of Tuple(String, String, Symbol)
-    @included_modules = [] of String
-    @methods = [] of Cruml::Entities::MethodInfo
-  end
+  def initialize(@name : String, @type : Symbol); end
 
   # Adds the name and the type of a instance variable into the instance vars array.
   def add_instance_var(name : String, type : String) : Nil
