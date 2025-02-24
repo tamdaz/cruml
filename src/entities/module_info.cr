@@ -2,13 +2,10 @@
 class Cruml::Entities::ModuleInfo
   getter name : String
   getter type : Symbol
-  getter methods : Array(Cruml::Entities::MethodInfo)
-  getter instance_vars : Array(Tuple(String, String))
+  getter methods = [] of Cruml::Entities::MethodInfo
+  getter instance_vars = [] of Tuple(String, String)
 
-  def initialize(@name : String, @type : Symbol = :normal)
-    @methods = [] of Cruml::Entities::MethodInfo
-    @instance_vars = [] of Tuple(String, String)
-  end
+  def initialize(@name : String, @type : Symbol = :normal); end
 
   # Adds a method into module.
   def add_method(method : Cruml::Entities::MethodInfo) : Nil
