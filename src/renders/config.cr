@@ -6,6 +6,9 @@ class Cruml::Renders::Config
   # Whether to disable colors in the diagram.
   class_property? no_color : Bool = false
 
+  # Enable the verbose mode
+  class_property? verbose : Bool = false
+
   # Gets the color for classes.
   def self.class_color : String
     (@@theme == :light) ? "#baa7e5" : "#2e1065"
