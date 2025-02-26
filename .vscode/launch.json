@@ -4,11 +4,18 @@
         {
             "program": "bin/cruml",
             "args": ["generate", "--path=examples"],
-            "name": "Debug cruml (with path 'examples/'",
+            "name": "Debug cruml (with path 'examples/')",
             "type": "lldb",
             "request": "launch",
             "cwd": "${workspaceRoot}",
-            "preLaunchTask": "Compile"
+            "preLaunchTask": "Debug program"
+        }, {
+            "program": "bin/spec",
+            "name": "Debug spec",
+            "type": "lldb",
+            "request": "launch",
+            "cwd": "${workspaceRoot}",
+            "preLaunchTask": "Debug spec"
         }
     ]
 }
