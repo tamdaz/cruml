@@ -1,5 +1,9 @@
+require "./classifier"
+
 # A module that provides methods to generate a Mermaid code.
 module Cruml::Renders::UML
+  include Cruml::Renders::Classifier
+
   # To format the mermaid code, an indentation of 4 spaces is set.
   INDENT = " " * 4
 
@@ -20,28 +24,23 @@ module Cruml::Renders::UML
       namespace = mod.name.gsub("::", '-').split('-')
       namespace.pop if namespace.size > 1
 
-      @code << INDENT * 2 << "namespace -" << namespace.join('-') << " {\n"
-      case mod.type
-      when :normal
-        @code << INDENT * 3 << "class `" << mod.name << "`:::module {\n"
-        @code << INDENT * 4 << "&lt;&lt;module&gt;&gt;\n"
-      when :interface
-        @code << INDENT * 3 << "class `" << mod.name << "`:::interface {\n"
-        @code << INDENT * 4 << "&lt;&lt;interface&gt;&gt;\n"
+      ivars_and_methods = -> do
+        add_instance_vars(mod.instance_vars)
+        add_methods(mod.methods)
       end
 
-      add_instance_vars(mod.instance_vars)
-      add_methods(mod.methods)
-      @code << INDENT * 3 << "}\n"
-      @code << INDENT * 2 << "}\n"
+      add_namespace namespace.join('-') do
+        case mod.type
+        when :normal    then add_module(mod.name, &ivars_and_methods)
+        when :interface then add_interface(mod.name, &ivars_and_methods)
+        end
+      end
     end
   end
 
   # Generates class diagrams.
   private def generate_class_diagrams
-    Cruml::ClassList.group_by_namespaces.each do |klass_group|
-      namespace, classes = klass_group[0], klass_group[1]
-
+    Cruml::ClassList.group_by_namespaces.each do |namespace, classes|
       # Add a relationship before creating a namespace.
       classes.each do |klass|
         add_parent_class(klass.parent_classes)
@@ -51,19 +50,16 @@ module Cruml::Renders::UML
       end
 
       # Replace `::` by `.`
-      @code << INDENT * 2 << "namespace -" << namespace.gsub("::", '.') << " {\n"
-      classes.each do |class_info|
-        add_class(class_info)
+      add_namespace namespace.gsub("::", '.') do
+        classes.each { |class_info| add_class(class_info) }
       end
-      @code << INDENT * 2 << "}\n"
     end
   end
 
   # Adds instance variables to the class.
   private def add_instance_vars(instance_vars : Array(Tuple(String, String))) : Nil
-    instance_vars.each do |ivar|
-      name, type = ivar[-2], ivar[-1]
-      @code << INDENT * 4 << "-#{name} : #{type}\n"
+    instance_vars.each do |name, type|
+      @code << INDENT * 4 << '-' << name << " : " << type << "\n"
     end
   end
 
@@ -71,21 +67,16 @@ module Cruml::Renders::UML
   private def add_class(class_info : Cruml::Entities::ClassInfo) : Nil
     short_class_name = class_info.name
 
-    case class_info.type # begin class
-    when :abstract
-      @code << INDENT * 3 << "class " << '`' << short_class_name << '`' << ":::abstract {\n"
-      @code << INDENT * 4 << "&lt;&lt;abstract&gt;&gt;\n"
-    when :interface
-      @code << INDENT * 3 << "class " << '`' << short_class_name << '`' << ":::interface {\n"
-      @code << INDENT * 4 << "&lt;&lt;interface&gt;&gt;\n"
-    when :class
-      @code << INDENT * 3 << "class " << '`' << short_class_name << '`' << " {\n"
+    ivars_and_methods = -> do
+      add_instance_vars(class_info.instance_vars)
+      add_methods(class_info.methods)
     end
 
-    add_instance_vars(class_info.instance_vars)
-    add_methods(class_info.methods)
-
-    @code << INDENT * 3 << "}\n"
+    case class_info.type # begin class
+    when :abstract  then add_abstract_class(short_class_name, &ivars_and_methods)
+    when :interface then add_interface(short_class_name, &ivars_and_methods)
+    when :class     then add_normal_class(short_class_name, &ivars_and_methods)
+    end
   end
 
   # Adds methods to the class.
@@ -93,10 +84,13 @@ module Cruml::Renders::UML
     methods.each do |method|
       visibility = method_visibility(method.visibility)
 
-      @code << INDENT * 4
-      @code << "#{visibility}#{method.name}(#{method.generate_args}) "
-      @code << " : " if method.return_type =~ /\(.*\)/
-      @code << "#{method.return_type}\n"
+      @code << INDENT * 4 << visibility << method.name
+      @code << '(' << method.generate_args << ')'
+      if method.return_type =~ /\(.*\)/
+        @code << " : "
+      end
+      @code << method.return_type
+      @code << "\n"
     end
   end
 
@@ -106,15 +100,15 @@ module Cruml::Renders::UML
   # See https://mermaid.js.org/syntax/classDiagram.html#defining-relationship for more info.
   private def add_parent_class(inherit_classes : Array(Tuple(String, String, Symbol))) : Nil
     inherit_classes.each do |class_name, subclass_name, class_type|
-      @code << INDENT * 2
-      case class_type
-      when :interface
-        @code << '`' << class_name << "` <|.. `" << subclass_name << '`' << "\n"
-      when :class
-        @code << '`' << class_name << "` <|-- `" << subclass_name << '`' << "\n"
-      when :abstract
-        @code << '`' << class_name << "` <|-- `" << subclass_name << '`' << "\n"
+      @code << INDENT * 2 << '`' << class_name << '`'
+
+      @code << case class_type
+      when :interface then " <|.. "
+      when :class     then " <|-- "
+      when :abstract  then " <|-- "
       end
+
+      @code << "`" << subclass_name << '`' << "\n"
     end
   end
 
