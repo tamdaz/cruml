@@ -10,6 +10,10 @@ class Cruml::Entities::MethodInfo
   # Add an argument into the args list.
   def add_arg(arg : Cruml::Entities::ArgInfo)
     @args << arg
+
+    if Cruml::Renders::Config.verbose? == true
+      puts "VERBOSE : #{arg.name.colorize(:magenta)} arg of type #{arg.type.colorize(:magenta)} added to #{@name.colorize(:magenta)} method."
+    end
   end
 
   # Generate the args.

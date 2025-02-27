@@ -13,6 +13,10 @@ class Cruml::Entities::ClassInfo
   def add_instance_var(name : String, type : String) : Nil
     @instance_vars.reject! { |ivar| ivar[0] == name }
     @instance_vars << {name, type}
+
+    if Cruml::Renders::Config.verbose? == true
+      puts "VERBOSE : #{@name.colorize(:magenta)} instance var added to #{@name.colorize(:magenta)} class."
+    end
   end
 
   # Adds a parent class into an array of parent classes.
@@ -21,11 +25,19 @@ class Cruml::Entities::ClassInfo
     if found_class
       @parent_classes << {parent_class_name, @name, found_class.type}
     end
+
+    if Cruml::Renders::Config.verbose? == true
+      puts "VERBOSE : #{@name.colorize(:magenta)} child class linked to #{parent_class_name.colorize(:magenta)} parent class."
+    end
   end
 
   # Adds a module name to the list of included modules.
   def add_included_module(module_name : String) : Nil
     @included_modules << module_name
+
+    if Cruml::Renders::Config.verbose? == true
+      puts "VERBOSE : #{module_name.colorize(:magenta)} module to #{@name.colorize(:magenta)} class."
+    end
   end
 
   # Adds a method into an array of methods.
@@ -34,6 +46,10 @@ class Cruml::Entities::ClassInfo
       @methods.unshift(method)
     else
       @methods << method
+    end
+
+    if Cruml::Renders::Config.verbose? == true
+      puts "VERBOSE : #{method.name.colorize(:magenta)}() method to #{@name.colorize(:magenta)} class."
     end
   end
 end

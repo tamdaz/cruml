@@ -11,6 +11,10 @@ targets:
   cruml:
     main: src/cruml.cr
 
+dependencies:
+  tallboy:
+    github: epoch/tallboy
+
 development_dependencies:
   ameba:
     github: crystal-ameba/ameba

@@ -1,5 +1,6 @@
 require "spec"
 require "./../src/entities/**"
+require "./../src/renders/config"
 
 def parse_module_helper : Nil
   code = <<-CRYSTAL
