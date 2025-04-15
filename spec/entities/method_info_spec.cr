@@ -9,7 +9,7 @@ describe Cruml::Entities::MethodInfo do
 
     method_info.add_arg(Cruml::Entities::ArgInfo.new("first_name", "String"))
     method_info.add_arg(Cruml::Entities::ArgInfo.new("last_name", "String"))
-    method_info.generate_args.should eq("first_name : String, last_name : String")
+    method_info.generate_args.should eq("first_name \\: String, last_name \\: String")
   end
 
   it "instantiates a protected method info" do
@@ -20,7 +20,7 @@ describe Cruml::Entities::MethodInfo do
 
     method_info.add_arg(Cruml::Entities::ArgInfo.new("first_name", "String"))
     method_info.add_arg(Cruml::Entities::ArgInfo.new("last_name", "String"))
-    method_info.generate_args.should eq("first_name : String, last_name : String")
+    method_info.generate_args.should eq("first_name \\: String, last_name \\: String")
   end
 
   it "instantiates a private method info" do
@@ -31,6 +31,6 @@ describe Cruml::Entities::MethodInfo do
 
     method_info.add_arg(Cruml::Entities::ArgInfo.new("first_name", "String"))
     method_info.add_arg(Cruml::Entities::ArgInfo.new("last_name", "String"))
-    method_info.generate_args.should eq("first_name : String, last_name : String")
+    method_info.generate_args.should eq("first_name \\: String, last_name \\: String")
   end
 end
