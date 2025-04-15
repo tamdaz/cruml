@@ -10,6 +10,8 @@ authors:
 targets:
   cruml:
     main: src/cruml.cr
+  console:
+    main: src/commands/console.cr
 
 dependencies:
   tallboy:
