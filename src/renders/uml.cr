@@ -26,12 +26,9 @@ module Cruml::Renders::UML
         add_instance_vars(mod.instance_vars)
         add_methods(mod.methods)
       end
-
-      add_namespace(namespace) do
-        case mod.type
-        when :normal    then add_module(mod.name, &ivars_and_methods)
-        when :interface then add_interface(mod.name, &ivars_and_methods)
-        end
+      case mod.type
+      when :normal    then add_module(mod.name, &ivars_and_methods)
+      when :interface then add_interface(mod.name, &ivars_and_methods)
       end
     end
   end
