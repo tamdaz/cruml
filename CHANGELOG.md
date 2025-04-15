@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.6.2](https://github.com/tamdaz/cruml/releases/tag/0.6.2) - 2025-04-15
+
+## Fixed
+
+- Refactor code in the `src/render` directory. (@tamdaz)(#29)
+
 ## [0.6.1](https://github.com/tamdaz/cruml/releases/tag/0.6.1) - 2025-02-24
 
 ## Setup
