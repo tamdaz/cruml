@@ -1,8 +1,8 @@
 require "tallboy"
 require "option_parser"
-require "./transformer"
-require "./renders/diagram_render"
-require "./renders/config"
+require "./../transformer"
+require "./../renders/diagram_render"
+require "./../renders/config"
 
 files = [] of String
 output_dir = "out/"
@@ -74,7 +74,7 @@ measured_time_to_verify = Time.measure do
 end
 
 measured_time_to_render = Time.measure do
-  diagram = Cruml::Renders::DiagramRender.new("#{output_dir}/diagram.html")
+  diagram = Cruml::Renders::DiagramRender.new("#{output_dir}/diagram.d2")
   diagram.generate
   diagram.save
 end
