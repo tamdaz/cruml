@@ -1,4 +1,4 @@
-require "./console"
+require "./commands/console"
 
 # **cruml** *(**Cr**ystal **UML**)* is a tool that allows to generate an UML diagram.
 # This is useful for any Crystal projects.

@@ -83,9 +83,6 @@ module Cruml::Renders::UML
   end
 
   # Creates a link between parent and child classes.
-  # If it is an interface, the arrow would look like : <|..
-  # If the parent class type is normal or abstract, the arrow would look like : <|--
-  # See https://mermaid.js.org/syntax/classDiagram.html#defining-relationship for more info.
   private def add_parent_class(inherit_classes : Array(Tuple(String, String, Symbol))) : Nil
     inherit_classes.each do |class_name, subclass_name, _class_type|
       @code << class_name.dump << " -> " << subclass_name.dump << "\n"
@@ -93,7 +90,6 @@ module Cruml::Renders::UML
   end
 
   # Defines the style properties for the class diagram.
-  # See https://mermaid.js.org/syntax/classDiagram.html#default-class for more info.
   private def set_diagram_colors : Nil
     @code << Cruml::Renders::Config.class_def_colors
   end
