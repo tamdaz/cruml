@@ -20,8 +20,6 @@ module Cruml::Renders::UML
   # Generates module diagrams.
   private def generate_module_diagrams
     Cruml::ModuleList.modules.each do |mod|
-      namespace = mod.name
-
       ivars_and_methods = -> do
         add_instance_vars(mod.instance_vars)
         add_methods(mod.methods)
@@ -35,7 +33,7 @@ module Cruml::Renders::UML
 
   # Generates class diagrams.
   private def generate_class_diagrams
-    Cruml::ClassList.group_by_namespaces.each do |namespace, classes|
+    Cruml::ClassList.group_by_namespaces.each do |_namespace, classes|
       classes.each do |klass|
         add_class(klass)
         add_parent_class(klass.parent_classes)
