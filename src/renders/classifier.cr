@@ -12,7 +12,7 @@ module Cruml::Renders::Classifier
   end
 
   private def add_abstract_class(name : String, &) : Nil
-    @code << Cruml::Renders::UML::INDENT * 3 << '"' << name << '"' << " {\n"
+    @code << Cruml::Renders::UML::INDENT << '"' << name << '"' << " {\n"
     @code << Cruml::Renders::UML::INDENT << "shape: class\n"
     unless Cruml::Renders::Config.no_color?
       @code << Cruml::Renders::UML::INDENT << <<-STR
@@ -20,19 +20,19 @@ module Cruml::Renders::Classifier
       STR
     end
     yield
-    @code << Cruml::Renders::UML::INDENT * 3 << "}\n"
+    @code << Cruml::Renders::UML::INDENT << "}\n"
   end
 
   private def add_interface(name : String, &) : Nil
-    @code << Cruml::Renders::UML::INDENT * 3 << '"' << name << '"' << " {\n"
-    @code << Cruml::Renders::UML::INDENT << "shape: class\n"
+    @code << Cruml::Renders::UML::INDENT << '"' << name << '"' << " {\n"
+    @code << Cruml::Renders::UML::INDENT * 2 << "shape: class\n"
     unless Cruml::Renders::Config.no_color?
       @code << Cruml::Renders::UML::INDENT << <<-STR
       style.fill: "#{Cruml::Renders::Config.interface_color}"\n
       STR
     end
     yield
-    @code << Cruml::Renders::UML::INDENT * 3 << "}\n"
+    @code << Cruml::Renders::UML::INDENT << "}\n"
   end
 
   private def add_namespace(name : String, &) : Nil
@@ -43,7 +43,7 @@ module Cruml::Renders::Classifier
 
   private def add_module(name : String, &)
     @code << Cruml::Renders::UML::INDENT << '"' << name << '"' << " {\n"
-    @code << Cruml::Renders::UML::INDENT << "shape: class\n"
+    @code << Cruml::Renders::UML::INDENT * 2 << "shape: class\n"
     yield
     @code << Cruml::Renders::UML::INDENT << "}\n"
   end
