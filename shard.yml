@@ -28,6 +28,6 @@ scripts:
 executables:
   - cruml
 
-crystal: '>= 1.10.0'
+crystal: '>= 1.16.0'
 
 license: MIT
