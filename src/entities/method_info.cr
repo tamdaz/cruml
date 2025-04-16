@@ -27,7 +27,8 @@ class Cruml::Entities::MethodInfo
   def generate_args : String
     String.build do |str|
       @args.each_with_index do |arg, i|
-        str << "#{arg.name} \\: #{arg.type.gsub("|", "\\|")}"
+        patterns = {'|' => "\\|", ':' => "\\:"}
+        str << "#{arg.name} \\: #{arg.type.gsub(patterns)}"
         if i != @args.size - 1
           str << ", "
         end
