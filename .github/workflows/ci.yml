@@ -8,7 +8,7 @@ on:
     - cron: '0 6 * * 6'
 
 jobs:
-  test:
+  linux-build:
     strategy:
       fail-fast: false
       matrix:
