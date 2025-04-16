@@ -3,7 +3,7 @@
 ![GitHub Release](https://img.shields.io/github/v/release/tamdaz/cruml)
 [![ci](https://github.com/tamdaz/cruml/actions/workflows/ci.yml/badge.svg)](https://github.com/tamdaz/cruml/actions/workflows/ci.yml)
 
-![crystal doc info](https://img.shields.io/badge/CrystalDoc.info-2E1052?logo=crystal&style=for-the-badge)
+[![crystal doc info](https://img.shields.io/badge/main-CrystalDoc.info-2E1052?logo=crystal&style=for-the-badge)](https://crystaldoc.info/github/tamdaz/cruml/main/index.html)
 
 > [!WARNING]
 > This tool is under development, it is not completely finished.
