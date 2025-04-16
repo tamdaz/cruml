@@ -1,7 +1,7 @@
 # cruml
 
 ![GitHub Release](https://img.shields.io/github/v/release/tamdaz/cruml)
-[![ci](https://github.com/tamdaz/cruml/actions/workflows/crystal.yml/badge.svg?branch=main)](https://github.com/tamdaz/cruml/actions/workflows/crystal.yml)
+[![ci](https://github.com/tamdaz/cruml/actions/workflows/ci.yml/badge.svg)](https://github.com/tamdaz/cruml/actions/workflows/ci.yml)
 
 ![crystal doc info](https://img.shields.io/badge/CrystalDoc.info-2E1052?logo=crystal&style=for-the-badge)
 
