@@ -1,8 +1,15 @@
 # This consists of obtaining information about methods.
 class Cruml::Entities::MethodInfo
+  # Method visibility (-, # and +).
   getter visibility : Symbol
+
+  # Method name.
   getter name : String
+
+  # Return type of a method.
   getter return_type : String
+
+  # All arguments in a method.
   getter args = [] of Cruml::Entities::ArgInfo
 
   def initialize(@visibility : Symbol, @name : String, @return_type : String); end
@@ -21,7 +28,9 @@ class Cruml::Entities::MethodInfo
     String.build do |str|
       @args.each_with_index do |arg, i|
         str << "#{arg.name} \\: #{arg.type.gsub("|", "\\|")}"
-        str << ", " if i != @args.size - 1
+        if i != @args.size - 1
+          str << ", "
+        end
       end
     end
   end

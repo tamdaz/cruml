@@ -1,8 +1,15 @@
 # This consists of obtaining information about module.
 class Cruml::Entities::ModuleInfo
+  # Module name
   getter name : String
+
+  # Module type
   getter type : Symbol
+
+  # All methods in a module.
   getter methods = [] of Cruml::Entities::MethodInfo
+
+  # all instance variables in a module.
   getter instance_vars = [] of Tuple(String, String)
 
   def initialize(@name : String, @type : Symbol = :normal); end
@@ -16,7 +23,7 @@ class Cruml::Entities::ModuleInfo
     end
   end
 
-  # Adds an instance var into module.
+  # Adds an instance variable into module.
   def add_instance_var(name : String, type : String) : Nil
     @instance_vars.reject! { |ivar| ivar[0] == name }
     @instance_vars << {name, type}
