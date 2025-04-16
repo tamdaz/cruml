@@ -1,10 +1,21 @@
 # This consists of obtaining information about the class.
 class Cruml::Entities::ClassInfo
+  # Class name
   getter name : String
+
+  # Class type
   getter type : Symbol
+
+  # Linked parent classes.
   getter parent_classes = [] of Tuple(String, String, Symbol)
+
+  # Included modules in a class.
   getter included_modules = [] of String
+
+  # All instance variables in a class.
   getter instance_vars = [] of Tuple(String, String)
+
+  # All methods in a class.
   getter methods = [] of Cruml::Entities::MethodInfo
 
   def initialize(@name : String, @type : Symbol); end

@@ -2,7 +2,8 @@
 
 ![GitHub Release](https://img.shields.io/github/v/release/tamdaz/cruml)
 [![ci](https://github.com/tamdaz/cruml/actions/workflows/crystal.yml/badge.svg?branch=main)](https://github.com/tamdaz/cruml/actions/workflows/crystal.yml)
-[![ci-docs](https://github.com/tamdaz/cruml/actions/workflows/ci-docs.yml/badge.svg)](https://github.com/tamdaz/cruml/actions/workflows/ci-docs.yml)
+
+![crystal doc info](https://img.shields.io/badge/CrystalDoc.info-2E1052?logo=crystal&style=for-the-badge)
 
 > [!WARNING]
 > This tool is under development, it is not completely finished.
@@ -11,7 +12,13 @@
 
 ![uml_class_diagram](img/diagram.png)
 
-> A class diagram representing the child classes linked to the parent class.
+> An UML class diagram representing the parent class linked to child classes.
+
+## Requirements
+
+To do this, you should have d2 installed.
+
+Documentation source : https://d2lang.com/tour/install#install-script.
 
 ## Installation
 
@@ -21,10 +28,11 @@
 development_dependencies:
   cruml:
     github: tamdaz/cruml
-    branch: main
 ```
 
-2. Run `shards install`, once this tool is installed, it will build a binary in the `bin/` directory located in your project.
+2. Run `shards install`.
+
+Once this tool is installed, this will build a binary into `bin/` directory in your project.
 
 ## Usage
 
@@ -41,31 +49,31 @@ Usage : cruml generate [arguments] -- [options]
 
 ## Examples
 
-To generate a diagram with all Crystal files in the `src/classes` directory:
+For example, to generate a diagram with Crystal files in the `src/models` directory:
 
-```
-bin/cruml generate --path="src/classes"
+```sh
+bin/cruml generate --path="src/models"
 ```
 
 To generate a diagram with one Crystal file:
 
-```
-bin/cruml generate --path="src/classes/my_class.cr"
+```sh
+bin/cruml generate --path="src/models/user.cr"
 ```
 
 > [!TIP]
-> You can use multiple `--path` flag to include several files.
+> You can use multiple `--path` flag to include several files or directories.
 
 In addition, you can change the diagram theme thanks to `--dark-mode` flag:
 
-```
-bin/cruml generate --path="src/classes" --dark-mode
+```sh
+bin/cruml generate --path="src/models" --dark-mode
 ```
 
 If you don't want to colorize the diagram, you can use the `--no-color` flag:
 
-```
-bin/cruml generate --path="src/classes" --no-color
+```sh
+bin/cruml generate --path="src/models" --no-color
 ```
 
 ## Contributing
