@@ -4,40 +4,53 @@ require "./../transformer"
 require "./../renders/diagram_render"
 require "./../renders/config"
 
+# Files to process
 files = [] of String
+
+# Output directory
 output_dir = "out/"
 
 OptionParser.parse do |parser|
   parser.banner = "Usage : cruml [subcommand] [arguments] -- [options]"
 
+  # `generate` argument
   parser.on "generate", "Generate the class diagram" do
     parser.banner = "Usage : cruml generate [arguments] -- [options]"
 
+    # Verbose flag
     parser.on "--verbose", "Enable verbose" do
       Cruml::Renders::Config.verbose = true
     end
 
+    # Dark mode flag
     parser.on "--dark-mode", "Set to dark mode" do
       Cruml::Renders::Config.theme = :dark
     end
 
+    # No color flag
     parser.on "--no-color", "Disable color output" do
       Cruml::Renders::Config.no_color = true
     end
 
+    # Path to specify flag
     parser.on "--path=PATH", "Path to specify" do |path|
       files << path if File.file?(path) && path.ends_with?(".cr")
       files |= Dir.glob("#{path}/**/*.cr") if File.directory?(path)
     end
 
-    parser.on "--output-dir=DIR", "Directory path to save diagrams" { |dir| output_dir = dir }
+    # Output directory flag
+    parser.on "--output-dir=DIR", "Directory path to save diagrams" do |dir|
+      output_dir = dir
+    end
   end
 
+  # Version flag
   parser.on "-v", "--version", "Show the version" do
     puts "Cruml (version #{Cruml::VERSION})"
     exit 0
   end
 
+  # Help flag
   parser.on "-h", "--help", "Show this help" do
     puts parser
     exit 0
@@ -57,6 +70,7 @@ end
 
 processed_files = 0 if Cruml::Renders::Config.verbose? == true
 
+# Time to process files.
 measured_time_to_process = Time.measure do
   files.each do |file|
     ast = Crystal::Parser.parse(File.read(file))
@@ -69,10 +83,12 @@ measured_time_to_process = Time.measure do
   end
 end
 
+# Time to verify instance variables.
 measured_time_to_verify = Time.measure do
   Cruml::ClassList.verify_instance_var_duplication
 end
 
+# Time to render
 measured_time_to_render = Time.measure do
   diagram = Cruml::Renders::DiagramRender.new("#{output_dir}/diagram.d2")
   diagram.generate
