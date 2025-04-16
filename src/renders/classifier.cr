@@ -1,50 +1,51 @@
+# Classifiers consists to add classes, abstract classes, interfaces, modules and
+# namespaces into the class diagram.
 module Cruml::Renders::Classifier
-  private def add_normal_class(name : String, &) : Nil
+  # Adds an object into the class diagram.
+  private def add_object(name : String, color : String, &) : Nil
     @code << '"' << name << '"' << " {\n"
     @code << Cruml::Renders::UML::INDENT << "shape: class\n"
     unless Cruml::Renders::Config.no_color?
       @code << Cruml::Renders::UML::INDENT << <<-STR
-      style.fill: "#{Cruml::Renders::Config.class_color}"\n
+      style.fill: "#{color}"\n
       STR
     end
     yield
     @code << "}\n"
   end
 
+  # Adds a normal class into the class diagram.
+  private def add_normal_class(name : String, &) : Nil
+    add_object(name, Cruml::Renders::Config.class_color) do
+      yield
+    end
+  end
+
+  # Adds an abstract class into the class diagram.
   private def add_abstract_class(name : String, &) : Nil
-    @code << Cruml::Renders::UML::INDENT << '"' << name << '"' << " {\n"
-    @code << Cruml::Renders::UML::INDENT << "shape: class\n"
-    unless Cruml::Renders::Config.no_color?
-      @code << Cruml::Renders::UML::INDENT << <<-STR
-      style.fill: "#{Cruml::Renders::Config.abstract_color}"\n
-      STR
+    add_object(name, Cruml::Renders::Config.abstract_color) do
+      yield
     end
-    yield
-    @code << Cruml::Renders::UML::INDENT << "}\n"
   end
 
+  # Adds an interface into the class diagram.
   private def add_interface(name : String, &) : Nil
-    @code << Cruml::Renders::UML::INDENT << '"' << name << '"' << " {\n"
-    @code << Cruml::Renders::UML::INDENT * 2 << "shape: class\n"
-    unless Cruml::Renders::Config.no_color?
-      @code << Cruml::Renders::UML::INDENT << <<-STR
-      style.fill: "#{Cruml::Renders::Config.interface_color}"\n
-      STR
+    add_object(name, Cruml::Renders::Config.interface_color) do
+      yield
     end
-    yield
-    @code << Cruml::Renders::UML::INDENT << "}\n"
   end
 
+  # Adds a namespace into the class diagram.
   private def add_namespace(name : String, &) : Nil
     @code << '"' << name << '"' << " {\n"
     yield
     @code << "}\n"
   end
 
+  # Adds a module into the class diagram.
   private def add_module(name : String, &)
-    @code << Cruml::Renders::UML::INDENT << '"' << name << '"' << " {\n"
-    @code << Cruml::Renders::UML::INDENT * 2 << "shape: class\n"
-    yield
-    @code << Cruml::Renders::UML::INDENT << "}\n"
+    add_object(name, Cruml::Renders::Config.class_color) do
+      yield
+    end
   end
 end
