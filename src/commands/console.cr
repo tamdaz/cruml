@@ -93,6 +93,13 @@ measured_time_to_render = Time.measure do
   diagram = Cruml::Renders::DiagramRender.new("#{output_dir}/diagram.d2")
   diagram.generate
   diagram.save
+
+  process = Process.run("d2", ["out/diagram.d2", "out/diagram.svg", "-c"])
+
+  if process.exit_code != 0
+    puts "Cannot render the class diagram with d2; maybe because of the syntax error or d2 is not installed."
+    exit 1
+  end
 end
 
 if Cruml::Renders::Config.verbose? == true
