@@ -1,3 +1,4 @@
+require "yaml"
 require "./entities/*"
 
 # Consists of processing a list of classes.
@@ -26,10 +27,37 @@ class Cruml::ClassList
 
   # Groups the classes by their namespaces.
   def self.group_by_namespaces
-    @@classes.group_by do |klass|
-      namespace = klass.name.split("::")
-      namespace.size > 2 ? namespace[0..-2].join("::") : namespace[0]
+    output = {} of String => Array(Cruml::Entities::ClassInfo)
+
+    File.open(Dir.current + "/.cruml.yml") do |file|
+      namespaces = YAML.parse(file)["namespaces"]?
+
+      if namespaces
+        namespaces.as_h.each do |key, classes|
+          classes_info = [] of Cruml::Entities::ClassInfo
+
+          classes.as_a.each do |klass|
+            found_class = find_by_name(klass.as_s)
+
+            if found_class
+              classes_info << found_class
+
+              # As classes are indicated in the YML config, we can delete them in the `@@classes` class var.
+              @@classes.reject! do |class_to_reject|
+                class_to_reject.name == klass
+              end
+            end
+          end
+
+          # Namespace would be deleted if array is empty.
+          unless classes_info.empty?
+            output[key.as_s] = classes_info
+          end
+        end
+      end
     end
+
+    output
   end
 
   # Verifies and removes duplicated instance variables from classes based on their parent classes.
