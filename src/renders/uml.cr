@@ -36,12 +36,12 @@ module Cruml::Renders::UML
   private def generate_class_diagrams
     Cruml::ClassList.group_by_namespaces.each do |namespace, classes|
       add_namespace(namespace) do
-      classes.each do |klass|
-        add_class(klass)
-        add_parent_class(klass.parent_classes)
+        classes.each do |klass|
+          add_class(klass)
+          add_parent_class(klass.parent_classes)
+        end
       end
     end
-  end
 
     Cruml::ClassList.classes.each do |klass|
       add_class(klass)
