@@ -1,3 +1,4 @@
+require "yaml"
 require "tallboy"
 require "option_parser"
 require "./../transformer"
@@ -34,8 +35,13 @@ OptionParser.parse do |parser|
 
     # Path to specify flag
     parser.on "--path=PATH", "Path to specify" do |path|
-      files << path if File.file?(path) && path.ends_with?(".cr")
-      files |= Dir.glob("#{path}/**/*.cr") if File.directory?(path)
+      if File.file?(path) && path.ends_with?(".cr")
+        files << path
+      end
+
+      if File.directory?(path)
+        files |= Dir.glob("#{path}/**/*.cr")
+      end
     end
 
     # Output directory flag
@@ -60,6 +66,23 @@ OptionParser.parse do |parser|
     STDERR.puts "ERROR: #{flag} is not a valid option.".colorize(:red)
     STDERR.puts parser
     exit 1
+  end
+end
+
+# Retrieve paths from the YML file config.
+File.open(Dir.current + "/.cruml.yml") do |file|
+  paths = YAML.parse(file)["paths"]?
+
+  if paths
+    paths.as_a.each do |path_from_yml|
+      if File.file?(path_from_yml.as_s) && path_from_yml.as_s.ends_with?(".cr")
+        files << path_from_yml.as_s
+      end
+
+      if File.directory?(path_from_yml.as_s)
+        files |= Dir.glob("#{path_from_yml.as_s}/**/*.cr")
+      end
+    end
   end
 end
 
