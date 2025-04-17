@@ -26,10 +26,16 @@ class Cruml::ClassList
   end
 
   # Groups the classes by their namespaces.
-  def self.group_by_namespaces
+  def self.group_by_namespaces(test_mode : Bool = false)
     output = {} of String => Array(Cruml::Entities::ClassInfo)
 
-    File.open(Dir.current + "/.cruml.yml") do |file|
+    config_path = if test_mode == true
+                    Dir.current + "/.cruml.test.yml"
+                  else
+                    Dir.current + "/.cruml.yml"
+                  end
+
+    File.open(config_path) do |file|
       namespaces = YAML.parse(file)["namespaces"]?
 
       if namespaces
