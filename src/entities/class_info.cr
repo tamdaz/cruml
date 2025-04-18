@@ -15,6 +15,9 @@ class Cruml::Entities::ClassInfo
   # All instance variables in a class.
   getter instance_vars = [] of Tuple(String, String)
 
+  # All class variables in a class.
+  getter class_vars = [] of Tuple(String, String)
+
   # All methods in a class.
   getter methods = [] of Cruml::Entities::MethodInfo
 
@@ -27,6 +30,16 @@ class Cruml::Entities::ClassInfo
 
     if Cruml::Renders::Config.verbose? == true
       puts "VERBOSE : #{@name.colorize(:magenta)} instance var added to #{@name.colorize(:magenta)} class."
+    end
+  end
+
+  # Adds the name and the type of a class variable into the class vars array.
+  def add_class_var(name : String, type : String) : Nil
+    @instance_vars.reject! { |ivar| ivar[0] == name }
+    @instance_vars << {name, type}
+
+    if Cruml::Renders::Config.verbose? == true
+      puts "VERBOSE : #{@name.colorize(:magenta)} class var added to #{@name.colorize(:magenta)} class."
     end
   end
 
