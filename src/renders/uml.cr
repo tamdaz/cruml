@@ -34,19 +34,16 @@ module Cruml::Renders::UML
 
   # Generates class diagrams.
   private def generate_class_diagrams
-    Cruml::ClassList.group_by_namespaces.each do |namespace, classes|
-      add_namespace(namespace) do
-        classes.each do |klass|
-          add_class(klass)
-          add_parent_class(klass.parent_classes)
-        end
-      end
-    end
-
-    Cruml::ClassList.classes.each do |klass|
+    my_proc = ->(klass : Cruml::Entities::ClassInfo) do
       add_class(klass)
       add_parent_class(klass.parent_classes)
     end
+
+    Cruml::ClassList.group_by_namespaces.each do |namespace, classes|
+      add_namespace(namespace) { classes.each(&my_proc) }
+    end
+
+    Cruml::ClassList.classes.each(&my_proc)
   end
 
   # Adds instance variables to the class.
