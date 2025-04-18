@@ -1,3 +1,5 @@
+require "yaml"
+
 # Stores the diagram configuration.
 class Cruml::Renders::Config
   # The theme of the diagram (`:light` or `:dark`).
@@ -11,22 +13,46 @@ class Cruml::Renders::Config
 
   # Gets the color for classes.
   def self.class_color : String
-    (@@theme == :light) ? "#baa7e5" : "#2e1065"
+    customized_color = color_theme_from_yaml("classes")
+
+    if !customized_color.nil?
+      customized_color
+    else
+      (@@theme == :light) ? "#baa7e5" : "#2e1065"
+    end
   end
 
   # Gets the color for abstract classes.
   def self.abstract_color : String
-    (@@theme == :light) ? "#a7e5a7" : "#365314"
+    customized_color = color_theme_from_yaml("abstract_classes")
+
+    if !customized_color.nil?
+      customized_color
+    else
+      (@@theme == :light) ? "#a7e5a7" : "#365314"
+    end
   end
 
   # Gets the color for interfaces.
   def self.interface_color : String
-    (@@theme == :light) ? "#e2c7a3" : "#af6300"
+    customized_color = color_theme_from_yaml("interfaces")
+
+    if !customized_color.nil?
+      customized_color
+    else
+      (@@theme == :light) ? "#e2c7a3" : "#af6300"
+    end
   end
 
   # Gets the color for modules.
   def self.module_color : String
-    (@@theme == :light) ? "#5ab3f4" : "#0041cc"
+    customized_color = color_theme_from_yaml("modules")
+
+    if !customized_color.nil?
+      customized_color
+    else
+      (@@theme == :light) ? "#5ab3f4" : "#0041cc"
+    end
   end
 
   # Gets the theme color.
@@ -37,6 +63,17 @@ class Cruml::Renders::Config
   # Gets the text color.
   def self.text_color : String
     (@@theme == :light) ? "#000000" : "#ffffff"
+  end
+
+  # Retrieve the color from the YAML file.
+  def self.color_theme_from_yaml(type : String) : String?
+    File.open(Dir.current + "/.cruml.yml") do |file|
+      colors = YAML.parse(file)["colors"]?
+
+      if colors
+        colors.as_h[@@theme.to_s][type].as_s
+      end
+    end
   end
 
   # Generates the class definitions for the diagram.

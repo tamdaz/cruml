@@ -24,6 +24,7 @@ module Cruml::Renders::UML
         add_instance_vars(mod.instance_vars)
         add_methods(mod.methods)
       end
+
       case mod.type
       when :normal    then add_module(mod.name, &ivars_and_methods)
       when :interface then add_interface(mod.name, &ivars_and_methods)
@@ -33,12 +34,16 @@ module Cruml::Renders::UML
 
   # Generates class diagrams.
   private def generate_class_diagrams
-    Cruml::ClassList.group_by_namespaces.each do |_namespace, classes|
-      classes.each do |klass|
-        add_class(klass)
-        add_parent_class(klass.parent_classes)
-      end
+    my_proc = ->(klass : Cruml::Entities::ClassInfo) do
+      add_class(klass)
+      add_parent_class(klass.parent_classes)
     end
+
+    Cruml::ClassList.group_by_namespaces.each do |namespace, classes|
+      add_namespace(namespace) { classes.each(&my_proc) }
+    end
+
+    Cruml::ClassList.classes.each(&my_proc)
   end
 
   # Adds instance variables to the class.

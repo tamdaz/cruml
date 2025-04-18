@@ -44,7 +44,7 @@ module Cruml::Renders::Classifier
 
   # Adds a module into the class diagram.
   private def add_module(name : String, &)
-    add_object(name, Cruml::Renders::Config.class_color) do
+    add_object(name, Cruml::Renders::Config.module_color) do
       yield
     end
   end

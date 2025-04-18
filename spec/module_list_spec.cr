@@ -20,7 +20,7 @@ describe Cruml::ModuleList do
 
     it "raises an error when module is not found" do
       expect_raises(Enumerable::NotFoundError) do
-        Cruml::ModuleList.find_by_name("NonExistentModule")
+        Cruml::ModuleList.find_by_name!("NonExistentModule")
       end
     end
   end

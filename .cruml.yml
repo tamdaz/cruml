@@ -1,0 +1,32 @@
+colors:
+  light:
+    classes: "#000fff"
+    abstract_classes: "#ff0000"
+    interfaces: "#0000ff"
+    modules: "#ff00ff"
+  dark:
+    classes: "#000555"
+    abstract_classes: "#550000"
+    interfaces: "#000055"
+    modules: "#550055"
+
+paths:
+  - src/entities
+  - examples/
+
+namespaces:
+  E2:
+    - E2::Organization
+    - E2::Enterprise
+    - E2::Bank
+  E3:
+    - E3::Universe
+    - E3::Galaxy
+    - E3::BlackHole
+    - E3::Planet
+    - E3::Star
+  E11:
+    - E11::G1::Link
+    - E11::G2::Sublink
+    - E11::G3::SubSublink
+    - E11::G3::AnotherSubSublink

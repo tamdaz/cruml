@@ -1,0 +1,12 @@
+namespaces:
+  Namespace1:
+    - Namespace1::Class1
+    - Namespace1::Class2
+  Namespace2:
+    - Namespace2::Class1
+  N1::SN1:
+    - N1::SN1::Class1
+  N1::SN2:
+    - N1::SN2::Class2
+  N2:
+    - N2::Class1

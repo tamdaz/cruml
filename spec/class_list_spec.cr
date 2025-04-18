@@ -8,13 +8,13 @@ describe Cruml::ClassList do
       class_info = Cruml::Entities::ClassInfo.new("TestClass", :class)
       Cruml::ClassList.add(class_info)
 
-      found_class = Cruml::ClassList.find_by_name("TestClass")
+      found_class = Cruml::ClassList.find_by_name!("TestClass")
       found_class.should eq(class_info)
     end
 
     it "raises an error when class is not found" do
       expect_raises(Enumerable::NotFoundError) do
-        Cruml::ModuleList.find_by_name("NonExistentClass")
+        Cruml::ModuleList.find_by_name!("NonExistentClass")
       end
     end
   end
@@ -30,7 +30,7 @@ describe Cruml::ClassList do
       class_info3 = Cruml::Entities::ClassInfo.new("Namespace2::Class1", :class)
       Cruml::ClassList.add(class_info3)
 
-      grouped_classes = Cruml::ClassList.group_by_namespaces
+      grouped_classes = Cruml::ClassList.group_by_namespaces(test_mode: true)
       grouped_classes["Namespace1"].should eq([class_info1, class_info2])
       grouped_classes["Namespace2"].should eq([class_info3])
     end
@@ -45,7 +45,7 @@ describe Cruml::ClassList do
       class_info3 = Cruml::Entities::ClassInfo.new("N2::Class1", :class)
       Cruml::ClassList.add(class_info3)
 
-      grouped_classes = Cruml::ClassList.group_by_namespaces
+      grouped_classes = Cruml::ClassList.group_by_namespaces(test_mode: true)
       grouped_classes["N1::SN1"].should eq([class_info1])
       grouped_classes["N1::SN2"].should eq([class_info2])
       grouped_classes["N2"].should eq([class_info3])
