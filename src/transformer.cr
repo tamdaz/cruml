@@ -124,7 +124,7 @@ class Cruml::Transformer < Crystal::Transformer
             class_info.add_method(Cruml::Entities::MethodInfo.new(:public, name, type))
           end
 
-          if ["property", "setter", "property?", "getter?"].includes?(visibility)
+          if ["property", "setter", "property?"].includes?(visibility)
             class_info.add_method(Cruml::Entities::MethodInfo.new(:public, "#{name}=", type))
           end
         end
