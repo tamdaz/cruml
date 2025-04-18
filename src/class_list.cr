@@ -29,13 +29,13 @@ class Cruml::ClassList
 
   # Verifies and removes duplicated instance variables from classes based on their parent classes.
   def self.verify_instance_var_duplication : Nil
-    self.classes.reject(&.parent_classes.empty?).sort_by!(&.parent_classes.size).reverse_each do |klass|
+    filtered_classes = @@classes.reject(&.parent_classes.empty?).sort_by!(&.parent_classes.size)
+
+    filtered_classes.reverse_each do |klass|
       klass.parent_classes.each do |parent_klass, _, _|
-        found_class = Cruml::ClassList.find_by_name(parent_klass)
-        if found_class
-          parent_ivars = found_class.instance_vars
-          klass.instance_vars.reject! { |ivar| parent_ivars.includes?(ivar) }
-        end
+        found_class = Cruml::ClassList.find_by_name!(parent_klass)
+        parent_ivars = found_class.instance_vars
+        klass.instance_vars.reject! { |ivar| parent_ivars.includes?(ivar) }
       end
     end
   end
