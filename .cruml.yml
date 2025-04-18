@@ -1,13 +1,18 @@
 colors:
-  classes: "#baa7e5"
-  abstract_classes: "#a7e5a7"
-  interfaces: "#e2c7a3"
-  modules: "#5ab3f4"
+  light:
+    classes: "#000fff"
+    abstract_classes: "#ff0000"
+    interfaces: "#0000ff"
+    modules: "#ff00ff"
+  dark:
+    classes: "#000555"
+    abstract_classes: "#550000"
+    interfaces: "#000055"
+    modules: "#550055"
 
 paths:
-  - examples/e2_organization.cr
-  - examples/e1_person.cr
   - src/entities
+  - examples/
 
 namespaces:
   E2:
