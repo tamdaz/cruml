@@ -8,7 +8,7 @@
 > [!WARNING]
 > This tool is under development, it is not completely finished.
 
-**cruml** *(**Cr**ystal **UML**)* is a tool that allows to generate an UML diagram. This is useful for any Crystal projects.
+**cruml** *(**Cr**ystal **UML**)* is a tool that allows to generate an UML diagram. This is useful for all projects using the Crystal language that need to know their structure.
 
 ![uml_class_diagram](img/diagram.png)
 
@@ -16,9 +16,21 @@
 
 ## Requirements
 
-To do this, you should have d2 installed.
+To do this, you should have d2 installed in your machine.
 
 Documentation source : https://d2lang.com/tour/install#install-script.
+
+## Compatibilities
+
+Here is are the compatibility table:
+
+| Cruml version | Crystal version   |
+|---------------|-------------------|
+| >>> soon...                       |
+| v0.7.0        | v1.16.0 & v1.16.1 |
+
+> [!TIP]
+> Table is subject to change.
 
 ## Installation
 
@@ -37,6 +49,14 @@ Once this tool is installed, this will build a binary into `bin/` directory in y
 ## Usage
 
 ```
+Usage : cruml [subcommand] [arguments] -- [options]
+    config                           Configuration
+    generate                         Generate the class diagram
+    -v, --version                    Show the version
+    -h, --help                       Show this help
+```
+
+```
 Usage : cruml generate [arguments] -- [options]
     -v, --version                    Show the version
     -h, --help                       Show this help
@@ -45,6 +65,13 @@ Usage : cruml generate [arguments] -- [options]
     --no-color                       Disable color output
     --path=PATH                      Path to specify
     --output-dir=DIR                 Directory path to save diagrams
+```
+
+```
+Usage : cruml [subcommand] [arguments] -- [options]
+    -v, --version                    Show the version
+    -h, --help                       Show this help
+    --generate                       Generate a YML config
 ```
 
 ## Examples
@@ -75,6 +102,44 @@ If you don't want to colorize the diagram, you can use the `--no-color` flag:
 ```sh
 bin/cruml generate --path="src/models" --no-color
 ```
+
+## Configuration
+
+Flags are useful to generate the class diagram. In addition, you can use the YML config file to group namespaces,
+customize the color of the classifiers and add paths.
+
+```yml
+colors:
+  light:
+    classes: "#000fff"
+    abstract_classes: "#ff0000"
+    interfaces: "#0000ff"
+    modules: "#ff00ff"
+  dark:
+    classes: "#000555"
+    abstract_classes: "#550000"
+    interfaces: "#000055"
+    modules: "#550055"
+
+paths:
+  - src/entities
+  - src/controllers
+  - src/services
+
+namespaces:
+  MyNamespace:
+    - App::Services::ClassOne
+    - App::Services::ClassTwo
+    - App::Services::ClassThree
+```
+
+Thanks to this config, you will not need to use flags in the CLI, just run `bin/cruml generate`.
+
+## Troubleshooting
+
+- Tool cannot know if there are objects in the recursive modules.
+- d2 binary cannot display the multi-line method signature.
+- Fonts cannot be automatically customized _(unless we manually edit the SVG file once generated)_. We'll see if d2 contributors can implement this feature later.
 
 ## Contributing
 
