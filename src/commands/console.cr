@@ -14,6 +14,64 @@ output_dir = "out/"
 OptionParser.parse do |parser|
   parser.banner = "Usage : cruml [subcommand] [arguments] -- [options]"
 
+  parser.on "config", "Configuration" do
+    # Generate a YML config.
+    parser.on "--generate", "Generate a YML config" do
+      output = YAML.build do |yml|
+        yml.mapping do
+          yml.scalar "colors"
+          yml.mapping do
+            yml.scalar "light"
+            yml.mapping do
+              yml.scalar "classes"
+              yml.scalar "#000fff"
+              yml.scalar "abstract_classes"
+              yml.scalar "#ff0000"
+              yml.scalar "interfaces"
+              yml.scalar "#0000ff"
+              yml.scalar "modules"
+              yml.scalar "#ff00ff"
+            end
+            yml.scalar "dark"
+            yml.mapping do
+              yml.scalar "classes"
+              yml.scalar "#000aaa"
+              yml.scalar "abstract_classes"
+              yml.scalar "#aa0000"
+              yml.scalar "interfaces"
+              yml.scalar "#0000aa"
+              yml.scalar "modules"
+              yml.scalar "#aa00aa"
+            end
+          end
+
+          yml.scalar "paths"
+          yml.sequence do
+            yml.scalar "src/"
+          end
+
+          yml.scalar "namespaces"
+          yml.mapping do
+            yml.scalar "Namespace"
+            yml.sequence do
+              yml.scalar "ClassOne"
+              yml.scalar "ClassTwo"
+              yml.scalar "ClassThree"
+            end
+          end
+        end
+      end
+
+      begin
+        File.write(Dir.current + "/.cruml.yml", output)
+        puts "Config is successfully generated."
+        exit 0
+      rescue Exception
+        puts "Impossble to generate the YML config file. Please retry."
+      end
+    end
+  end
+
   # `generate` argument
   parser.on "generate", "Generate the class diagram" do
     parser.banner = "Usage : cruml generate [arguments] -- [options]"
