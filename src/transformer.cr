@@ -59,6 +59,24 @@ class Cruml::Transformer < Crystal::Transformer
       end
     end
 
+    if match_class_vars = node.body.to_s.match(/(class_getter|class_property|class_setter)\((\w+) : (\w+)\)/)
+      visibility, name, type = match_class_vars[1], match_class_vars[2], match_class_vars[3].gsub("::Nil", "Nil")
+
+      found_class = Cruml::ClassList.find_by_name!(@current_class_name)
+
+      found_class.tap do |klass|
+        klass.add_class_var("@@#{name}", type)
+
+        if ["class_property", "class_getter", "class_property?", "class_getter?"].includes?(visibility)
+          klass.add_method(Cruml::Entities::MethodInfo.new(:public, name, type))
+        end
+
+        if ["class_property", "class_setter", "class_property?"].includes?(visibility)
+          klass.add_method(Cruml::Entities::MethodInfo.new(:public, "#{name}=", type))
+        end
+      end
+    end
+
     super(node)
   end
 
@@ -106,7 +124,7 @@ class Cruml::Transformer < Crystal::Transformer
             class_info.add_method(Cruml::Entities::MethodInfo.new(:public, name, type))
           end
 
-          if ["property", "setter", "property?", "getter?"].includes?(visibility)
+          if ["property", "setter", "property?"].includes?(visibility)
             class_info.add_method(Cruml::Entities::MethodInfo.new(:public, "#{name}=", type))
           end
         end
