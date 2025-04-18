@@ -44,7 +44,6 @@ class Cruml::ClassList
 
           classes.as_a.each do |klass|
             found_class = find_by_name(klass.as_s)
-
             if found_class
               classes_info << found_class
 
