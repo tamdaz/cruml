@@ -1,5 +1,39 @@
 # Changelog
 
+## [0.7.0](https://github.com/tamdaz/cruml/releases/tag/0.7.0) - 2025-04-18
+
+## Added
+
+- Setup the VSCode config to easily debug (@tamdaz)(#27)
+- Setup the `--verbose` flag (@tamdaz)(#28)
+- Add the `PULL_REQUEST_TEMPLATE.md` file. (@tamdaz)(#39)
+- Setup the YML config (@tamdaz)(#43)
+- Display class vars (@tamdaz)(#45)
+- Setup the YML config file generator. (@tamdaz)(#46)
+
+## Changed
+
+- Update the `.gitignore` file. (@tamdaz)(#25)
+- Set the ameba version to `~> 1.6.0` (@tamdaz)(#26)
+- Refactor code in the `src/render` directory. (@tamdaz)(#29)
+- Integrate d2lang into cruml (@tamdaz)(#30)
+- Rename the abstract class to `AbstractShape` (@tamdaz)(#31)
+- Move the console file into `src/commands` directory (@tamdaz)(#32)
+- Refactor classifiers (@tamdaz)(#34)
+- Improve docs (@tamdaz)(#35)
+- Update the README for the next version. (@tamdaz)(#47)
+- Change the Crystal version in the `shard.yml` file. (@tamdaz)(#37)
+- Improve CI workflow. (@tamdaz)(#40)
+
+## Fixed
+
+- Escape some characters (`|` and `:`) in the argument type (@tamdaz)(#38)
+- Refactor code in the transformer and the class list. (@tamdaz)(#44)
+
+## Removed
+
+- Remove config for formatting HTML files (@tamdaz)(#36)
+
 ## [0.6.2](https://github.com/tamdaz/cruml/releases/tag/0.6.2) - 2025-04-15
 
 ## Fixed
