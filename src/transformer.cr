@@ -64,15 +64,15 @@ class Cruml::Transformer < Crystal::Transformer
 
       found_class = Cruml::ClassList.find_by_name!(@current_class_name)
 
-      found_class.tap do |class_info|
-        class_info.add_class_var("@@#{name}", type)
+      found_class.tap do |klass|
+        klass.add_class_var("@@#{name}", type)
 
         if ["class_property", "class_getter", "class_property?", "class_getter?"].includes?(visibility)
-          class_info.add_method(Cruml::Entities::MethodInfo.new(:public, name, type))
+          klass.add_method(Cruml::Entities::MethodInfo.new(:public, name, type))
         end
 
         if ["class_property", "class_setter", "class_property?"].includes?(visibility)
-          class_info.add_method(Cruml::Entities::MethodInfo.new(:public, "#{name}=", type))
+          klass.add_method(Cruml::Entities::MethodInfo.new(:public, "#{name}=", type))
         end
       end
     end
