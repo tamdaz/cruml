@@ -209,7 +209,7 @@ class Cruml::Transformer < Crystal::Transformer
     if is_not_duplicated_method
       return_type = node.return_type.to_s || "Nil"
       visibility = node.name.to_s == "initialize" ? :protected : :public
-      method_name = node.receiver ? "self\.#{node.name}" : node.name
+      method_name = node.receiver ? "self.#{node.name}" : node.name
 
       method_info = Cruml::Entities::MethodInfo.new(visibility, method_name, return_type)
 
