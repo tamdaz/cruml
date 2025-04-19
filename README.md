@@ -16,13 +16,13 @@
 
 ## Requirements
 
-To do this, you should have d2 installed in your machine.
+To do this, d2 should be installed in your machine.
 
 Documentation source : https://d2lang.com/tour/install#install-script.
 
 ## Compatibilities
 
-Here is are the compatibility table:
+Here is the compatibility table:
 
 | Cruml version | Crystal version   |
 |---------------|-------------------|
@@ -44,7 +44,7 @@ development_dependencies:
 
 2. Run `shards install`.
 
-Once this tool is installed, this will build a binary into `bin/` directory in your project.
+Once this tool installed, this will build a binary into `bin/` directory in your project.
 
 ## Usage
 
@@ -76,7 +76,7 @@ Usage : cruml [subcommand] [arguments] -- [options]
 
 ## Examples
 
-For example, to generate a diagram with Crystal files in the `src/models` directory:
+For example, to generate a diagram with Crystal files from the `src/models` directory:
 
 ```sh
 bin/cruml generate --path="src/models"
@@ -91,7 +91,7 @@ bin/cruml generate --path="src/models/user.cr"
 > [!TIP]
 > You can use multiple `--path` flag to include several files or directories.
 
-In addition, you can change the diagram theme thanks to `--dark-mode` flag:
+In addition, you can set your diagram to the dark mode thanks to `--dark-mode` flag:
 
 ```sh
 bin/cruml generate --path="src/models" --dark-mode
