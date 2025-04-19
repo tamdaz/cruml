@@ -93,9 +93,16 @@ class Cruml::Transformer < Crystal::Transformer
         # Add a method into class.
         found_class = Cruml::ClassList.find_by_name!(@current_class_name)
 
-        found_class.add_method(
-          Cruml::Entities::MethodInfo.new(visibility(node.modifier), method_name.to_s, method.return_type.to_s)
-        )
+        method_with_visibility = Cruml::Entities::MethodInfo.new(visibility(node.modifier), method_name.to_s, method.return_type.to_s)
+
+        method.args.map(&.to_s).each do |arg|
+          arg_name, arg_type = arg.split(" : ")
+          method_with_visibility.add_arg(
+            Cruml::Entities::ArgInfo.new(arg_name, arg_type.gsub(" ::", ' '))
+          )
+        end
+
+        found_class.add_method(method_with_visibility)
       else
         # Add a method into module.
         found_module = Cruml::ModuleList.find_by_name!(@current_module_name)
@@ -202,7 +209,7 @@ class Cruml::Transformer < Crystal::Transformer
     if is_not_duplicated_method
       return_type = node.return_type.to_s || "Nil"
       visibility = node.name.to_s == "initialize" ? :protected : :public
-      method_name = node.receiver ? "self.#{node.name}" : node.name
+      method_name = node.receiver ? "self\.#{node.name}" : node.name
 
       method_info = Cruml::Entities::MethodInfo.new(visibility, method_name, return_type)
 
