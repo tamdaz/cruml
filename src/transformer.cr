@@ -233,7 +233,7 @@ class Cruml::Transformer < Crystal::Transformer
     if class_name.downcase.ends_with?("interface")
       :interface
     else
-      (node.abstract?) ? :abstract : :class
+      node.abstract? ? :abstract : :class
     end
   end
 
