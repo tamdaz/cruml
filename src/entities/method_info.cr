@@ -37,7 +37,7 @@ class Cruml::Entities::MethodInfo
           '[' => "\\[",
           ']' => "\\]",
         }
-        
+
         str << "#{arg.name} \\: #{arg.type.gsub(patterns)}"
         if i != @args.size - 1
           str << ", "
