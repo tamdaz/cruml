@@ -12,7 +12,9 @@ class Cruml::Entities::MethodInfo
   # All arguments in a method.
   getter args = [] of Cruml::Entities::ArgInfo
 
-  def initialize(@visibility : Symbol, @name : String, @return_type : String); end
+  def initialize(@visibility : Symbol, @name : String, @return_type : String)
+    @name = escape_characters(@name)
+  end
 
   # Add an argument into the args list.
   def add_arg(arg : Cruml::Entities::ArgInfo)
@@ -23,22 +25,28 @@ class Cruml::Entities::MethodInfo
     end
   end
 
+  # Escape some special characters to avoid syntax errors during diagram
+  # compilation of d2.
+  private def escape_characters(input : String) : String
+    patterns = {
+      '|' => "\\|",
+      ':' => "\\:",
+      '.' => "\\.",
+      '{' => "\\{",
+      '}' => "\\}",
+      '<' => "\\<",
+      '[' => "\\[",
+      ']' => "\\]",
+    }
+
+    input.gsub(patterns)
+  end
+
   # Generate the args.
   def generate_args : String
     String.build do |str|
       @args.each_with_index do |arg, i|
-        patterns = {
-          '|' => "\\|",
-          ':' => "\\:",
-          '.' => "\\.",
-          '{' => "\\{",
-          '}' => "\\}",
-          '<' => "\\<",
-          '[' => "\\[",
-          ']' => "\\]",
-        }
-
-        str << "#{arg.name} \\: #{arg.type.gsub(patterns)}"
+        str << "#{arg.name} \\: #{escape_characters(arg.type)}"
         if i != @args.size - 1
           str << ", "
         end
