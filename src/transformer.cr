@@ -96,10 +96,12 @@ class Cruml::Transformer < Crystal::Transformer
         method_with_visibility = Cruml::Entities::MethodInfo.new(visibility(node.modifier), method_name.to_s, method.return_type.to_s)
 
         method.args.map(&.to_s).each do |arg|
-          arg_name, arg_type = arg.split(" : ")
-          method_with_visibility.add_arg(
-            Cruml::Entities::ArgInfo.new(arg_name, arg_type.gsub(" ::", ' '))
-          )
+          if arg.includes?(" : ")
+            arg_name, arg_type = arg.split(" : ")
+            method_with_visibility.add_arg(
+              Cruml::Entities::ArgInfo.new(arg_name, arg_type.gsub(" ::", ' '))
+            )
+          end
         end
 
         found_class.add_method(method_with_visibility)
@@ -214,10 +216,12 @@ class Cruml::Transformer < Crystal::Transformer
       method_info = Cruml::Entities::MethodInfo.new(visibility, method_name, return_type)
 
       node.args.map(&.to_s).each do |arg|
-        arg_name, arg_type = arg.split(" : ")
-        method_info.add_arg(
-          Cruml::Entities::ArgInfo.new(arg_name, arg_type.gsub(" ::", ' '))
-        )
+        if arg.includes?(" : ")
+          arg_name, arg_type = arg.split(" : ")
+          method_info.add_arg(
+            Cruml::Entities::ArgInfo.new(arg_name, arg_type.gsub(" ::", ' '))
+          )
+        end
       end
 
       if @current_module_name.empty?
