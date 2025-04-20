@@ -32,7 +32,7 @@ class Cruml::Transformer < Crystal::Transformer
     # If a class def contains the generic
     if node.type_vars
       generic = node.type_vars.as(Array(String))
-      @current_class_name += "~#{generic.join(", ")}~"
+      @current_class_name += "(#{generic.join(", ")})"
     end
 
     class_type = if @current_class_name.downcase.ends_with?("interface")
@@ -209,7 +209,7 @@ class Cruml::Transformer < Crystal::Transformer
     if is_not_duplicated_method
       return_type = node.return_type.to_s || "Nil"
       visibility = node.name.to_s == "initialize" ? :protected : :public
-      method_name = node.receiver ? "self.#{node.name}" : node.name
+      method_name = node.receiver ? "self\\.#{node.name}" : node.name
 
       method_info = Cruml::Entities::MethodInfo.new(visibility, method_name, return_type)
 
