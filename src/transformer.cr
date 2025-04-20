@@ -4,6 +4,11 @@ require "./module_list"
 
 # Class that consists to inspect the reflected objects.
 class Cruml::Transformer < Crystal::Transformer
+  INCLUDE_REGEX                  = /^include (\w+(?:::\w+)*)$/
+  CLASS_VARS_ATTRIBUTE_REGEX     = /(class_getter|class_property|class_setter)\((\w+) : (\w+)\)/
+  INSTANCE_VARS_ATTTRIBUTE_REGEX = /^(property|getter|setter|property\?|getter\?)\((\w+) : ([\w:| ]+)\)/
+  INSTANCE_VARS_REGEX            = /^@(\w+) : ([\w:| ]+)$/
+
   def initialize
     @current_class_name = ""
     @current_module_name = ""
