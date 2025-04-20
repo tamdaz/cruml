@@ -4,6 +4,11 @@ require "./module_list"
 
 # Class that consists to inspect the reflected objects.
 class Cruml::Transformer < Crystal::Transformer
+  INCLUDE_REGEX                  = /^include (\w+(?:::\w+)*)$/
+  CLASS_VARS_ATTRIBUTE_REGEX     = /(class_getter|class_property|class_setter)\((\w+) : (\w+)\)/
+  INSTANCE_VARS_ATTTRIBUTE_REGEX = /^(property|getter|setter|property\?|getter\?)\((\w+) : ([\w:| ]+)\)/
+  INSTANCE_VARS_REGEX            = /^@(\w+) : ([\w:| ]+)$/
+
   def initialize
     @current_class_name = ""
     @current_module_name = ""
@@ -29,21 +34,14 @@ class Cruml::Transformer < Crystal::Transformer
     @current_class_name = node.name.to_s
     @current_module_name = ""
 
-    # If a class def contains the generic
+    # If a class def contains the generic.
     if node.type_vars
       generic = node.type_vars.as(Array(String))
       @current_class_name += "(#{generic.join(", ")})"
     end
 
-    class_type = if @current_class_name.downcase.ends_with?("interface")
-                   :interface
-                 else
-                   node.abstract? ? :abstract : :class
-                 end
+    class_info = Cruml::Entities::ClassInfo.new(@current_class_name, class_type(@current_class_name, node))
 
-    class_info = Cruml::Entities::ClassInfo.new(@current_class_name, class_type)
-
-    # Replace the "::" by "." for namespaces.
     if node.superclass
       class_info.add_parent_class(node.superclass.to_s)
     end
@@ -52,15 +50,19 @@ class Cruml::Transformer < Crystal::Transformer
 
     # Check if there's an "include" keyword followed by a module
     node.body.to_s.each_line do |line|
-      if match = line.match(/^include (\w+(?:::\w+)*)$/)
-        included_module = match[1]
+      if match_include = line.match(INCLUDE_REGEX)
+        included_module = match_include[1]
+
         found_class = Cruml::ClassList.find_by_name(@current_class_name)
-        found_class.add_included_module(included_module) if found_class
+
+        if found_class
+          found_class.add_included_module(included_module)
+        end
       end
     end
 
-    if match_class_vars = node.body.to_s.match(/(class_getter|class_property|class_setter)\((\w+) : (\w+)\)/)
-      visibility, name, type = match_class_vars[1], match_class_vars[2], match_class_vars[3].gsub("::Nil", "Nil")
+    if match_class_vars = node.body.to_s.match(CLASS_VARS_ATTRIBUTE_REGEX)
+      visibility, name, type = match_class_vars
 
       found_class = Cruml::ClassList.find_by_name!(@current_class_name)
 
@@ -82,37 +84,25 @@ class Cruml::Transformer < Crystal::Transformer
 
   # Transforms a visibility modifier node.
   def transform(node : Crystal::VisibilityModifier) : Crystal::ASTNode
-    method = node.exp.as?(Crystal::Def)
+    method = node.exp.as(Crystal::Def)
 
-    if method
-      method_name = method.receiver ? "self.#{method.name}" : method.name
+    @protected_and_private_methods << method
 
-      @protected_and_private_methods << method
+    if @current_module_name.empty?
+      # Add a method into class.
+      found_class = Cruml::ClassList.find_by_name!(@current_class_name)
 
-      if @current_module_name.empty?
-        # Add a method into class.
-        found_class = Cruml::ClassList.find_by_name!(@current_class_name)
+      method_with_visibility = Cruml::Entities::MethodInfo.new(visibility(node.modifier), method.name.to_s, method.return_type.to_s)
+      add_args(method, method_with_visibility)
 
-        method_with_visibility = Cruml::Entities::MethodInfo.new(visibility(node.modifier), method_name.to_s, method.return_type.to_s)
+      found_class.add_method(method_with_visibility)
+    else
+      # Add a method into module.
+      found_module = Cruml::ModuleList.find_by_name!(@current_module_name)
 
-        method.args.map(&.to_s).each do |arg|
-          if arg.includes?(" : ")
-            arg_name, arg_type = arg.split(" : ")
-            method_with_visibility.add_arg(
-              Cruml::Entities::ArgInfo.new(arg_name, arg_type.gsub(" ::", ' '))
-            )
-          end
-        end
-
-        found_class.add_method(method_with_visibility)
-      else
-        # Add a method into module.
-        found_module = Cruml::ModuleList.find_by_name!(@current_module_name)
-
-        found_module.add_method(
-          Cruml::Entities::MethodInfo.new(visibility(node.modifier), method_name.to_s, method.return_type.to_s)
-        )
-      end
+      found_module.add_method(
+        Cruml::Entities::MethodInfo.new(visibility(node.modifier), method.name.to_s, method.return_type.to_s)
+      )
     end
 
     super(node)
@@ -121,8 +111,8 @@ class Cruml::Transformer < Crystal::Transformer
   # Transforms an expressions node.
   def transform(node : Crystal::Expressions) : Crystal::ASTNode
     node.expressions.each do |exp|
-      if match = exp.to_s.match(/^(property|getter|setter|property\?|getter\?)\((\w+) : ([\w:| ]+)\)/)
-        visibility, name, type = match[1], match[2], match[3].gsub("::Nil", "Nil")
+      if match = exp.to_s.match(INSTANCE_VARS_ATTTRIBUTE_REGEX)
+        visibility, name, type = match[1], match[2], match[3]
 
         found_class = Cruml::ClassList.find_by_name!(@current_class_name)
 
@@ -139,6 +129,7 @@ class Cruml::Transformer < Crystal::Transformer
         end
       end
     end
+
     super(node)
   end
 
@@ -147,16 +138,13 @@ class Cruml::Transformer < Crystal::Transformer
     ivar_name = node.name.to_s
 
     @variables.each do |variable|
-      var_name = variable.var.to_s
-      var_type = variable.declared_type.to_s
+      var_name, var_type = variable.var.to_s, variable.declared_type.to_s
 
       if var_name.includes?(ivar_name)
-        if @current_module_name.empty?
-          found_class = Cruml::ClassList.find_by_name!(@current_class_name)
-          found_class.add_instance_var(var_name, var_type)
+        if !@current_module_name.empty?
+          Cruml::ModuleList.find_by_name!(@current_module_name).add_instance_var(var_name, var_type)
         else
-          found_module = Cruml::ModuleList.find_by_name!(@current_module_name)
-          found_module.add_instance_var(var_name, var_type)
+          Cruml::ClassList.find_by_name!(@current_class_name).add_instance_var(var_name, var_type)
         end
       end
     end
@@ -168,9 +156,7 @@ class Cruml::Transformer < Crystal::Transformer
   def transform(node : Crystal::Assign) : Crystal::ASTNode
     @variables.each do |var|
       if node.target.to_s.includes?(var.var.to_s)
-        found_class = Cruml::ClassList.find_by_name!(@current_class_name)
-
-        found_class.add_instance_var(
+        Cruml::ClassList.find_by_name!(@current_class_name).add_instance_var(
           node.target.to_s, var.declared_type.to_s.gsub(" ::", ' ')
         )
       end
@@ -197,15 +183,15 @@ class Cruml::Transformer < Crystal::Transformer
         if match = line.match(/^@(\w+) = #{arg_name}$/)
           ivar_name = match[1]
           found_class = Cruml::ClassList.find_by_name!(@current_class_name)
-          found_class.add_instance_var("@#{ivar_name}", arg.restriction.to_s.gsub("::Nil", "Nil"))
+          found_class.add_instance_var("@#{ivar_name}", arg.restriction.to_s)
         end
       end
     end
 
-    if match = node.body.to_s.match(/^@(\w+) : ([\w:| ]+)$/)
-      ivar_name, ivar_type = match[1], match[2].gsub("::Nil", "Nil")
-      found_class = Cruml::ClassList.find_by_name(@current_class_name)
-      found_class.add_instance_var("@#{ivar_name}", ivar_type) if found_class
+    if match_instance_var = node.body.to_s.match(INSTANCE_VARS_REGEX)
+      ivar_name, ivar_type = match_instance_var
+
+      Cruml::ClassList.find_by_name!(@current_class_name).add_instance_var("@#{ivar_name}", ivar_type)
     end
 
     if is_not_duplicated_method
@@ -214,28 +200,41 @@ class Cruml::Transformer < Crystal::Transformer
       method_name = node.receiver ? "self\\.#{node.name}" : node.name
 
       method_info = Cruml::Entities::MethodInfo.new(visibility, method_name, return_type)
+      add_args(node, method_info)
 
-      node.args.map(&.to_s).each do |arg|
-        if arg.includes?(" : ")
-          arg_name, arg_type = arg.split(" : ")
-          method_info.add_arg(
-            Cruml::Entities::ArgInfo.new(arg_name, arg_type.gsub(" ::", ' '))
-          )
-        end
-      end
-
-      if @current_module_name.empty?
-        # Add a method into class.
-        found_class = Cruml::ClassList.find_by_name!(@current_class_name)
-        found_class.add_method(method_info)
-      else
+      if !@current_module_name.empty?
         # Add a method into module.
         found_module = Cruml::ModuleList.find_by_name!(@current_module_name)
         found_module.add_method(method_info)
+      else
+        # Add a method into class.
+        found_class = Cruml::ClassList.find_by_name!(@current_class_name)
+        found_class.add_method(method_info)
       end
     end
 
     super(node)
+  end
+
+  # Add arguments for methods.
+  private def add_args(node : Crystal::Def, method : Cruml::Entities::MethodInfo) : Void
+    node.args.map(&.to_s).each do |arg|
+      if arg.includes?(" : ")
+        arg_name, arg_type = arg.split(" : ")
+        arg_type.gsub(" ::", ' ')
+
+        method.add_arg(Cruml::Entities::ArgInfo.new(arg_name, arg_type))
+      end
+    end
+  end
+
+  # Determines the class type.
+  private def class_type(class_name : String, node : Crystal::ClassDef)
+    if class_name.downcase.ends_with?("interface")
+      :interface
+    else
+      node.abstract? ? :abstract : :class
+    end
   end
 
   # Determines the visibility of a node.
