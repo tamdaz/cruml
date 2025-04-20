@@ -32,7 +32,7 @@ class Cruml::Transformer < Crystal::Transformer
     # If a class def contains the generic
     if node.type_vars
       generic = node.type_vars.as(Array(String))
-      @current_class_name += "~#{generic.join(", ")}~"
+      @current_class_name += "(#{generic.join(", ")})"
     end
 
     class_type = if @current_class_name.downcase.ends_with?("interface")
