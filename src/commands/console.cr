@@ -24,24 +24,24 @@ OptionParser.parse do |parser|
             yml.scalar "light"
             yml.mapping do
               yml.scalar "classes"
-              yml.scalar "#000fff"
+              yml.scalar "#baa7e5"
               yml.scalar "abstract_classes"
-              yml.scalar "#ff0000"
+              yml.scalar "#a7e5a7"
               yml.scalar "interfaces"
-              yml.scalar "#0000ff"
+              yml.scalar "#e2c7a3"
               yml.scalar "modules"
-              yml.scalar "#ff00ff"
+              yml.scalar "#5ab3f4"
             end
             yml.scalar "dark"
             yml.mapping do
               yml.scalar "classes"
-              yml.scalar "#000aaa"
+              yml.scalar "#2e1065"
               yml.scalar "abstract_classes"
-              yml.scalar "#aa0000"
+              yml.scalar "#365314"
               yml.scalar "interfaces"
-              yml.scalar "#0000aa"
+              yml.scalar "#af6300"
               yml.scalar "modules"
-              yml.scalar "#aa00aa"
+              yml.scalar "#0041cc"
             end
           end
 
