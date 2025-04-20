@@ -84,25 +84,27 @@ class Cruml::Transformer < Crystal::Transformer
 
   # Transforms a visibility modifier node.
   def transform(node : Crystal::VisibilityModifier) : Crystal::ASTNode
-    method = node.exp.as(Crystal::Def)
+    method = node.exp.as?(Crystal::Def)
 
-    @protected_and_private_methods << method
+    if method
+      @protected_and_private_methods << method
 
-    if @current_module_name.empty?
-      # Add a method into class.
-      found_class = Cruml::ClassList.find_by_name!(@current_class_name)
+      if @current_module_name.empty?
+        # Add a method into class.
+        found_class = Cruml::ClassList.find_by_name!(@current_class_name)
 
-      method_with_visibility = Cruml::Entities::MethodInfo.new(visibility(node.modifier), method.name.to_s, method.return_type.to_s)
-      add_args(method, method_with_visibility)
+        method_with_visibility = Cruml::Entities::MethodInfo.new(visibility(node.modifier), method.name.to_s, method.return_type.to_s)
+        add_args(method, method_with_visibility)
 
-      found_class.add_method(method_with_visibility)
-    else
-      # Add a method into module.
-      found_module = Cruml::ModuleList.find_by_name!(@current_module_name)
+        found_class.add_method(method_with_visibility)
+      else
+        # Add a method into module.
+        found_module = Cruml::ModuleList.find_by_name!(@current_module_name)
 
-      found_module.add_method(
-        Cruml::Entities::MethodInfo.new(visibility(node.modifier), method.name.to_s, method.return_type.to_s)
-      )
+        found_module.add_method(
+          Cruml::Entities::MethodInfo.new(visibility(node.modifier), method.name.to_s, method.return_type.to_s)
+        )
+      end
     end
 
     super(node)
