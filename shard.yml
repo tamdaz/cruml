@@ -1,5 +1,5 @@
 name: cruml
-version: 0.7.0
+version: 0.7.1
 
 description: |
   A tool that provides an UML class diagram generator for any Crystal projects.
