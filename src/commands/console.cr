@@ -175,10 +175,15 @@ measured_time_to_render = Time.measure do
   diagram.generate
   diagram.save
 
-  process = Process.run("d2", ["out/diagram.d2", "out/diagram.svg", "-c"])
+  begin
+    process = Process.run("d2", ["out/diagram.d2", "out/diagram.svg", "-c"])
 
-  if process.exit_code != 0
-    puts "Cannot render the class diagram with d2; maybe because of the syntax error or d2 is not installed."
+    if process.exit_code != 0
+      puts "Cannot render the class diagram with d2; maybe because of the syntax error."
+      exit 1
+    end
+  rescue File::NotFoundError
+    puts "d2 is not installed. Please go to https://github.com/terrastruct/d2 to install it."
     exit 1
   end
 end
