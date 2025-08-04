@@ -2,7 +2,6 @@
 
 ![GitHub Release](https://img.shields.io/github/v/release/tamdaz/cruml)
 [![ci](https://github.com/tamdaz/cruml/actions/workflows/ci.yml/badge.svg)](https://github.com/tamdaz/cruml/actions/workflows/ci.yml)
-
 [![crystal doc info](https://img.shields.io/badge/main-CrystalDoc.info-2E1052?logo=crystal&style=for-the-badge)](https://crystaldoc.info/github/tamdaz/cruml/main/index.html)
 
 > [!WARNING]
@@ -27,6 +26,7 @@ Here is the compatibility table:
 | Cruml version | Crystal version   |
 |---------------|-------------------|
 | >>> soon...                       |
+| v0.7.1        | v1.16.x & v1.17.x |
 | v0.7.0        | v1.16.0 & v1.16.1 |
 
 > [!TIP]
@@ -142,6 +142,7 @@ Thanks to this config, you will not need to use flags in the CLI, just run `bin/
 - Fonts cannot be automatically customized _(unless we manually edit the SVG file once generated)_. We'll see if d2 contributors can implement this feature later.
 - Return type of a method should be indicated explicity, otherwise it will display `void`.
 - Recursive modules aren't supported for the moment. For example, if you have a code that look like this:
+
 ```crystal
 module MyModule
   module MySubModule

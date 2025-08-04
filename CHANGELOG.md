@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.7.1](https://github.com/tamdaz/cruml/releases/tag/0.7.1) - 2025-08-05
+
+# Fixed
+
+- Display args to protected and private methods. (@tamdaz)(#49)
+- Fix typos (@tamdaz)(#50)
+- Fix special characters for d2 code (@tamdaz)(#51)
+- Change default colors (@tamdaz)(#52)
+- Check if args are present or not. (@tamdaz)(#53)
+- Update troubleshooting in the README (@tamdaz)(#54)
+- Refactor the `src/transformer.cr` file. (@tamdaz)(#55)
+- Make `method` variable nullable. (@tamdaz)(#57)
+- Escape special characters to method name and args. (@tamdaz)(#58)
+- Fix GH CI (@tamdaz)(#60)
+- Inform to the user the installation of d2 for the class diagram generation. (@tamdaz)(#59)
+
 ## [0.7.0](https://github.com/tamdaz/cruml/releases/tag/0.7.0) - 2025-04-18
 
 ## Added
