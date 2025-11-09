@@ -1,5 +1,3 @@
-require "spec"
-require "./../src/entities/**"
 require "./../src/renders/config"
-
-# ...
+require "./../src/entities/**"
+require "spec"

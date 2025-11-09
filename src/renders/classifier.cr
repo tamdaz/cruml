@@ -3,13 +3,15 @@
 module Cruml::Renders::Classifier
   # Adds an object into the class diagram.
   private def add_object(name : String, color : String, &) : Nil
-    @code << '"' << name << '"' << " {\n"
-    @code << Cruml::Renders::UML::INDENT << "shape: class\n"
+    @code << '"' << name << '"' << " {" << "\n"
+    @code << Cruml::Renders::UML::INDENT << "shape: class" << "\n"
+
     unless Cruml::Renders::Config.no_color?
       @code << Cruml::Renders::UML::INDENT << <<-STR
       style.fill: "#{color}"\n
       STR
     end
+
     yield
     @code << "}\n"
   end

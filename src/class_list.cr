@@ -17,12 +17,12 @@ class Cruml::ClassList
 
   # Find a class info by name.
   def self.find_by_name(class_name : String) : Cruml::Entities::ClassInfo?
-    @@classes.find { |class_info| class_name == class_info.name }
+    @@classes.find { |klass| class_name == klass.name }
   end
 
   # Find a class info by name. Raises if not found.
   def self.find_by_name!(class_name : String) : Cruml::Entities::ClassInfo?
-    @@classes.find! { |class_info| class_name == class_info.name }
+    @@classes.find! { |klass| class_name == klass.name }
   end
 
   # Groups the classes by their namespaces.
@@ -36,9 +36,7 @@ class Cruml::ClassList
                   end
 
     File.open(config_path) do |file|
-      namespaces = YAML.parse(file)["namespaces"]?
-
-      if namespaces
+      if namespaces = YAML.parse(file)["namespaces"]?
         namespaces.as_h.each do |key, classes|
           classes_info = [] of Cruml::Entities::ClassInfo
 
@@ -49,12 +47,12 @@ class Cruml::ClassList
 
               # As classes are indicated in the YML config, we can delete them in the `@@classes` class var.
               @@classes.reject! do |class_to_reject|
-                class_to_reject.name == klass
+                class_to_reject.name == klass.as_s
               end
             end
           end
 
-          # Namespace would be deleted if array is empty.
+          # Namespace can be deleted if the array is empty.
           unless classes_info.empty?
             output[key.as_s] = classes_info
           end

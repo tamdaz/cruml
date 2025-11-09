@@ -4,6 +4,7 @@ require "option_parser"
 require "./../transformer"
 require "./../renders/diagram_render"
 require "./../renders/config"
+require "./runner"
 
 # Files to process
 files = [] of String
@@ -32,6 +33,7 @@ OptionParser.parse do |parser|
               yml.scalar "modules"
               yml.scalar "#5ab3f4"
             end
+
             yml.scalar "dark"
             yml.mapping do
               yml.scalar "classes"
@@ -108,13 +110,11 @@ OptionParser.parse do |parser|
     end
   end
 
-  # Version flag
   parser.on "-v", "--version", "Show the version" do
     puts "Cruml (version #{Cruml::VERSION})"
     exit 0
   end
 
-  # Help flag
   parser.on "-h", "--help", "Show this help" do
     puts parser
     exit 0
@@ -129,16 +129,14 @@ end
 
 # Retrieve paths from the YML file config.
 File.open(Dir.current + "/.cruml.yml") do |file|
-  paths = YAML.parse(file)["paths"]?
-
-  if paths
-    paths.as_a.each do |path_from_yml|
-      if File.file?(path_from_yml.as_s) && path_from_yml.as_s.ends_with?(".cr")
-        files << path_from_yml.as_s
+  if paths = YAML.parse(file)["paths"]?
+    paths.as_a.each do |path|
+      if File.file?(path.as_s) && path.as_s.ends_with?(".cr")
+        files << path.as_s
       end
 
-      if File.directory?(path_from_yml.as_s)
-        files |= Dir.glob("#{path_from_yml.as_s}/**/*.cr")
+      if File.directory?(path.as_s)
+        files |= Dir.glob("#{path.as_s}/**/*.cr")
       end
     end
   end
@@ -149,63 +147,9 @@ if files.size == 0
   exit 1
 end
 
-processed_files = 0 if Cruml::Renders::Config.verbose? == true
-
-# Time to process files.
-measured_time_to_process = Time.measure do
-  files.each do |file|
-    ast = Crystal::Parser.parse(File.read(file))
-    tx = Cruml::Transformer.new
-    ast.transform(tx)
-
-    if Cruml::Renders::Config.verbose? == true && processed_files
-      processed_files += 1
-    end
-  end
+if Cruml::Renders::Config.verbose?
+  # ameba:disable Lint/UselessAssign
+  processed_files = 0
 end
 
-# Time to verify instance variables.
-measured_time_to_verify = Time.measure do
-  Cruml::ClassList.verify_instance_var_duplication
-end
-
-# Time to render
-measured_time_to_render = Time.measure do
-  diagram = Cruml::Renders::DiagramRender.new("#{output_dir}/diagram.d2")
-  diagram.generate
-  diagram.save
-
-  begin
-    process = Process.run("d2", ["out/diagram.d2", "out/diagram.svg", "-c"])
-
-    if process.exit_code != 0
-      puts "Cannot render the class diagram with d2; maybe because of the syntax error."
-      exit 1
-    end
-  rescue File::NotFoundError
-    puts "d2 is not installed. Please go to https://github.com/terrastruct/d2 to install it."
-    exit 1
-  end
-end
-
-if Cruml::Renders::Config.verbose? == true
-  table = Tallboy.table do
-    header "Statistics"
-    rows [
-      ["Processed files", processed_files],
-      ["Time to process", measured_time_to_process],
-      ["Time to verify (ivars, cvars)", measured_time_to_render],
-      ["Time to render", measured_time_to_verify],
-      ["Global time", measured_time_to_process + measured_time_to_render + measured_time_to_verify],
-    ]
-  end
-
-  puts table
-else
-  total_time = measured_time_to_process + measured_time_to_render + measured_time_to_verify
-  if total_time.total_seconds >= 1
-    puts "Diagram successfully generated in #{total_time.total_seconds.round(2)} seconds.".colorize(:green)
-  else
-    puts "Diagram successfully generated in #{total_time.total_milliseconds.round(2)} milliseconds.".colorize(:green)
-  end
-end
+Cruml::Runner.new(files, output_dir, Cruml::Renders::Config.verbose?).run

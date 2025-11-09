@@ -14,21 +14,21 @@ class Cruml::Entities::ModuleInfo
 
   def initialize(@name : String, @type : Symbol = :normal); end
 
-  # Adds a method into module.
+  # Adds a method into the module.
   def add_method(method : Cruml::Entities::MethodInfo) : Nil
     @methods << method
 
-    if Cruml::Renders::Config.verbose? == true
+    if Cruml::Renders::Config.verbose?
       puts "VERBOSE : #{method.name.colorize(:magenta)} method to #{@name.colorize(:magenta)} module."
     end
   end
 
-  # Adds an instance variable into module.
+  # Adds an instance variable into the module.
   def add_instance_var(name : String, type : String) : Nil
     @instance_vars.reject! { |ivar| ivar[0] == name }
     @instance_vars << {name, type}
 
-    if Cruml::Renders::Config.verbose? == true
+    if Cruml::Renders::Config.verbose?
       puts "VERBOSE : #{name.colorize(:magenta)} instance var added to #{@name.colorize(:magenta)} module."
     end
   end
