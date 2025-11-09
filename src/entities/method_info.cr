@@ -1,6 +1,6 @@
 # This consists of obtaining information about methods.
 class Cruml::Entities::MethodInfo
-  # Method visibility (-, # and +).
+  # Method visibility (- private, # protected and + public).
   getter visibility : Symbol
 
   # Method name.
@@ -20,7 +20,7 @@ class Cruml::Entities::MethodInfo
   def add_arg(arg : Cruml::Entities::ArgInfo)
     @args << arg
 
-    if Cruml::Renders::Config.verbose? == true
+    if Cruml::Renders::Config.verbose?
       puts "VERBOSE : #{arg.name.colorize(:magenta)} arg of type #{arg.type.colorize(:magenta)} added to #{@name.colorize(:magenta)} method."
     end
   end
@@ -45,11 +45,9 @@ class Cruml::Entities::MethodInfo
   # Generate the args.
   def generate_args : String
     String.build do |str|
-      @args.each_with_index do |arg, i|
-        str << "#{arg.name} \\: #{escape_characters(arg.type)}"
-        if i != @args.size - 1
-          str << ", "
-        end
+      @args.each_with_index do |arg, index|
+        str << arg.name << " \\: " << escape_characters(arg.type)
+        str << ", " if index != @args.size - 1
       end
     end
   end
