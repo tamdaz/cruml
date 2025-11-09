@@ -147,7 +147,7 @@ if files.size == 0
   exit 1
 end
 
-if Cruml::Renders::Config.verbose? == true
+if Cruml::Renders::Config.verbose?
   # ameba:disable Lint/UselessAssign
   processed_files = 0
 end
