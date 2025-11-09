@@ -1,0 +1,46 @@
+name: deploy
+
+on:
+  release:
+    types:
+      - created
+
+jobs:
+  dist_linux:
+    runs-on: ubuntu-latest
+    container:
+      image: crystallang/crystal:latest-alpine
+    steps:
+    - uses: actions/checkout@v2
+    - name: Update Libs
+      run: apk add --update --upgrade --no-cache --force-overwrite libxml2-dev yaml-dev
+    - name: Build
+      run: |
+        shards build console --production --release --static --no-debug
+        strip ./bin/console
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: linux-binary
+        path: ./bin/console
+        retention-days: 1
+
+  release:
+    needs: [dist_linux]
+    permissions: write-all
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download Linux Binary
+      uses: actions/download-artifact@v4
+      with:
+        name: linux-binary
+        path: ./artifacts/linux
+    - name: Upload Linux Release Asset
+      uses: actions/upload-release-asset@v1.0.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ./artifacts/linux/console
+        asset_name: amb-${{ github.event.release.tag_name }}-linux-x86_64
+        asset_content_type: binary/octet-stream
