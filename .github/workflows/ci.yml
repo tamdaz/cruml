@@ -20,9 +20,9 @@ jobs:
       uses: crystal-lang/install-crystal@v1
       with:
         crystal: ${{ matrix.crystal }}
+    - name: Install shards
+      run: shards install
     - name: Check the code format
-      uses: crystal-ameba/github-action@v0.12.0
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: bin/ameba
     - name: Run tests
       run: crystal spec --order=random
