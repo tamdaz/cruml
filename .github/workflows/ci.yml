@@ -10,7 +10,7 @@ jobs:
   format:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/crystal-ameba/ameba:1.6.4
+      image: ghcr.io/crystal-ameba/ameba:1.6.0
     steps:
       - name: Download source
         uses: actions/checkout@v4
