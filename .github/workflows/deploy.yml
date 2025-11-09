@@ -16,13 +16,13 @@ jobs:
       run: apk add --update --upgrade --no-cache --force-overwrite libxml2-dev yaml-dev
     - name: Build
       run: |
-        shards build console --production --release --static --no-debug
-        strip ./bin/console
+        shards build cruml --production --release --static --no-debug --without-development
+        strip ./bin/cruml
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
         name: linux-binary
-        path: ./bin/console
+        path: ./bin/cruml
         retention-days: 1
 
   release:
@@ -41,6 +41,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ github.event.release.upload_url }}
-        asset_path: ./artifacts/linux/console
-        asset_name: amb-${{ github.event.release.tag_name }}-linux-x86_64
+        asset_path: ./artifacts/linux/cruml
+        asset_name: cruml-${{ github.event.release.tag_name }}-linux-x86_64
         asset_content_type: binary/octet-stream
