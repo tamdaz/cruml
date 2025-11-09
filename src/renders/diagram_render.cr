@@ -2,19 +2,19 @@ require "ecr"
 require "file_utils"
 require "./uml"
 
-# Consists of generating a class diagram.
-# See https://d2lang.com/tour/uml-classes
+# Consists of generating a class diagram (see https://d2lang.com/tour/uml-classes)
 class Cruml::Renders::DiagramRender
   include Cruml::Renders::UML
 
   getter code = String::Builder.new
 
-  def initialize(@path_dir : String); end
+  def initialize(@path_dir : String, @registry : Cruml::Services::RegistryService); end
 
   # Generates the UML class diagram.
   def generate : Nil
-    generate_module_diagrams
-    generate_class_diagrams
+    generate_diagrams_by_namespace
+    generate_standalone_modules
+    generate_standalone_classes
   end
 
   # Saves the class diagram as a `.d2` file.

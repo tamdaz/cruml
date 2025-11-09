@@ -3,13 +3,13 @@ require "yaml"
 # Stores the diagram configuration.
 class Cruml::Renders::Config
   # The theme of the diagram (`:light` or `:dark`).
-  class_property theme : Symbol = :light
+  class_property theme = :light
 
   # Whether to disable colors in the diagram.
-  class_property? no_color : Bool = false
+  class_property? no_color = false
 
   # Enable the verbose mode
-  class_property? verbose : Bool = false
+  class_property? verbose = false
 
   # Gets the color for classes.
   def self.class_color : String
