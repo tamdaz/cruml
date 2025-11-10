@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.8.0](https://github.com/tamdaz/cruml/releases/tag/0.8.0) - 2025-11-10
+
+### Added
+
+- Add dashed arrows for the interfaces (@tamdaz)(#63)
+
+### Changed
+
+- Major changes (@tamdaz)(#62)
+- Update the README (@tamdaz)(#65)
+- Change colors (@tamdaz)(#64)
+
+
 ## [0.7.1](https://github.com/tamdaz/cruml/releases/tag/0.7.1) - 2025-08-05
 
 ### Fixed
