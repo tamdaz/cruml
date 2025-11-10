@@ -111,10 +111,10 @@ customize the color of the classifiers and add paths.
 ```yml
 colors:
   light:
-    classes: "#baa7e5"
-    abstract_classes: "#a7e5a7"
-    interfaces: "#e2c7a3"
-    modules: "#5ab3f4"
+    classes: "#5016bb"
+    abstract_classes: "#5ea012"
+    interfaces: "#e28b19"
+    modules: "#1158f3"
   dark:
     classes: "#2e1065"
     abstract_classes: "#365314"
