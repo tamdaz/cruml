@@ -23,11 +23,11 @@ Documentation source : https://d2lang.com/tour/install#install-script.
 
 Here is the compatibility table:
 
-| Cruml version | Crystal version   |
-|---------------|-------------------|
-| >>> soon...                       |
-| v0.7.1        | v1.16.x & v1.17.x |
-| v0.7.0        | v1.16.0 & v1.16.1 |
+| Cruml version | Crystal version         |
+|---------------|-------------------------|
+| v0.8.0        | from v1.16.x to v1.18.0 |
+| v0.7.1        | from v1.16.x & v1.17.x  |
+| v0.7.0        | v1.16.x                 |
 
 > [!NOTE]
 > Table is subject to change.
