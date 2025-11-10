@@ -67,13 +67,6 @@ Usage : cruml generate [arguments] -- [options]
     --output-dir=DIR                 Directory path to save diagrams
 ```
 
-```
-Usage : cruml [subcommand] [arguments] -- [options]
-    -v, --version                    Show the version
-    -h, --help                       Show this help
-    --generate                       Generate a YML config
-```
-
 ## Examples
 
 For example, to generate a diagram with Crystal files from the `src/models` directory:
