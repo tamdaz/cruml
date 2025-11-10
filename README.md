@@ -29,7 +29,7 @@ Here is the compatibility table:
 | v0.7.1        | v1.16.x & v1.17.x |
 | v0.7.0        | v1.16.0 & v1.16.1 |
 
-> [!TIP]
+> [!NOTE]
 > Table is subject to change.
 
 ## Installation
