@@ -18,7 +18,7 @@ class Cruml::Renders::Config
     if !customized_color.nil?
       customized_color
     else
-      (@@theme == :light) ? "#baa7e5" : "#2e1065"
+      (@@theme == :light) ? "#5016bb" : "#2e1065"
     end
   end
 
@@ -29,7 +29,7 @@ class Cruml::Renders::Config
     if !customized_color.nil?
       customized_color
     else
-      (@@theme == :light) ? "#a7e5a7" : "#365314"
+      (@@theme == :light) ? "#5ea012" : "#365314"
     end
   end
 
@@ -40,7 +40,7 @@ class Cruml::Renders::Config
     if !customized_color.nil?
       customized_color
     else
-      (@@theme == :light) ? "#e2c7a3" : "#af6300"
+      (@@theme == :light) ? "#e28b19" : "#af6300"
     end
   end
 
@@ -51,7 +51,7 @@ class Cruml::Renders::Config
     if !customized_color.nil?
       customized_color
     else
-      (@@theme == :light) ? "#5ab3f4" : "#0041cc"
+      (@@theme == :light) ? "#1158f3" : "#0041cc"
     end
   end
 
