@@ -1,8 +1,12 @@
 # cruml
 
+![license](https://img.shields.io/github/license/tamdaz/cruml)
 ![GitHub Release](https://img.shields.io/github/v/release/tamdaz/cruml)
-[![ci](https://github.com/tamdaz/cruml/actions/workflows/ci.yml/badge.svg)](https://github.com/tamdaz/cruml/actions/workflows/ci.yml)
-[![crystal doc info](https://img.shields.io/badge/main-CrystalDoc.info-2E1052?logo=crystal&style=for-the-badge)](https://crystaldoc.info/github/tamdaz/cruml/main/index.html)
+![ci](https://github.com/tamdaz/cruml/actions/workflows/ci.yml/badge.svg?branch=main)
+![deploy](https://github.com/tamdaz/cruml/actions/workflows/deploy.yml/badge.svg?branch=main)
+![commit activity](https://img.shields.io/github/commit-activity/m/tamdaz/cruml)
+![issues](https://img.shields.io/github/issues/tamdaz/cruml)
+![prs](https://img.shields.io/github/issues-pr/tamdaz/cruml)
 
 > [!WARNING]
 > This tool is under development, it is not completely finished.
