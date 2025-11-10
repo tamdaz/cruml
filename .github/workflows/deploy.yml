@@ -6,7 +6,7 @@ on:
       - created
 
 jobs:
-  dist_linux_x86_64_musl:
+  linux_x86_64_musl:
     runs-on: ubuntu-latest
     container:
       image: crystallang/crystal:1.18-alpine
@@ -25,8 +25,25 @@ jobs:
           path: ./bin/cruml
           retention-days: 1
 
+  linux_x86_64_glibc:
+    runs-on: ubuntu-latest
+    container:
+      image: crystallang/crystal:1.18
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build
+        run: |
+          shards build cruml --production --release --no-debug --without-development
+          strip ./bin/cruml
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-x86_64-glibc-binary
+          path: ./bin/cruml
+          retention-days: 1
+
   release:
-    needs: [dist_linux_x86_64_musl]
+    needs: [linux_x86_64_musl, linux_x86_64_glibc]
     permissions: write-all
     runs-on: ubuntu-latest
     steps:
@@ -43,4 +60,19 @@ jobs:
           upload_url: ${{ github.event.release.upload_url }}
           asset_path: ./artifacts/linux-x86_64-musl/cruml
           asset_name: cruml-${{ github.event.release.tag_name }}-linux-x86_64-musl
+          asset_content_type: binary/octet-stream
+
+      - name: Download Linux x86_64 glibc Binary
+        uses: actions/download-artifact@v4
+        with:
+          name: linux-x86_64-glibc-binary
+          path: ./artifacts/linux-x86_64-glibc
+      - name: Upload Linux x86_64 glibc Release Asset
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./artifacts/linux-x86_64-glibc/cruml
+          asset_name: cruml-${{ github.event.release.tag_name }}-linux-x86_64-glibc
           asset_content_type: binary/octet-stream
