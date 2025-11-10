@@ -27,6 +27,16 @@ module Cruml::Parsers::VariableParser
     end
   end
 
+  # Parses class variable declarations like @@name : Type
+  def parse_class_var_declaration(line : String) : NamedTuple(name: String, type: String)?
+    if match = line.match(CLASS_VARS)
+      {
+        name: match[1],
+        type: match[2],
+      }
+    end
+  end
+
   # Parses instance variable declarations like @name : Type
   def parse_instance_var_declaration(line : String) : NamedTuple(name: String, type: String)?
     if match = line.match(INSTANCE_VARS)
