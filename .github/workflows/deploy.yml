@@ -24,32 +24,9 @@ jobs:
           name: linux-x86_64-musl-binary
           path: ./bin/cruml
           retention-days: 1
-  dist_linux_aarch64_musl:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
-        with:
-          platforms: arm64
-      - name: Build in Alpine ARM64
-        run: |
-          docker run --rm --platform linux/arm64 \
-            -v ${{ github.workspace }}:/workspace \
-            -w /workspace \
-            crystallang/crystal:1.18-alpine \
-            sh -c "apk add --update --upgrade --no-cache --force-overwrite libxml2-dev yaml-dev && \
-                   shards build cruml --production --release --static --no-debug --without-development && \
-                   strip ./bin/cruml"
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: linux-aarch64-musl-binary
-          path: ./bin/cruml
-          retention-days: 1
 
   release:
-    needs: [dist_linux_x86_64_musl, dist_linux_aarch64_musl]
+    needs: [dist_linux_x86_64_musl]
     permissions: write-all
     runs-on: ubuntu-latest
     steps:
@@ -58,11 +35,6 @@ jobs:
         with:
           name: linux-x86_64-musl-binary
           path: ./artifacts/linux-x86_64-musl
-      - name: Download Linux aarch64 musl Binary
-        uses: actions/download-artifact@v4
-        with:
-          name: linux-aarch64-musl-binary
-          path: ./artifacts/linux-aarch64-musl
       - name: Upload Linux x86_64 musl Release Asset
         uses: actions/upload-release-asset@v1.0.1
         env:
@@ -71,13 +43,4 @@ jobs:
           upload_url: ${{ github.event.release.upload_url }}
           asset_path: ./artifacts/linux-x86_64-musl/cruml
           asset_name: cruml-${{ github.event.release.tag_name }}-linux-x86_64-musl
-          asset_content_type: binary/octet-stream
-      - name: Upload Linux aarch64 musl Release Asset
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./artifacts/linux-aarch64-musl/cruml
-          asset_name: cruml-${{ github.event.release.tag_name }}-linux-aarch64-musl
           asset_content_type: binary/octet-stream
