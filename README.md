@@ -46,7 +46,7 @@ development_dependencies:
     github: tamdaz/cruml
 ```
 
-2. Run `shards install`.
+2. Run `shards install`:
 
 Once this tool installed, this will build a binary into `bin/` directory in your project.
 
@@ -106,6 +106,7 @@ Flags are useful to generate the class diagram. In addition, you can use the YML
 customize the color of the classifiers and add paths.
 
 ```yml
+# Customizable colors to style the classifiers.
 colors:
   light:
     classes: "#5016bb"
@@ -118,11 +119,13 @@ colors:
     interfaces: "#af6300"
     modules: "#0041cc"
 
+# Path to parse all Crystal files.
 paths:
   - src/entities
   - src/controllers
   - src/services
 
+# Specify the namespace for grouping the classes (recommended for organizing the class diagram).
 namespaces:
   MyNamespace:
     - App::Services::ClassOne
@@ -130,12 +133,12 @@ namespaces:
     - App::Services::ClassThree
 ```
 
-Thanks to this config, you will not need to use flags in the CLI, just run `bin/cruml generate`.
+Thanks to this YML config, you will not need to use flags in the CLI, just run `bin/cruml generate`.
 
 ## Troubleshooting
 
-- d2 binary cannot display the multi-line method signature.
-- Return type of a method should be indicated explicity, otherwise it will display `void`.
+- The d2 program cannot display the multi-line method signature.
+- Return type of a method should be indicated explicity, otherwise `void` will be displayed.
 
 ## Contributing
 
