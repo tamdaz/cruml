@@ -12,7 +12,6 @@
 - Update the README (@tamdaz)(#65)
 - Change colors (@tamdaz)(#64)
 
-
 ## [0.7.1](https://github.com/tamdaz/cruml/releases/tag/0.7.1) - 2025-08-05
 
 ### Fixed
