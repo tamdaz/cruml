@@ -9,12 +9,14 @@ colors:
     abstract_classes: "#365314"
     interfaces: "#af6300"
     modules: "#0041cc"
-
 paths:
-  - src/entities
   - examples/
 
 namespaces:
+  E1:
+    - E1::Person
+    - E1::Employee
+    - E1::Customer
   E2:
     - E2::Organization
     - E2::Enterprise
@@ -25,8 +27,96 @@ namespaces:
     - E3::BlackHole
     - E3::Planet
     - E3::Star
+  E4:
+    - E4::Container
+    - E4::Box(T)
+    - E4::Pair(A, B)
+  E5:
+    - E5::Person
+    - E5::Book
+    - E5::Coordinates
+  E6:
+    - E6::Visibility
+  E7:
+    - E7::A
+    - E7::B
+    - E7::C
+    - E7::D
+    - E7::E
+    - E7::F
+    - E7::G
+  E8:
+    - E8::ObjectInterface
+    - E8::AbstractShape
+    - E8::Circle
+    - E8::Rectangle
+    - E8::Triangle
+  E9:
+    - E9::GetterExample
+    - E9::PropertyExample
+    - E9::SetterExample
+    - E9::NullableGetterExample
+    - E9::NullablePropertyExample
+  E10:
+    - E10::ModuleOne
+    - E10::ModuleTwo
+    - E10::MyClass
   E11:
     - E11::G1::Link
     - E11::G2::Sublink
     - E11::G3::SubSublink
     - E11::G3::AnotherSubSublink
+  E12:
+    - E12::Shape
+    - E12::Circle
+    - E12::Rectangle
+  E13:
+    - E13::ClassOne
+    - E13::ClassTwo
+    - E13::ClassThree
+  E14:
+    - E14::Services::Authentication::User
+    - E14::Services::Authentication::Session
+    - E14::Services::Database::Connection
+    - E14::Services::Database::PostgresConnection
+  E15:
+    - E15::Repository(T)
+    - E15::CachedRepository(T)
+    - E15::Pair(K, V)
+    - E15::Triple(A, B, C)
+  E16:
+    - E16::Timestampable
+    - E16::Loggable
+    - E16::Serializable
+    - E16::BaseModel
+    - E16::User
+    - E16::Article
+  E17:
+    - E17::Configuration
+    - E17::Factory
+    - E17::User
+    - E17::Admin
+  E18:
+    - E18::Response
+    - E18::Result(T)
+    - E18::Container
+    - E18::Optional(T)
+  E19:
+    - E19::Model
+    - E19::ExtendedModel
+  E20:
+    - E20::EmptyClass
+    - E20::OnlyClassMethods
+    - E20::ImplementsAbstract
+    - E20::SingleProperty
+    - E20::DeepInheritance
+    - E20::Level1
+    - E20::Level2
+    - E20::Level3
+    - E20::MultipleInitializers
+    - E20::AbstractWithImplementations
+  E21:
+    - E21::ClassMethods
+    - E21::Comparable
+    - E21::Product
+    - E21::Book
