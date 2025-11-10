@@ -1,8 +1,12 @@
 # cruml
 
+![license](https://img.shields.io/github/license/tamdaz/cruml)
 ![GitHub Release](https://img.shields.io/github/v/release/tamdaz/cruml)
-[![ci](https://github.com/tamdaz/cruml/actions/workflows/ci.yml/badge.svg)](https://github.com/tamdaz/cruml/actions/workflows/ci.yml)
-[![crystal doc info](https://img.shields.io/badge/main-CrystalDoc.info-2E1052?logo=crystal&style=for-the-badge)](https://crystaldoc.info/github/tamdaz/cruml/main/index.html)
+![ci](https://github.com/tamdaz/cruml/actions/workflows/ci.yml/badge.svg?branch=main)
+![deploy](https://github.com/tamdaz/cruml/actions/workflows/deploy.yml/badge.svg?branch=main)
+![commit activity](https://img.shields.io/github/commit-activity/m/tamdaz/cruml)
+![issues](https://img.shields.io/github/issues/tamdaz/cruml)
+![prs](https://img.shields.io/github/issues-pr/tamdaz/cruml)
 
 > [!WARNING]
 > This tool is under development, it is not completely finished.
@@ -26,7 +30,7 @@ Here is the compatibility table:
 | Cruml version | Crystal version         |
 |---------------|-------------------------|
 | v0.8.0        | from v1.16.x to v1.18.0 |
-| v0.7.1        | from v1.16.x & v1.17.x  |
+| v0.7.1        | v1.16.x and v1.17.x     |
 | v0.7.0        | v1.16.x                 |
 
 > [!NOTE]
@@ -42,7 +46,7 @@ development_dependencies:
     github: tamdaz/cruml
 ```
 
-2. Run `shards install`.
+2. Run `shards install`:
 
 Once this tool installed, this will build a binary into `bin/` directory in your project.
 
@@ -102,6 +106,7 @@ Flags are useful to generate the class diagram. In addition, you can use the YML
 customize the color of the classifiers and add paths.
 
 ```yml
+# Customizable colors to style the classifiers.
 colors:
   light:
     classes: "#5016bb"
@@ -114,11 +119,13 @@ colors:
     interfaces: "#af6300"
     modules: "#0041cc"
 
+# Path to parse all Crystal files.
 paths:
   - src/entities
   - src/controllers
   - src/services
 
+# Specify the namespace for grouping the classes (recommended for organizing the class diagram).
 namespaces:
   MyNamespace:
     - App::Services::ClassOne
@@ -126,12 +133,12 @@ namespaces:
     - App::Services::ClassThree
 ```
 
-Thanks to this config, you will not need to use flags in the CLI, just run `bin/cruml generate`.
+Thanks to this YML config, you will not need to use flags in the CLI, just run `bin/cruml generate`.
 
 ## Troubleshooting
 
-- d2 binary cannot display the multi-line method signature.
-- Return type of a method should be indicated explicity, otherwise it will display `void`.
+- The d2 program cannot display the multi-line method signature.
+- Return type of a method should be indicated explicity, otherwise `void` will be displayed.
 
 ## Contributing
 
