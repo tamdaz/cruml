@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.8.1](https://github.com/tamdaz/cruml/releases/tag/0.8.1) - 2025-11-10
+
+### Updated
+
+- Update the README (@tamdaz)(#69)
+- Deploy musl and glibc when creating a release. (@tamdaz)(#68)
+
+### Fixed
+
+- Show the class variables in the class diagram. (@tamdaz)(#67)
+
 ## [0.8.0](https://github.com/tamdaz/cruml/releases/tag/0.8.0) - 2025-11-10
 
 ### Added
