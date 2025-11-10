@@ -69,7 +69,9 @@ class Cruml::Services::RegistryService
           end
 
           # Only add namespace if it has classes
-          output[key.as_s] = classes_info unless classes_info.empty?
+          unless classes_info.empty?
+            output[key.as_s] = classes_info
+          end
         end
       end
     end
