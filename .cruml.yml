@@ -9,6 +9,7 @@ colors:
     abstract_classes: "#365314"
     interfaces: "#af6300"
     modules: "#0041cc"
+
 paths:
   - examples/
 
@@ -120,3 +121,5 @@ namespaces:
     - E21::Comparable
     - E21::Product
     - E21::Book
+  E22:
+    - E22::Person

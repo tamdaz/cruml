@@ -9,6 +9,9 @@ module Cruml::Parsers::RegexPatterns
   # Matches class variable attributes: `class_getter(name : Type)`
   CLASS_VARS_ATTRIBUTE = /(class_getter|class_property|class_setter)\((\w+) : (\w+)\)/
 
+  # Matches class variable declarations: `@@name : Type`
+  CLASS_VARS = /^@@(\w+) : ([\w:| ()]+)$/
+
   # Matches instance variable attributes: `property(name : Type)`
   INSTANCE_VARS_ATTRIBUTE = /^(property|getter|setter|property\?|getter\?)\((\w+) : ([\w:| ]+)\)/
 

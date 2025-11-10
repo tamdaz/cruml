@@ -107,11 +107,19 @@ module Cruml::Renders::UML
     end
   end
 
+  # Adds class variables to the class.
+  private def add_class_vars(class_vars : Array(Tuple(String, String))) : Nil
+    class_vars.each do |name, type|
+      @code << INDENT << '-' << name << " : " << type << "\n"
+    end
+  end
+
   # Creates a class with a complete set of instance variables and methods.
   private def add_class(class_info : Cruml::Entities::ClassInfo) : Nil
     short_class_name = class_info.name
 
     ivars_and_methods = -> do
+      add_class_vars(class_info.class_vars)
       add_instance_vars(class_info.instance_vars)
       add_methods(class_info.methods)
     end

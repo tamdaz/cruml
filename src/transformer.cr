@@ -120,6 +120,11 @@ class Cruml::Transformer < Crystal::Transformer
   # Transforms a type declaration node
   def transform(node : Crystal::TypeDeclaration) : Crystal::ASTNode
     @variables |= [node]
+
+    if node.var.is_a?(Crystal::ClassVar)
+      process_class_var_declaration(node)
+    end
+
     super(node)
   end
 
@@ -228,6 +233,18 @@ class Cruml::Transformer < Crystal::Transformer
     if VisibilityHelpers.has_class_setter?(class_var[:visibility])
       method = Cruml::Entities::MethodInfo.new(:public, "#{class_var[:name]}=", class_var[:type])
       found_class.add_method(method)
+    end
+  end
+
+  private def process_class_var_declaration(node : Crystal::TypeDeclaration) : Nil
+    return unless node.var.is_a?(Crystal::ClassVar)
+
+    var_name = node.var.as(Crystal::ClassVar).name
+    var_type = node.declared_type.to_s
+
+    if found_class = @registry.find_class(@current_class_name)
+      # Here, there's no need to add "@@" before the cvar name.
+      found_class.add_class_var(var_name, var_type)
     end
   end
 
