@@ -6,7 +6,7 @@ on:
       - created
 
 jobs:
-  dist_linux_x86_64_musl:
+  linux_x86_64_musl:
     runs-on: ubuntu-latest
     container:
       image: crystallang/crystal:1.18-alpine
@@ -25,7 +25,7 @@ jobs:
           path: ./bin/cruml
           retention-days: 1
 
-  dist_linux_x86_64_glibc:
+  linux_x86_64_glibc:
     runs-on: ubuntu-latest
     container:
       image: crystallang/crystal:1.18
@@ -43,7 +43,7 @@ jobs:
           retention-days: 1
 
   release:
-    needs: [dist_linux_x86_64_musl, dist_linux_x86_64_glibc]
+    needs: [linux_x86_64_musl, linux_x86_64_glibc]
     permissions: write-all
     runs-on: ubuntu-latest
     steps:
