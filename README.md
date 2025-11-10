@@ -29,7 +29,7 @@ Here is the compatibility table:
 | v0.7.1        | v1.16.x & v1.17.x |
 | v0.7.0        | v1.16.0 & v1.16.1 |
 
-> [!TIP]
+> [!NOTE]
 > Table is subject to change.
 
 ## Installation
@@ -65,13 +65,6 @@ Usage : cruml generate [arguments] -- [options]
     --no-color                       Disable color output
     --path=PATH                      Path to specify
     --output-dir=DIR                 Directory path to save diagrams
-```
-
-```
-Usage : cruml [subcommand] [arguments] -- [options]
-    -v, --version                    Show the version
-    -h, --help                       Show this help
-    --generate                       Generate a YML config
 ```
 
 ## Examples
@@ -137,30 +130,8 @@ Thanks to this config, you will not need to use flags in the CLI, just run `bin/
 
 ## Troubleshooting
 
-- Tool cannot know if there are objects in the recursive modules.
 - d2 binary cannot display the multi-line method signature.
-- Fonts cannot be automatically customized _(unless we manually edit the SVG file once generated)_. We'll see if d2 contributors can implement this feature later.
 - Return type of a method should be indicated explicity, otherwise it will display `void`.
-- Recursive modules aren't supported for the moment. For example, if you have a code that look like this:
-
-```crystal
-module MyModule
-  module MySubModule
-    class MyClass
-      getter name : String
-    end
-  end
-end
-```
-
-It will get only the class `MyClass` but the namespace will not be prefixed with (`MyModule::MySubModule::MyClass`).
-If you want to include the namespace in your class name, you have to use the implicit namespace by doing this:
-
-```crystal
-class MyModule::MySubModule::MyClass
-  getter name : String
-end
-```
 
 ## Contributing
 
