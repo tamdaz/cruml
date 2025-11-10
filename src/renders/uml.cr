@@ -143,8 +143,12 @@ module Cruml::Renders::UML
 
   # Creates a link between parent and child classes.
   private def add_parent_class(inherit_classes : Array(Tuple(String, String, Symbol))) : Nil
-    inherit_classes.each do |class_name, subclass_name, _class_type|
-      @code << class_name.dump << " -> " << subclass_name.dump << "\n"
+    inherit_classes.each do |class_name, subclass_name, class_type|
+      if class_type == :interface
+        @code << class_name.dump << " -> " << subclass_name.dump << ": {style.stroke-dash: 3}\n"
+      else
+        @code << class_name.dump << " -> " << subclass_name.dump << "\n"
+      end
     end
   end
 
@@ -162,7 +166,7 @@ module Cruml::Renders::UML
   private def add_extended_modules(class_info : Cruml::Entities::ClassInfo) : Nil
     class_info.extended_modules.each do |module_name|
       # In D2, we use dotted lines with larger stroke-dash to show "extend" relationships
-      @code << module_name.dump << " -> " << class_info.name.dump << ": {style.stroke-dash: 5}\n"
+      @code << module_name.dump << " -> " << class_info.name.dump << ": {style.stroke-dash: 3}\n"
     end
   end
 

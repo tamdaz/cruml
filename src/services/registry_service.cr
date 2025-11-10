@@ -69,7 +69,9 @@ class Cruml::Services::RegistryService
           end
 
           # Only add namespace if it has classes
-          output[key.as_s] = classes_info unless classes_info.empty?
+          unless classes_info.empty?
+            output[key.as_s] = classes_info
+          end
         end
       end
     end
@@ -77,27 +79,37 @@ class Cruml::Services::RegistryService
     output
   end
 
-  # Groups modules by their namespaces (infers from module names)
-  def group_modules_by_namespaces : Hash(String, Array(Cruml::Entities::ModuleInfo))
+  # Groups modules by their namespaces defined in the YML config.
+  def group_modules_by_namespaces(test_mode : Bool = false) : Hash(String, Array(Cruml::Entities::ModuleInfo))
     output = {} of String => Array(Cruml::Entities::ModuleInfo)
 
-    @modules.each do |the_module|
-      if the_module.name.includes?("::")
-        parts = the_module.name.split("::")
-        # Use all parts except the last one as namespace
-        namespace = parts[0..-2].join("::")
+    config_path = if test_mode
+                    Dir.current + "/.cruml.test.yml"
+                  else
+                    Dir.current + "/.cruml.yml"
+                  end
 
-        unless namespace.empty?
-          output[namespace] ||= [] of Cruml::Entities::ModuleInfo
-          output[namespace] << the_module
-        end
-      end
+    unless File.exists?(config_path)
+      return output
     end
 
-    # Remove grouped modules from the main array
-    output.each_value do |modules|
-      modules.each do |the_module|
-        @modules.reject! { |mod| mod.name == the_module.name }
+    File.open(config_path) do |file|
+      if namespaces = YAML.parse(file)["namespaces"]?
+        namespaces.as_h.each do |key, items|
+          modules_info = [] of Cruml::Entities::ModuleInfo
+
+          items.as_a.each do |item|
+            if found_module = find_module(item.as_s)
+              modules_info << found_module
+
+              # Remove modules that are in the YML config from the main array
+              @modules.reject! { |mod| mod.name == item.as_s }
+            end
+          end
+
+          # Only add namespace if it has modules
+          output[key.as_s] = modules_info unless modules_info.empty?
+        end
       end
     end
 
