@@ -20,12 +20,6 @@ development_dependencies:
     github: crystal-ameba/ameba
     version: ~> 1.6.0
 
-scripts:
-  postinstall: shards build cruml
-
-executables:
-  - cruml
-
 crystal: '>= 1.16.0'
 
 license: MIT
